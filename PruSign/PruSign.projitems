@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{5E1BC842-49A1-4168-9CB5-357AA951C7B7}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PruSign</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PruSignPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PruSignPage.xaml.cs">
+      <DependentUpon>PruSignPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ImageWithTouch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SenderUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Signature.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IFileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SignatureDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SignatureItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LongRunningTasks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomScrollView.cs" />
+  </ItemGroup>
+</Project>

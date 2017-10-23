@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PruSignModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Points">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="isempty" Type="bit" />
+          <Property Name="x" Type="float" />
+          <Property Name="y" Type="float" />
+          <Property Name="when" Type="bigint" />
+          <Property Name="SignatureId" Type="bigint" />
+          <Property Name="id" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Signature">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="image" Type="text" />
+          <Property Name="datetime" Type="datetime" />
+          <Property Name="customername" Type="varchar" MaxLength="100" />
+          <Property Name="customerid" Type="varchar" MaxLength="30" />
+          <Property Name="documentid" Type="varchar" MaxLength="30" />
+          <Property Name="applicationid" Type="varchar" MaxLength="30" />
+          <Property Name="hash" Type="text" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="PruSignModelStoreContainer">
+          <EntitySet Name="Points" EntityType="Self.Points" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Signature" EntityType="Self.Signature" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PruSignModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PruSignEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Points" EntityType="PruSignModel.Points" />
+          <EntitySet Name="Signature" EntityType="PruSignModel.Signature" />
+        </EntityContainer>
+        <EntityType Name="Points">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="isempty" Type="Boolean" />
+          <Property Name="x" Type="Double" />
+          <Property Name="y" Type="Double" />
+          <Property Name="when" Type="Int64" />
+          <Property Name="SignatureId" Type="Int64" />
+          <Property Name="id" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Signature">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="datetime" Type="DateTime" Precision="3" />
+          <Property Name="customername" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="customerid" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="documentid" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="applicationid" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="hash" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Int64" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PruSignModelStoreContainer" CdmEntityContainer="PruSignEntities" >
+          <EntitySetMapping Name="Points">
+            <EntityTypeMapping TypeName="PruSignModel.Points">
+              <MappingFragment StoreEntitySet="Points">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="SignatureId" ColumnName="SignatureId" />
+                <ScalarProperty Name="when" ColumnName="when" />
+                <ScalarProperty Name="y" ColumnName="y" />
+                <ScalarProperty Name="x" ColumnName="x" />
+                <ScalarProperty Name="isempty" ColumnName="isempty" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Signature">
+            <EntityTypeMapping TypeName="PruSignModel.Signature">
+              <MappingFragment StoreEntitySet="Signature">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="hash" ColumnName="hash" />
+                <ScalarProperty Name="applicationid" ColumnName="applicationid" />
+                <ScalarProperty Name="documentid" ColumnName="documentid" />
+                <ScalarProperty Name="customerid" ColumnName="customerid" />
+                <ScalarProperty Name="customername" ColumnName="customername" />
+                <ScalarProperty Name="datetime" ColumnName="datetime" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

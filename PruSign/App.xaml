@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PruSign.App">
 	<Application.Resources>
+        <ResourceDictionary>
+            
+            <!--Colors-->
+            <Color x:Key="FaluRed">#801515</Color>
+            <Color x:Key="HippieGreen">#5C8F49</Color>
+            <Color x:Key="GreenHouse">#22540F</Color>
+            <Color x:Key="PrudentialBlue">#0679BD</Color>
+        </ResourceDictionary>
 		<!-- Application resource dictionary -->
 	</Application.Resources>
 </Application>

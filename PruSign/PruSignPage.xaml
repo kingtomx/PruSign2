@@ -1,4 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:PruSign" x:Class="PruSign.PruSignPage">
-	<Label Text="Welcome to Xamarin Forms!" VerticalOptions="Center" HorizontalOptions="Center" />
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:PruSign" 
+             x:Class="PruSign.PruSignPage">
+    <ContentPage.Content>
+        <local:CustomScrollView>
+            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!--Grid Children-->
+                <StackLayout Padding="10" BackgroundColor="{StaticResource PrudentialBlue}" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0"
+                             HorizontalOptions="FillAndExpand">
+                    <Image  Aspect="AspectFit" Source="prudential_white.png" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Image>
+                </StackLayout>
+
+                <!--Date Time Field-->
+                <Entry  x:Name="DateTimeEntry" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" 
+                        IsEnabled="false" Text="{Binding CurrentDate}" PlaceholderColor="Gray" 
+                        TextColor="{StaticResource FaluRed}" VerticalOptions="Start"></Entry>
+
+                <!--Sign Area-->
+                <Frame  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand"
+                        BackgroundColor="Red" Padding="0" HasShadow="False" OutlineColor="{StaticResource GreenHouse}">
+                    <local:ImageWithTouch x:Name="DrawingImage" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                                          BackgroundColor="White" CurrentLineColor="{StaticResource HippieGreen}"></local:ImageWithTouch>
+                </Frame>
+
+                <!--Client Name Entry-->
+                <Entry  x:Name="ClientName" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="End"
+                        HorizontalOptions="FillAndExpand" Placeholder="Customer name" PlaceholderColor="Gray"
+                        Text="{Binding ClientName}">
+                </Entry>
+
+                <!--Client ID Entry-->
+                <Entry  x:Name="ClientID" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End"
+                        HorizontalOptions="FillAndExpand" Placeholder="Customer Id" PlaceholderColor="Gray"
+                        Text="{Binding ClientId}">
+                </Entry>
+
+                <!--Document ID Entry-->
+                <Entry  x:Name="DocumentID" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End"
+                        HorizontalOptions="FillAndExpand" Placeholder="Document Id" PlaceholderColor="Gray"
+                        Text="{Binding DocumentId}">
+                </Entry>
+
+                <!--Button and Application Selector-->
+                <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Picker x:Name="Applications" Title="Select an application" SelectedItem="{Binding Application}"
+                            HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>eApplication</x:String>
+                                <x:String>WSM</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <Button x:Name="Submit" BackgroundColor="{StaticResource PrudentialBlue}" TextColor="White" Text="Agree &amp; Send"
+                            HorizontalOptions="End" VerticalOptions="Center" Command="{Binding OnBtnSubmitTappedCommand}"></Button>
+                </StackLayout>
+
+            </Grid>
+        </local:CustomScrollView>
+    </ContentPage.Content>
 </ContentPage>

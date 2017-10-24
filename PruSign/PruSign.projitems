@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\HomeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PruSignPage.xaml.cs">
       <DependentUpon>PruSignPage.xaml</DependentUpon>
     </Compile>

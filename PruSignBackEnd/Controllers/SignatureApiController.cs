@@ -36,11 +36,8 @@ namespace PruSignBackEnd
                         Array.Resize(ref response, response.Length+1);
                         response[response.Length - 1] = aux;
                     }
-
-
                 }
                 return response;
-
         }
 
         public string get(int id)
@@ -50,10 +47,8 @@ namespace PruSignBackEnd
 
 		public HttpResponseMessage Post(PruSignBackEnd.PruSign.Object.Signature signature)
 		{
-
 			try
 			{
-
                 var context = new DB.PruSignEntities();
                 context.Signature.Add(new DB.Signature() {
                     applicationid = signature.applicationId,

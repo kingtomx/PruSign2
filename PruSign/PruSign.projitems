@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomViews\EnhancedButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\ISQLite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ServiceAsync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\UserCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\HomeViewModel.cs" />

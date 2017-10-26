@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PruSign.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,9 @@ namespace PruSign.Data.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }
+        public ICommand OnSettingsClickedCommand { get; set; }
+        public INavigation Navigation { get; set; }
+        public bool IsLocked { get; set; }
 
         #region Properties
         private string clientName;
@@ -58,17 +62,6 @@ namespace PruSign.Data.ViewModels
             }
         }
 
-        private string errorMessage;
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set
-            {
-                errorMessage = value;
-                OnPropertyChanged();
-            }
-        }
-
         private string currentDate;
         public string CurrentDate
         {
@@ -81,31 +74,33 @@ namespace PruSign.Data.ViewModels
         }
         #endregion
 
-        public HomeViewModel()
+        public HomeViewModel(INavigation navigation)
         {
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
+            OnSettingsClickedCommand = new Command(OnSettingsClicked);
             CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
+            Navigation = navigation;
         }
 
         public void OnBtnSubmitTapped()
         {
             try
             {
-                if (ClientName == null)
+                if (string.IsNullOrEmpty(ClientName))
                 {
-                    ErrorMessage = "Name cannot be empty";
+                    SendError("Name cannot be empty");
                 }
-                else if (ClientId == null)
+                else if (string.IsNullOrEmpty(ClientId))
                 {
-                    ErrorMessage = "Customer Id cannot be empty";
+                    SendError("Client Id cannot be empty");
                 }
-                else if (DocumentId == null)
+                else if (string.IsNullOrEmpty(DocumentId))
                 {
-                    ErrorMessage = "Document Id cannot be empty";
+                    SendError("Document Id cannot be empty");
                 }
-                else if (Application == null)
+                else if (string.IsNullOrEmpty(Application))
                 {
-                    ErrorMessage = "Select an Application to send the signature";
+                    SendError("Select an Application to send the signature");
                 }
                 else
                 {
@@ -116,10 +111,22 @@ namespace PruSign.Data.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                SendError(ex.Message);
             }
+        }
 
-            MessagingCenter.Send<HomeViewModel, string>(this, "Error", ErrorMessage);
+        public void OnSettingsClicked()
+        {
+            if (!IsLocked)
+            {
+                IsLocked = true;
+                ModalHelper.Push(Navigation, new SettingsPage(), () => IsLocked = false);
+            }
+        }
+
+        void SendError(string errorMessage)
+        {
+            MessagingCenter.Send<HomeViewModel, string>(this, "Error", errorMessage);
         }
 
         void OnPropertyChanged([CallerMemberName] string name = "")

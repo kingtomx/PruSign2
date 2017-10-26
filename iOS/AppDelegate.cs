@@ -5,6 +5,7 @@ using Foundation;
 using UIKit;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using PruSign.Data;
 
 namespace PruSign.iOS
 {
@@ -30,22 +31,23 @@ namespace PruSign.iOS
 
 		public override void DidEnterBackground(UIApplication app)
 		{
-			sendRestSignature();
+			SendRestSignature();
 		}
 
 
-		private void sendRestSignature()
+		private async void SendRestSignature()
 		{
 			nint taskID = UIApplication.SharedApplication.BeginBackgroundTask(() =>
 			{
 			});
-			new Task(() =>
+			new Task(async () =>
 						{
 							try
 							{
 								FileHelper fh = new FileHelper();
-								SignatureDatabase db = new SignatureDatabase(fh.GetLocalFilePath("PruSign.db"));
-								Task<List<SignatureItem>> items = db.GetItemsNotDoneAsync();
+								PruSignDatabase db = new PruSignDatabase();
+                                ServiceAsync<SignatureItem> serviceSignature = new ServiceAsync<SignatureItem>(db);
+								Task<List<SignatureItem>> items = serviceSignature.GetAll().Where(s => s.Sent == false).ToListAsync();
 
 								foreach (var item in items.Result)
 								{
@@ -55,13 +57,13 @@ namespace PruSign.iOS
 										item.Sent = true;
 										item.SentTimeStamp = System.DateTime.Now.Ticks;
 										item.SignatureObject = "";
-										db.SaveItemAsync(item);
+                                        await serviceSignature.Add(item);
 									}
 									catch (Exception ex)
 									{
 										// POR AHORA HAGAMOS ESTO EN CASO DE ERROR
 										item.Miscelanea = ex.Message;
-										db.SaveItemAsync(item);
+                                        await serviceSignature.Add(item);
 									}
 								}
 

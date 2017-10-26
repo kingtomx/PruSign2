@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace PruSign
+namespace PruSign.CustomViews
 {
 	public class ImageWithTouch : Image
 	{

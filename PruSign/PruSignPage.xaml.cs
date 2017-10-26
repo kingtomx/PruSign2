@@ -13,7 +13,7 @@ namespace PruSign
         {
             InitializeComponent();
 
-            HomeVM = new HomeViewModel();
+            HomeVM = new HomeViewModel(Navigation);
             BindingContext = HomeVM;
 
             MessagingCenter.Subscribe<HomeViewModel, string>(this, "Error", (sender, arg) => {
@@ -23,6 +23,16 @@ namespace PruSign
             MessagingCenter.Subscribe<HomeViewModel>(this, "Success", (sender) => {
                 DisplayAlert("Success", "Your signature has been saved", "OK");
             });
+        }
+
+        protected override void OnAppearing()
+        {
+            if(HomeVM != null)
+            {
+                // TO-DO Check if the user credentials are stored in the database
+
+            }
+            base.OnAppearing(); 
         }
     }
 }

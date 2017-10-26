@@ -4,6 +4,7 @@ using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using PruSign;
 using PruSign.Android;
+using PruSign.CustomViews;
 
 [assembly: ExportRenderer(typeof(ImageWithTouch), typeof(ImageWithTouchRenderer))]
 

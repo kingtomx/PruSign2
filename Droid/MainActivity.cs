@@ -9,6 +9,7 @@ using Flurl;
 using Flurl.Http;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using PruSign.Data;
 
 namespace PruSign.Droid
 {
@@ -60,31 +61,29 @@ namespace PruSign.Droid
             try
             {
                 FileHelper fh = new FileHelper();
-                SignatureDatabase db = new SignatureDatabase(fh.GetLocalFilePath("PruSign.db"));
-                System.Threading.Tasks.Task<System.Collections.Generic.List<SignatureItem>> items = db.GetItemsNotDoneAsync();
+                PruSignDatabase db = new PruSignDatabase();
+                ServiceAsync<SignatureItem> serviceSignature = new ServiceAsync<SignatureItem>(db);
+                System.Threading.Tasks.Task<System.Collections.Generic.List<SignatureItem>> items = serviceSignature.GetAll().Where(i => i.Sent == false).ToListAsync();
                 foreach (var item in items.Result)
-				{
-					try
-					{
-
-                        			Signature requestItem = Signature.LoadFromJson(item.SignatureObject);
-						var response = await "http://10.0.2.2:8080/api/SignatureApi".PostJsonAsync(requestItem);
-						item.Sent = true;
-						item.SentTimeStamp = System.DateTime.Now.Ticks;
-						await db.SaveItemAsync(item);
-					}
-					catch (FlurlHttpTimeoutException timeOutException)
-					{
-						item.Miscelanea = timeOutException.Message;
-						await db.SaveItemAsync(item);
-					}
-					catch (FlurlHttpException generalException)
-					{
-						item.Miscelanea = generalException.Message;
-						await db.SaveItemAsync(item);
-					}
-
-
+                {
+                    try
+                    {
+                        Signature requestItem = Signature.LoadFromJson(item.SignatureObject);
+                        var response = await "http://10.0.2.2:8080/api/SignatureApi".PostJsonAsync(requestItem);
+                        item.Sent = true;
+                        item.SentTimeStamp = System.DateTime.Now.Ticks;
+                        await serviceSignature.Add(item);
+                    }
+                    catch (FlurlHttpTimeoutException timeOutException)
+                    {
+                        item.Miscelanea = timeOutException.Message;
+                        await serviceSignature.Add(item);
+                    }
+                    catch (FlurlHttpException generalException)
+                    {
+                        item.Miscelanea = generalException.Message;
+                        await serviceSignature.Add(item);
+                    }
                 }
             }
             catch (Exception ex)

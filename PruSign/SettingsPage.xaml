@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PruSign.SettingsPage">
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+            <AbsoluteLayout HeightRequest="60" BackgroundColor="{StaticResource PrudentialBlue}" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                <Image VerticalOptions="Center" 
+                       AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1" 
+                       HorizontalOptions="Start" Source="ic_close_white.png" WidthRequest="50" BackgroundColor="Transparent">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{ Binding OnBtnCloseClickedCommand }" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1">
+                    <Label  Text="Settings" FontSize="Large" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
+                </StackLayout>
+            </AbsoluteLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

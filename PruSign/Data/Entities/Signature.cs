@@ -1,5 +1,5 @@
 ﻿using System;
-namespace PruSign
+namespace PruSign.Data.Entities
 {
 	public class Signature
 	{

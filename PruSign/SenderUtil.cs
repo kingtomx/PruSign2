@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using PruSign.Data.Entities;
+using PruSign.Data;
 
 namespace PruSign
 {
 	public static class SenderUtil
 	{
 
+        private static ServiceAsync<SignatureItem> ServiceSignature { get; set; }
+        private static ServiceAsync<UserCredentials> ServiceUserCredentials { get; set; }
 
-		public static void SendSign(String name, String customerId, String documentId, String appName, String datetime)
+        public static async void SendSign(string name, string customerId, string documentId, string appName, string datetime)
 		{
 			var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			var directoryname = System.IO.Path.Combine(documents, "temporalSignatures");
@@ -62,13 +66,9 @@ namespace PruSign
 				streamWriter.Close();
 			}
 
-#if __IOS__
-			PruSign.iOS.FileHelper fh = new iOS.FileHelper();
-#endif
-#if __ANDROID__
-			PruSign.Droid.FileHelper fh = new Droid.FileHelper();
-#endif
-			SignatureDatabase db = new SignatureDatabase(fh.GetLocalFilePath("PruSign.db"));
+			PruSignDatabase db = new PruSignDatabase();
+            ServiceSignature = new ServiceAsync<SignatureItem>(db);
+
 			SignatureItem dbItem = new SignatureItem()
 			{
 				SignatureObject = json,
@@ -82,15 +82,23 @@ namespace PruSign
 				Miscelanea = "{}"
 
 			};
-			db.SaveItemAsync(dbItem);
+            await ServiceSignature.Add(dbItem);
 			System.IO.File.Delete(filename);
 			//System.IO.File.Delete(System.IO.Path.Combine(directoryname, "signature.png"));
 			//System.IO.File.Delete(System.IO.Path.Combine(directoryname, "points.json"));
-
-
 		}
 
-
+        public static async void SaveCredentials(string username, string password)
+        {
+            PruSignDatabase db = new PruSignDatabase();
+            ServiceUserCredentials = new ServiceAsync<UserCredentials>(db);
+            UserCredentials dbItem = new UserCredentials()
+            {
+                Username = username,
+                Password = password
+            };
+            await ServiceUserCredentials.Add(dbItem);
+        }
 
 		private static string SHA512StringHash(byte[] input)
 		{
@@ -110,15 +118,11 @@ namespace PruSign
 			return sBuilder.ToString();
 		}
 
-
 		private static byte[] GetBytes(string str)
 		{
 			byte[] bytes = new byte[str.Length * sizeof(char)];
 			System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
 			return bytes;
 		}
-
-
-
 	}
 }

@@ -16,18 +16,40 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomViews\EnhancedButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\IEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\ISQLite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ServiceAsync.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\UserCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\HomeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\LoginViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ModalHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LoginPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PruSignPage.xaml.cs">
       <DependentUpon>PruSignPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ImageWithTouch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomViews\ImageWithTouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SenderUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Signature.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\Signature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IFileHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SignatureDatabase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SignatureItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PruSignDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\SignatureItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LongRunningTasks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CustomScrollView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SettingsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SettingsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

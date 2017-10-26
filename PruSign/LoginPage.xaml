@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:PruSign.CustomViews"
+             x:Class="PruSign.LoginPage">
+    <ContentPage.Content>
+        <RelativeLayout BackgroundColor="White">
+            <StackLayout BackgroundColor="{StaticResource PrudentialBlue}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=.4}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=1}">
+                <Image  Aspect="AspectFit" Source="prudential_white.png" 
+                    HorizontalOptions="Center" VerticalOptions="EndAndExpand"></Image>
+                <Label Text="PRUSIGN" FontSize="Medium" VerticalOptions="StartAndExpand" TextColor="White" HorizontalOptions="Center"></Label>
+            </StackLayout>
+            <StackLayout BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Spacing="12"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=.4}"
+                RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=.1}"
+                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=.6}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=.8}">
+                <StackLayout>
+                    <Label Text="USERNAME"></Label>
+                    <Entry Text="{Binding Username}"></Entry>
+                </StackLayout>
+                <StackLayout>
+                    <Label Text="PASSWORD"></Label>
+                    <Entry Text="{Binding Password}" IsPassword="True"></Entry>
+                </StackLayout>
+                <controls:EnhancedButton Margin="0,40,0,0" Padding="30"  HorizontalOptions="FillAndExpand" Text="LOGIN"  
+                                      BackgroundColor="{StaticResource PrudentialBlue}" TextColor="White" Command="{Binding OnBtnSubmitTappedCommand}"></controls:EnhancedButton>
+            </StackLayout>
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>

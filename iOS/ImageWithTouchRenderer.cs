@@ -4,7 +4,7 @@ using Xamarin.Forms;
 using PruSign;
 using PruSign.iOS;
 using System.ComponentModel;
-using CoreGraphics;
+using PruSign.CustomViews;
 
 [assembly: ExportRenderer(typeof(ImageWithTouch), typeof(ImageWithTouchRenderer))]
 namespace PruSign.iOS

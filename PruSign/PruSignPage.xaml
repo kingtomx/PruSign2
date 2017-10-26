@@ -1,77 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:local="clr-namespace:PruSign" 
+             xmlns:controls="clr-namespace:PruSign.CustomViews" 
              x:Class="PruSign.PruSignPage">
     <ContentPage.Content>
-        <local:CustomScrollView>
-            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <!--Grid Children-->
-                <StackLayout Padding="10" BackgroundColor="{StaticResource PrudentialBlue}" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0"
-                             HorizontalOptions="FillAndExpand">
-                    <Image  Aspect="AspectFit" Source="prudential_white.png" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Image>
+            <!--Grid Children-->
+            <AbsoluteLayout Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" BackgroundColor="{StaticResource PrudentialBlue}" 
+                                HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="60">
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1">
+                    <Image  Aspect="AspectFit" Source="prudential_white.png" HorizontalOptions="Center" VerticalOptions="Center"></Image>
                 </StackLayout>
+                <Image VerticalOptions="Center" 
+                       AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1" 
+                       HorizontalOptions="End" Source="ic_settings_white.png" WidthRequest="50" BackgroundColor="Transparent">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{ Binding OnSettingsClickedCommand }" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </AbsoluteLayout>
 
-                <!--Date Time Field-->
-                <Entry  x:Name="DateTimeEntry" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" 
+
+            <!--Date Time Field-->
+            <Entry  x:Name="DateTimeEntry" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" 
                         IsEnabled="false" Text="{Binding CurrentDate}" PlaceholderColor="Gray" 
                         TextColor="{StaticResource FaluRed}" VerticalOptions="Start"></Entry>
 
-                <!--Sign Area-->
-                <Frame  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand"
+            <!--Sign Area-->
+            <Frame  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand"
                         BackgroundColor="Red" Padding="0" HasShadow="False" OutlineColor="{StaticResource GreenHouse}">
-                    <local:ImageWithTouch x:Name="DrawingImage" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                                          BackgroundColor="White" CurrentLineColor="{StaticResource HippieGreen}"></local:ImageWithTouch>
-                </Frame>
+                <controls:ImageWithTouch x:Name="DrawingImage" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                                          BackgroundColor="White" CurrentLineColor="{StaticResource HippieGreen}"></controls:ImageWithTouch>
+            </Frame>
 
-                <!--Client Name Entry-->
-                <Entry  x:Name="ClientName" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="End"
+            <!--Client Name Entry-->
+            <Entry  x:Name="ClientName" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="End"
                         HorizontalOptions="FillAndExpand" Placeholder="Customer name" PlaceholderColor="Gray"
                         Text="{Binding ClientName}">
-                </Entry>
+            </Entry>
 
-                <!--Client ID Entry-->
-                <Entry  x:Name="ClientID" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End"
+            <!--Client ID Entry-->
+            <Entry  x:Name="ClientID" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End"
                         HorizontalOptions="FillAndExpand" Placeholder="Customer Id" PlaceholderColor="Gray"
                         Text="{Binding ClientId}">
-                </Entry>
+            </Entry>
 
-                <!--Document ID Entry-->
-                <Entry  x:Name="DocumentID" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End"
+            <!--Document ID Entry-->
+            <Entry  x:Name="DocumentID" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End"
                         HorizontalOptions="FillAndExpand" Placeholder="Document Id" PlaceholderColor="Gray"
                         Text="{Binding DocumentId}">
-                </Entry>
+            </Entry>
 
-                <!--Button and Application Selector-->
-                <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <Picker x:Name="Applications" Title="Select an application" SelectedItem="{Binding Application}"
+            <!--Button and Application Selector-->
+            <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Picker x:Name="Applications" Title="Select an application" SelectedItem="{Binding Application}"
                             HorizontalOptions="FillAndExpand" VerticalOptions="Center">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>eApplication</x:String>
-                                <x:String>WSM</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                    <Button x:Name="Submit" BackgroundColor="{StaticResource PrudentialBlue}" TextColor="White" Text="Agree &amp; Send"
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>eApplication</x:String>
+                            <x:String>WSM</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Button x:Name="Submit" BackgroundColor="{StaticResource PrudentialBlue}" TextColor="White" Text="Agree &amp; Send"
                             HorizontalOptions="End" VerticalOptions="Center" Command="{Binding OnBtnSubmitTappedCommand}"></Button>
-                </StackLayout>
-
-            </Grid>
-        </local:CustomScrollView>
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

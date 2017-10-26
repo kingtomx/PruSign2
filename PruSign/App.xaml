@@ -8,6 +8,7 @@
             <Color x:Key="HippieGreen">#5C8F49</Color>
             <Color x:Key="GreenHouse">#22540F</Color>
             <Color x:Key="PrudentialBlue">#0679BD</Color>
+            
         </ResourceDictionary>
 		<!-- Application resource dictionary -->
 	</Application.Resources>

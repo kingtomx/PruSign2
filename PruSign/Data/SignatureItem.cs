@@ -1,9 +1,10 @@
 ﻿using System;
 using SQLite;
+using PruSign.Data.Entities;
 
-namespace PruSign
+namespace PruSign.Data
 {
-	public class SignatureItem
+	public class SignatureItem : IEntity
 	{
 		[PrimaryKey, AutoIncrement]
 		public int ID { get; set; }
@@ -26,5 +27,8 @@ namespace PruSign
 
 		public string Miscelanea { get; set; }
 
-	}
+        public DateTime Created { get; set; }
+
+        public DateTime Updated { get; set; }
+    }
 }

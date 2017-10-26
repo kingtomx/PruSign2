@@ -1,15 +1,28 @@
-﻿using Xamarin.Forms;
+﻿using PruSign;
+using PruSign.Data.ViewModels;
+using Xamarin.Forms;
 
 namespace PruSign
 {
 	public partial class App : Application
 	{
-		public App()
+        public bool IsLocked { get; set; }
+
+        public App()
 		{
 			InitializeComponent();
 
-			MainPage = new PruSignPage();
-		}
+			MainPage = new LoginPage();
+
+            MessagingCenter.Subscribe<LoginViewModel>(this, "RedirectToHome", (sender) =>
+            {
+                if (!IsLocked)
+                {
+                    IsLocked = true;
+                    MainPage = new PruSignPage();
+                }
+            });
+        }
 
 		protected override void OnStart()
 		{

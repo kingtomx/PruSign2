@@ -23,6 +23,10 @@ namespace PruSign.Droid.CustomRenderers
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Button> e)
         {
             base.OnElementChanged(e);
+            if (Control != null)
+            {
+                Control.Elevation = 0;
+            }
             UpdatePadding();
         }
 

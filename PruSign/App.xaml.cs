@@ -12,7 +12,7 @@ namespace PruSign
 		{
 			InitializeComponent();
 
-			MainPage = new LoginPage();
+			MainPage = new PruSignPage();
 
             MessagingCenter.Subscribe<LoginViewModel>(this, "RedirectToHome", (sender) =>
             {

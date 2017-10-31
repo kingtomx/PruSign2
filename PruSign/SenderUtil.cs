@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using PruSign.Data.Entities;
 using PruSign.Data;
+using PruSign.Helpers;
 
 namespace PruSign
 {
@@ -11,8 +12,6 @@ namespace PruSign
 
         public static async void SendSign(string name, string customerId, string documentId, string appName, string datetime)
         {
-            PruSignDatabase db = new PruSignDatabase();
-
             try
             {
                 var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -67,6 +66,7 @@ namespace PruSign
                     streamWriter.Close();
                 }
 
+                PruSignDatabase db = new PruSignDatabase();
                 var serviceSignature = new ServiceAsync<SignatureItem>(db);
 
                 SignatureItem dbItem = new SignatureItem()
@@ -88,14 +88,8 @@ namespace PruSign
             }
             catch (Exception ex)
             {
-                var serviceLog = new ServiceAsync<LogEntry>(db);
-                await serviceLog.Add(new LogEntry()
-                {
-                    Message = ex.Message
-                });
+                LogHelper.Log(ex);
             }
-
-
         }
 
         public static async void SaveCredentials(string username, string password)

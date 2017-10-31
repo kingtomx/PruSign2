@@ -16,6 +16,7 @@ namespace PruSign.Data
             ConnectionAsync = DependencyService.Get<ISQLite>().GetConnectionAsync();
             ConnectionAsync.CreateTableAsync<SignatureItem>();
             ConnectionAsync.CreateTableAsync<UserCredentials>();
+            ConnectionAsync.CreateTableAsync<LogEntry>();
         }
 	}
 }

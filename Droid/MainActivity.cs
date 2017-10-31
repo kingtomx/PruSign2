@@ -72,17 +72,17 @@ namespace PruSign.Droid
                         var response = await "http://10.0.2.2:8080/api/SignatureApi".PostJsonAsync(requestItem);
                         item.Sent = true;
                         item.SentTimeStamp = System.DateTime.Now.Ticks;
-                        await serviceSignature.Add(item);
+                        await serviceSignature.Update(item);
                     }
                     catch (FlurlHttpTimeoutException timeOutException)
                     {
                         item.Miscelanea = timeOutException.Message;
-                        await serviceSignature.Add(item);
+                        await serviceSignature.Update(item);
                     }
                     catch (FlurlHttpException generalException)
                     {
                         item.Miscelanea = generalException.Message;
-                        await serviceSignature.Add(item);
+                        await serviceSignature.Update(item);
                     }
                 }
             }

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PruSign.LogPage">
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+            <AbsoluteLayout HeightRequest="60" BackgroundColor="{StaticResource PrudentialBlue}" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                <Image VerticalOptions="Center" 
+                       AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1" 
+                       HorizontalOptions="Start" Source="ic_close_white.png" WidthRequest="50" BackgroundColor="Transparent">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{ Binding OnBtnCloseClickedCommand }" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1">
+                    <Label  Text="Logs" FontSize="Large" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
+                </StackLayout>
+                <Image VerticalOptions="Center" 
+                       AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1" 
+                       HorizontalOptions="End" Source="ic_send_white.png" WidthRequest="50" BackgroundColor="Transparent">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{ Binding OnBtnSendLogsClickedCommand }" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </AbsoluteLayout>
+            <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Color="{StaticResource PrudentialBlue}" 
+                               IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            <ListView HasUnevenRows="True" x:Name="LogListView" IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBooleanConverter}}" 
+                      VerticalOptions="FillAndExpand" ItemsSource="{Binding Logs}" RowHeight="-1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="20,10,20,10" HorizontalOptions="FillAndExpand">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" FontSize="Medium" Text="{Binding FormattedDate}"/>
+                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding Message}" FontAttributes="Bold"/>
+                                <Label Grid.Row="2" Grid.Column="0" Text="{Binding StackTrace}"/>
+                            </Grid>
+                        </ViewCell>
+                        <!--<TextCell Text="{Binding Mess   age}" />-->
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <!--Friendly message when there is no logs to display-->
+            <Label HorizontalOptions="Center" Text="There are no results to display" IsVisible="{Binding ShowNoResults}" VerticalOptions="CenterAndExpand"/>
+            <Label HorizontalOptions="Center" Text="There was an error trying to get the logs" IsVisible="{Binding FailedToLoad}" VerticalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

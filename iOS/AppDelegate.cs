@@ -6,6 +6,7 @@ using UIKit;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using PruSign.Data;
+using PruSign.Helpers;
 
 namespace PruSign.iOS
 {
@@ -39,12 +40,12 @@ namespace PruSign.iOS
 		{
 			nint taskID = UIApplication.SharedApplication.BeginBackgroundTask(() =>
 			{
+
 			});
 			new Task(async () =>
 						{
 							try
 							{
-								FileHelper fh = new FileHelper();
 								PruSignDatabase db = new PruSignDatabase();
                                 ServiceAsync<SignatureItem> serviceSignature = new ServiceAsync<SignatureItem>(db);
 								Task<List<SignatureItem>> items = serviceSignature.GetAll().Where(s => s.Sent == false).ToListAsync();
@@ -57,13 +58,13 @@ namespace PruSign.iOS
 										item.Sent = true;
 										item.SentTimeStamp = System.DateTime.Now.Ticks;
 										item.SignatureObject = "";
-                                        await serviceSignature.Add(item);
+                                        await serviceSignature.Update(item);
 									}
 									catch (Exception ex)
 									{
-										// POR AHORA HAGAMOS ESTO EN CASO DE ERROR
-										item.Miscelanea = ex.Message;
-                                        await serviceSignature.Add(item);
+                                        // POR AHORA HAGAMOS ESTO EN CASO DE ERROR
+                                        item.Miscelanea = ex.Message;
+                                        await serviceSignature.Update(item);
 									}
 								}
 
@@ -71,8 +72,8 @@ namespace PruSign.iOS
 							}
 							catch (Exception ex)
 							{
-								String error = ex.Message;
-							}
+                                LogHelper.Log(ex);
+                            }
 						}).Start();			
 		}
 

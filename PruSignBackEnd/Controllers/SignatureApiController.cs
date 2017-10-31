@@ -4,75 +4,75 @@ using System.Net;
 using System.Net.Http;
 using System.Data.SqlClient;
 using System.Collections;
+using PruSignBackEnd.Data.Entities;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Text;
+using System.Linq;
+using PruSignBackEnd.Data.DB;
+using PruSignBackEnd.Helpers;
 
 namespace PruSignBackEnd
 {
-	public class SignatureApiController : ApiController
-	{
+    public class SignatureApiController : ApiController
+    {
+        private PruSignContext db = new PruSignContext();
+        private Service<Signature> serviceSignature;
 
-        public PruSignBackEnd.PruSign.Object.Signature[] get( string customerid, 
-                                                              string documentid,
-                                                              string applicationid) {
-                PruSignBackEnd.PruSign.Object.Signature[] response = { };
-                using (var context = new DB.PruSignEntities())
-                {
-                    string sqlSearch = "select * from Signature where customerid=@customerid and documentid=@documentid and applicationid=@applicationid";
-                    object[] parameters = {
-                                            new SqlParameter("@customerid", customerid),
-                                            new SqlParameter("@documentid", documentid),
-                                            new SqlParameter("@applicationid", applicationid),
-                                          };
-                    var results = context.Signature.SqlQuery(sqlSearch, parameters);
 
-                    foreach (var s in results) {
-                        PruSignBackEnd.PruSign.Object.Signature aux = new PruSign.Object.Signature();
-                        aux.applicationId = s.applicationid;
-                        aux.customerId = s.customerid;
-                        aux.customerName = s.customername;
-                        aux.datetime = s.datetime.ToString();
-                        aux.documentId = s.documentid;
-                        aux.hash = s.hash;
-                        aux.image = s.image;
-                        Array.Resize(ref response, response.Length+1);
-                        response[response.Length - 1] = aux;
-                    }
-                }
-                return response;
+        public SignatureApiController()
+        {
+            serviceSignature = new Service<Signature>(db);
         }
 
-        public string get(int id)
-		{
-			return "value";
-		}
+        [Route("api/signature/")]
+        public HttpResponseMessage get(string customerid, string documentid, string applicationid)
+        {
+            try
+            {
+                var signatures = serviceSignature.GetAll().Where(signature => signature.CustomerId.Equals(customerid) &&
+                                                                  signature.DocumentId.Equals(documentid) &&
+                                                                  signature.ApplicationId.Equals(applicationid));
 
-		public HttpResponseMessage Post(PruSignBackEnd.PruSign.Object.Signature signature)
-		{
-			try
-			{
-                var context = new DB.PruSignEntities();
-                context.Signature.Add(new DB.Signature() {
-                    applicationid = signature.applicationId,
-                    customerid = signature.customerId,
-                    customername = signature.customerName,
-                    datetime = System.DateTime.Parse(signature.datetime),
-                    documentid = signature.documentId,
-                    hash = signature.hash,
-                    image = signature.image
-                });
-                context.SaveChanges();
-
-				return new HttpResponseMessage(HttpStatusCode.OK);
-
-			}
-			catch (Exception)
-			{
+                var resp = JsonConvert.SerializeObject(signatures);
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-			}
+            }
+        }
 
+        [Route("api/signature/")]
+        public HttpResponseMessage Post(Signature signature)
+        {
+            try
+            {
+                var newSignature = new Signature()
+                {
+                    ApplicationId = signature.ApplicationId,
+                    CustomerId = signature.CustomerId,
+                    CustomerName = signature.CustomerName,
+                    DocumentId = signature.DocumentId,
+                    Hash = signature.Hash,
+                    Image = signature.Image
+                };
 
-		}
+                serviceSignature.Add(newSignature);
+                db.SaveChanges();
 
-
-
-	}
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:PruSign.CustomViews"
              x:Class="PruSign.SettingsPage">
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
@@ -16,6 +17,13 @@
                     <Label  Text="Settings" FontSize="Large" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
                 </StackLayout>
             </AbsoluteLayout>
+            
+            <Label Text="Logs" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" FontSize="Large" Margin="10,20,10,0"></Label>
+            <BoxView Color="{StaticResource PrudentialBlue}" HeightRequest="1" HorizontalOptions="FillAndExpand"></BoxView>
+            <controls:EnhancedButton BackgroundColor="White" Text="Log error list" Command="{Binding OnViewLogListTappedCommand}"></controls:EnhancedButton>
+            <BoxView Color="{StaticResource PrudentialBlue}" HeightRequest="1" HorizontalOptions="FillAndExpand"></BoxView>
+            <controls:EnhancedButton BackgroundColor="White" Text="Send Logs" Command="{Binding OnSendLogsTappedCommand}"></controls:EnhancedButton>
+            <BoxView Color="{StaticResource PrudentialBlue}" HeightRequest="1" HorizontalOptions="FillAndExpand"></BoxView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -33,5 +33,23 @@ namespace PruSign.iOS.Data
 
             return connection;
         }
+
+        public SQLiteConnection GetConnection()
+        {
+            var fileName = "PruSign.db";
+
+            string docFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            string libFolder = Path.Combine(docFolder, "..", "Library", "Databases");
+
+            if (!Directory.Exists(libFolder))
+            {
+                Directory.CreateDirectory(libFolder);
+            }
+
+            var path = Path.Combine(libFolder, fileName);
+            var connection = new SQLiteConnection(path);
+
+            return connection;
+        }
     }
 }

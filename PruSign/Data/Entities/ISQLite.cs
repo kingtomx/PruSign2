@@ -7,5 +7,6 @@ namespace PruSign.Data.Entities
     public interface ISQLite
     {
         SQLite.SQLiteAsyncConnection GetConnectionAsync();
+        SQLite.SQLiteConnection GetConnection();
     }
 }

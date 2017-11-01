@@ -31,5 +31,17 @@ namespace PruSign.Droid.Data
 
             return connection;
         }
+
+        public SQLiteConnection GetConnection()
+        {
+            var fileName = "PruSign.db";
+
+            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var path = Path.Combine(documentsPath, fileName);
+
+            var connection = new SQLiteConnection(path);
+
+            return connection;
+        }
     }
 }

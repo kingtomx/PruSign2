@@ -17,8 +17,8 @@ namespace PruSign.Data.ViewModels
         public ICommand OnBtnCloseClickedCommand { get; set; }
         public ICommand OnBtnSendLogsClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
-        private PruSignDatabase db { get; set; }
-        private ServiceAsync<LogEntry> serviceLogs { get; set; }
+        private PruSignDatabase Db { get; set; }
+        private ServiceAsync<LogEntry> ServiceLogs { get; set; }
 
         #region Properties
         private bool isEmpty;
@@ -71,7 +71,8 @@ namespace PruSign.Data.ViewModels
         }
 
         private List<LogEntry> logs;
-        public List<LogEntry> Logs {
+        public List<LogEntry> Logs
+        {
             get { return logs; }
             set
             {
@@ -92,8 +93,22 @@ namespace PruSign.Data.ViewModels
             ShowNoResults = false;
             Navigation = navigation;
             Logs = new List<LogEntry>();
-            db = new PruSignDatabase();
-            serviceLogs = new ServiceAsync<LogEntry>(db);
+            Db = new PruSignDatabase();
+            ServiceLogs = new ServiceAsync<LogEntry>(Db);
+
+            MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogsConfirmation", async (sender) =>
+            {
+                try
+                {
+                    var request = await SenderUtil.SendDeviceLogs();
+                    Console.WriteLine(request);
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Log(ex);
+                    MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsError");
+                }
+            });
         }
 
         public async Task Initialize()
@@ -102,10 +117,9 @@ namespace PruSign.Data.ViewModels
             {
                 // Try to get the log list. If there is any issue retrieving results, 
                 // the application will display an alert message and return to the previous page
-                Logs = await serviceLogs.GetAll()
+                Logs = await ServiceLogs.GetAll()
                     .OrderByDescending(log => log.Created)
-                    .Take(20)
-                    .ToListAsync();
+                    .Take(20).ToListAsync();
                 IsEmpty = (Logs.Count > 0) ? false : true;
 
             }
@@ -129,7 +143,7 @@ namespace PruSign.Data.ViewModels
 
         public void OnBtnSendLogsClicked()
         {
-            MessagingCenter.Send<LogViewModel>(this, "SendLogs");
+            MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogs");
         }
 
         void OnPropertyChanged([CallerMemberName] string name = "")

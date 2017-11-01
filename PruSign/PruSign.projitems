@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PruSignPage.xaml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HomePage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\ISQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Service.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ServiceAsync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\UserCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\HomeViewModel.cs" />
@@ -35,8 +36,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)LogPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)PruSignPage.xaml.cs">
-      <DependentUpon>PruSignPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomViews\ImageWithTouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SenderUtil.cs" />

@@ -17,7 +17,7 @@ namespace PruSignBackEnd.Helpers
 
             var systemLog = new SystemLog()
             {
-                StackTrace = ex.Message
+                StackTrace = ex.ToString()
             };
             serviceSystemLog.Add(systemLog);
             db.SaveChanges();

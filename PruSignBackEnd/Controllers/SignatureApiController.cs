@@ -14,6 +14,7 @@ using PruSignBackEnd.Helpers;
 
 namespace PruSignBackEnd
 {
+    [RoutePrefix("api")]
     public class SignatureApiController : ApiController
     {
         private PruSignContext db = new PruSignContext();
@@ -25,8 +26,8 @@ namespace PruSignBackEnd
             serviceSignature = new Service<Signature>(db);
         }
 
-        [Route("api/signature/")]
-        public HttpResponseMessage get(string customerid, string documentid, string applicationid)
+        [Route("signature/")]
+        public HttpResponseMessage Get(string customerid, string documentid, string applicationid)
         {
             try
             {
@@ -48,7 +49,8 @@ namespace PruSignBackEnd
             }
         }
 
-        [Route("api/signature/")]
+        [HttpPost]
+        [Route("signature/")]
         public HttpResponseMessage Post(Signature signature)
         {
             try

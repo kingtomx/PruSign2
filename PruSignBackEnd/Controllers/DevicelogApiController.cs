@@ -2,6 +2,7 @@
 using PruSignBackEnd.Data.DB;
 using PruSignBackEnd.Data.Entities;
 using PruSignBackEnd.Helpers;
+using PruSignBackEnd.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ using System.Text;
 using System.Web;
 using System.Web.Http;
 
-namespace PruSignBackEnd.Controllers
+namespace PruSignBackEnd
 {
+    [RoutePrefix("api")]
     public class DeviceLogApiController : ApiController
     {
         private PruSignContext db = new PruSignContext();
@@ -23,7 +25,7 @@ namespace PruSignBackEnd.Controllers
             serviceDeviceLog = new Service<DeviceLog>(db);
         }
 
-        [Route("api/devicelog/")]
+        [Route("devicelog/")]
         public HttpResponseMessage Get(string device)
         {
             try
@@ -33,7 +35,26 @@ namespace PruSignBackEnd.Controllers
                 {
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
                 }
-                var resp = JsonConvert.SerializeObject(logs);
+
+                // The original query returns the log.details field as a string. 
+                // Below we deserialize the json string into a DeviceLogDetailsViewModel array and, finally, 
+                // we create a DeviceLogViewModel object including the details inside. 
+                // Now the details will be returned as json object arrays 
+                List<object> formattedResults = new List<object>();
+
+                foreach (var item in logs)
+                {
+                    DeviceLogDetailsViewModel[] result = JsonConvert.DeserializeObject<DeviceLogDetailsViewModel[]>(item.Details);
+                    formattedResults.Add(new DeviceLogViewModel
+                    {
+                        Device = item.Device,
+                        Created = item.Created.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Updated = item.Updated.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Details = result
+                    });
+                    
+                }
+                var resp = JsonConvert.SerializeObject(formattedResults);
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -47,7 +68,8 @@ namespace PruSignBackEnd.Controllers
             }
         }
 
-        [Route("api/devicelog/")]
+        [HttpPost]
+        [Route("devicelog/")]
         public HttpResponseMessage Post(DeviceLog log)
         {
             try

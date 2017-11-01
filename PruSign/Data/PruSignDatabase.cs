@@ -10,6 +10,7 @@ namespace PruSign.Data
 	public class PruSignDatabase
 	{
         public SQLiteAsyncConnection ConnectionAsync;
+        public SQLiteConnection Connection;
 
         public PruSignDatabase()
 		{
@@ -17,6 +18,11 @@ namespace PruSign.Data
             ConnectionAsync.CreateTableAsync<SignatureItem>();
             ConnectionAsync.CreateTableAsync<UserCredentials>();
             ConnectionAsync.CreateTableAsync<LogEntry>();
+
+            Connection = DependencyService.Get<ISQLite>().GetConnection();
+            Connection.CreateTable<SignatureItem>();
+            Connection.CreateTable<UserCredentials>();
+            Connection.CreateTable<LogEntry>();
         }
 	}
 }

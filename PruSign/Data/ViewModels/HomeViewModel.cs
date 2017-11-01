@@ -105,7 +105,7 @@ namespace PruSign.Data.ViewModels
                 else
                 {
                     SenderUtil.SendSign(ClientName, ClientId, DocumentId, Application, CurrentDate);
-                    MessagingCenter.Send<HomeViewModel>(this, "Success");
+                    MessagingCenter.Send<HomeViewModel>(this, "HomeSuccess");
                     return;
                 }
             }
@@ -126,7 +126,7 @@ namespace PruSign.Data.ViewModels
 
         void SendError(string errorMessage)
         {
-            MessagingCenter.Send<HomeViewModel, string>(this, "Error", errorMessage);
+            MessagingCenter.Send<HomeViewModel, string>(this, "HomeError", errorMessage);
         }
 
         void OnPropertyChanged([CallerMemberName] string name = "")

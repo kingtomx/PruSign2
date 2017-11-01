@@ -22,7 +22,7 @@
             <BoxView Color="{StaticResource PrudentialBlue}" HeightRequest="1" HorizontalOptions="FillAndExpand"></BoxView>
             <controls:EnhancedButton BackgroundColor="White" Text="Log error list" Command="{Binding OnViewLogListTappedCommand}"></controls:EnhancedButton>
             <BoxView Color="{StaticResource PrudentialBlue}" HeightRequest="1" HorizontalOptions="FillAndExpand"></BoxView>
-            <controls:EnhancedButton BackgroundColor="White" Text="Send Logs" Command="{Binding OnSendLogsTappedCommand}"></controls:EnhancedButton>
+            <controls:EnhancedButton BackgroundColor="White" Text="Send Logs" Command="{Binding OnBtnSendLogsClickedCommand}"></controls:EnhancedButton>
             <BoxView Color="{StaticResource PrudentialBlue}" HeightRequest="1" HorizontalOptions="FillAndExpand"></BoxView>
         </StackLayout>
     </ContentPage.Content>

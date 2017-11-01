@@ -20,6 +20,32 @@ namespace PruSign
 			InitializeComponent ();
             SettingsVM = new SettingsViewModel(Navigation);
             BindingContext = SettingsVM;
-		}
-	}
+
+            MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogs", (sender) =>
+            {
+                DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
+                .ContinueWith(action =>
+                {
+                    // If the user confirms, then we go back to the view model to process the POST to the backend.
+                    if (action.Result)
+                    {
+                        MessagingCenter.Send<SettingsPage>(this, "SettingsVM_SendLogsConfirmation");
+                    }
+                });
+            });
+
+            MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError", (sender) =>
+            {
+                DisplayAlert("Error", "There was an error trying to send the logs", "Ok");
+            });
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError");
+            MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogs");
+
+            base.OnDisappearing();
+        }
+    }
 }

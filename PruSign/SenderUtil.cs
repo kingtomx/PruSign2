@@ -4,6 +4,12 @@ using Newtonsoft.Json;
 using PruSign.Data.Entities;
 using PruSign.Data;
 using PruSign.Helpers;
+using System.Collections.Generic;
+using RestSharp;
+using System.Net.Http;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PruSign
 {
@@ -127,6 +133,36 @@ namespace PruSign
             byte[] bytes = new byte[str.Length * sizeof(char)];
             System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
+        }
+
+        public static async Task<HttpResponseMessage> SendDeviceLogs()
+        {
+            try
+            {
+                var db = new PruSignDatabase();
+                var serviceLogs = new ServiceAsync<LogEntry>(db);
+                var logs = await serviceLogs.GetAll().ToListAsync();
+                var client = new RestClient("http://192.168.89.36");
+                var request = new RestRequest("api/devicelog", Method.POST);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddJsonBody(new
+                {
+                    Device = "Test",
+                    Details = JsonConvert.SerializeObject(logs)
+                });
+
+                var response = await client.ExecuteTaskAsync(request);
+                
+                return new HttpResponseMessage(){
+                    StatusCode = response.StatusCode,
+                    Content = new StringContent(response.Content, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Log(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

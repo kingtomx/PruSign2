@@ -9,26 +9,26 @@ namespace PruSign.Data
 {
     public class ServiceAsync<T> where T : class, IEntity, new()
     {
-        private SQLiteAsyncConnection _connection;
+        private SQLiteAsyncConnection _asyncConnection;
 
         public ServiceAsync(PruSignDatabase db)
         {
-            _connection = db.ConnectionAsync;
+            _asyncConnection = db.ConnectionAsync;
         }
 
         public AsyncTableQuery<T> GetAll()
         {
-            return _connection.Table<T>();
+            return _asyncConnection.Table<T>();
         }
 
         public Task<T> Get(int id)
         {
-            return _connection.Table<T>().Where(t => t.ID == id).FirstOrDefaultAsync();
+            return _asyncConnection.Table<T>().Where(t => t.ID == id).FirstOrDefaultAsync();
         }
 
         public async Task Delete(T entity)
         {
-            await _connection.DeleteAsync(entity);
+            await _asyncConnection.DeleteAsync(entity);
         }
 
         public async Task Add(T entity)
@@ -36,19 +36,19 @@ namespace PruSign.Data
             entity.Created = DateTime.Now;
             entity.Updated = DateTime.Now;
 
-            await _connection.InsertAsync(entity);
+            await _asyncConnection.InsertAsync(entity);
         }
 
         public async Task Update(T entity)
         {
             entity.Updated = DateTime.Now;
 
-            await _connection.UpdateAsync(entity);
+            await _asyncConnection.UpdateAsync(entity);
         }
 
         public async Task DeleteAll(string table)
         {
-            await _connection.ExecuteAsync("DELETE FROM " + table);
+            await _asyncConnection.ExecuteAsync("DELETE FROM " + table);
         }
     }
 }

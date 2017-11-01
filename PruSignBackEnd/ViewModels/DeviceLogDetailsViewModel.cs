@@ -1,14 +1,12 @@
-﻿using PruSign.Data.Entities;
-using SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Web;
 
-namespace PruSign.Data
+namespace PruSignBackEnd.ViewModels
 {
-    public class LogEntry : IEntity
+    public class DeviceLogDetailsViewModel
     {
-        [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
 
         public string Message { get; set; }

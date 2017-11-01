@@ -12,14 +12,14 @@ namespace PruSign
 		{
 			InitializeComponent();
 
-			MainPage = new PruSignPage();
+			MainPage = new HomePage();
 
             MessagingCenter.Subscribe<LoginViewModel>(this, "RedirectToHome", (sender) =>
             {
                 if (!IsLocked)
                 {
                     IsLocked = true;
-                    MainPage = new PruSignPage();
+                    MainPage = new HomePage();
                 }
             });
         }

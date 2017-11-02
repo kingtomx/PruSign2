@@ -141,7 +141,7 @@ namespace PruSign
             {
                 var db = new PruSignDatabase();
                 var serviceLogs = new ServiceAsync<LogEntry>(db);
-                var logsQueryable = serviceLogs.GetAll();
+                var logsQueryable = serviceLogs.GetAll().Where(l => !l.Sent);
                 var logs = await logsQueryable.ToListAsync();
 
                 if (logs.Count > 0)

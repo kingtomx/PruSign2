@@ -106,6 +106,10 @@
     <Compile Include="Migrations\201710311421263_New fields included.Designer.cs">
       <DependentUpon>201710311421263_New fields included.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711021152117_Change DeviceLog entity.cs" />
+    <Compile Include="Migrations\201711021152117_Change DeviceLog entity.Designer.cs">
+      <DependentUpon>201711021152117_Change DeviceLog entity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
     <Compile Include="Data\Entities\DeviceLog.cs" />
@@ -113,7 +117,7 @@
     <Compile Include="Data\Entities\PointWhen.cs" />
     <Compile Include="Data\DB\PruSignContext.cs" />
     <Compile Include="Data\Entities\Signature.cs" />
-    <Compile Include="ViewModels\DeviceLogDetailsViewModel.cs" />
+    <Compile Include="ViewModels\DeviceLogEntriesViewModel.cs" />
     <Compile Include="ViewModels\DeviceLogViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710311421263_New fields included.resx">
       <DependentUpon>201710311421263_New fields included.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711021152117_Change DeviceLog entity.resx">
+      <DependentUpon>201711021152117_Change DeviceLog entity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

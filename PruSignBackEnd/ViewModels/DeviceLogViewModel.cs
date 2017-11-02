@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PruSignBackEnd.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,8 +9,6 @@ namespace PruSignBackEnd.ViewModels
     public class DeviceLogViewModel
     {
         public string Device { get; set; }
-        public string Created { get; set; }
-        public string Updated { get; set; }
-        public DeviceLogDetailsViewModel[] Details{ get; set; }
+        public List<DeviceLogEntriesViewModel> Entries { get; set; }
     }
 }

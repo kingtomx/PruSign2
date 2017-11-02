@@ -10,7 +10,7 @@ namespace PruSignBackEnd.Data.DB
     public class PruSignContext : DbContext
     {
         public PruSignContext()
-            : base("name=PruSignDatabase")
+            : base("PruSignDatabase")
         {
         }
 

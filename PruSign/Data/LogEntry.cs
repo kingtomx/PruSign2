@@ -11,6 +11,10 @@ namespace PruSign.Data
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
 
+        public DateTime Created { get; set; }
+
+        public DateTime Updated { get; set; }
+
         public string Message { get; set; }
 
         public string StackTrace { get; set; }
@@ -21,8 +25,6 @@ namespace PruSign.Data
             set { }
         }
 
-        public DateTime Created { get; set; }
-
-        public DateTime Updated { get; set; }
+        public bool Sent { get; set; }
     }
 }

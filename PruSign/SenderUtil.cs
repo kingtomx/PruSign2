@@ -141,22 +141,39 @@ namespace PruSign
             {
                 var db = new PruSignDatabase();
                 var serviceLogs = new ServiceAsync<LogEntry>(db);
-                var logs = await serviceLogs.GetAll().ToListAsync();
-                var client = new RestClient("http://192.168.89.36");
-                var request = new RestRequest("api/devicelog", Method.POST);
-                request.AddHeader("Content-Type", "application/json");
-                request.AddJsonBody(new
-                {
-                    Device = "Test",
-                    Details = JsonConvert.SerializeObject(logs)
-                });
+                var logsQueryable = serviceLogs.GetAll();
+                var logs = await logsQueryable.ToListAsync();
 
-                var response = await client.ExecuteTaskAsync(request);
+                if (logs.Count > 0)
+                {
+                    var client = new RestClient("http://192.168.89.36");
+                    var request = new RestRequest("api/devicelog", Method.POST);
+                    request.AddHeader("Content-Type", "application/json");
+
+                    var jsonBody = new
+                    {
+                        Device = "test",
+                        Entries = logs
+                    };
+                    request.AddJsonBody(jsonBody);
+
+                    var response = await client.ExecuteTaskAsync(request);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        foreach (var item in logs)
+                        {
+                            item.Sent = true;
+                            await serviceLogs.Update(item);
+                        }
+                    }
+                    return new HttpResponseMessage()
+                    {
+                        StatusCode = response.StatusCode,
+                        Content = new StringContent(response.Content, Encoding.UTF8, "application/json")
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.OK);
                 
-                return new HttpResponseMessage(){
-                    StatusCode = response.StatusCode,
-                    Content = new StringContent(response.Content, Encoding.UTF8, "application/json")
-                };
             }
             catch (Exception ex)
             {

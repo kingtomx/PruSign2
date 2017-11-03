@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -43,7 +44,17 @@ namespace PruSign.Data.ViewModels
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
         }
 
-        public void OnBtnSubmitTapped()
+        //public async Task IsAuthenticated()
+        //{
+        //    // Checking if the credentials are stored in the database
+        //    var db = new PruSignDatabase();
+        //    var userCredentialService = new ServiceAsync<UserCredentials>(db);
+        //    int result = await userCredentialService.GetAll().CountAsync();
+        //    if(result > 0)
+        //        MessagingCenter.Send<LoginViewModel>(this, "RedirectToHome");
+        //}
+
+        public async void OnBtnSubmitTapped()
         {
             try
             {
@@ -57,7 +68,25 @@ namespace PruSign.Data.ViewModels
                 }
                 else
                 {
-                    MessagingCenter.Send<LoginViewModel>(this, "RedirectToHome");
+                    // TO-DO CHECK AGAINST THE AUTHORIZATIOIN SERVER TO VALIDATE THE CREDENTIALS
+
+                    // Saving credentials
+                    try
+                    {
+                        var db = new PruSignDatabase();
+                        var userCredentialService = new ServiceAsync<UserCredentials>(db);
+                        await userCredentialService.Add(new UserCredentials()
+                        {
+                            Username = this.Username,
+                            Password = this.Password
+                        });
+                        MessagingCenter.Send<LoginViewModel>(this, "RedirectToHome");
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Log(ex);
+                        MessagingCenter.Send<LoginViewModel>(this, "LoginVM_ErrorSavingCredentials");
+                    }
                 }
             }
             catch (Exception ex)

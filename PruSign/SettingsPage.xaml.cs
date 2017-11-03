@@ -1,4 +1,4 @@
-﻿    using PruSign.Data.ViewModels;
+﻿using PruSign.Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +20,16 @@ namespace PruSign
             InitializeComponent();
             SettingsVM = new SettingsViewModel(Navigation);
             BindingContext = SettingsVM;
+        }
 
+        protected override void OnAppearing()
+        {
             MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogs", (sender) =>
             {
                 DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
                 .ContinueWith(action =>
                 {
-                    // If the user confirms, then we go back to the view model to process the POST to the backend.
-                    if (action.Result)
-                    {
-                        MessagingCenter.Send<SettingsPage>(this, "SettingsVM_SendLogsConfirmation");
-                    }
+                    MessagingCenter.Send<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation", action.Result);
                 });
             });
 
@@ -50,6 +49,7 @@ namespace PruSign
                     DisplayAlert("Success", "Your logs have been sent", "Ok");
                 });
             });
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()
@@ -57,7 +57,7 @@ namespace PruSign
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogs");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
-
+            SettingsVM = null;
             base.OnDisappearing();
         }
     }

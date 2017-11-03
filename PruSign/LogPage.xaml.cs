@@ -26,11 +26,7 @@ namespace PruSign
                 DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
                 .ContinueWith(action =>
                 {
-                    // If the user confirms, then we go back to the view model to process the POST to the backend.
-                    if (action.Result)
-                    {
-                        MessagingCenter.Send<LogPage>(this, "LogVM_SendLogsConfirmation");
-                    }
+                    MessagingCenter.Send<LogPage, bool>(this, "LogVM_SendLogsConfirmation", action.Result);
                 });
             });
 
@@ -57,7 +53,7 @@ namespace PruSign
                     DisplayAlert("Error", "There was an error trying to get the logs", "Ok")
                     .ContinueWith(action =>
                     {
-                        Navigation.PopModalAsync();
+                        
                     });
                 });
             });
@@ -83,6 +79,7 @@ namespace PruSign
             MessagingCenter.Unsubscribe<LogViewModel>(this, "LogVM_SendLogsError");
             MessagingCenter.Unsubscribe<LogViewModel>(this, "LogVM_SendLogsSuccess");
             MessagingCenter.Unsubscribe<LogViewModel>(this, "LogVM_CannotGetLogs");
+            LogVM = null;
             base.OnDisappearing();
         }
     }

@@ -4,6 +4,8 @@
              x:Class="PruSign.LogPage">
     <ContentPage.Content>
         <StackLayout>
+            
+            <!--This will only be visible when the page is loading -->
             <StackLayout IsVisible="{Binding IsLoading}" VerticalOptions="FillAndExpand">
                 <ActivityIndicator VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand" IsRunning="True" IsVisible="True"
                                Color="{StaticResource PrudentialBlue}" />
@@ -43,16 +45,16 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="Medium" Text="{Binding FormattedDate}"/>
-                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Message}" FontAttributes="Bold"/>
-                                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding StackTrace}"/>
-                                    <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" Text="Error Location: " FontAttributes="Italic"/>
-                                    <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" Text="{Binding ErrorLocation}"/>
+                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding FormattedDate}"/>
+                                    <Label Grid.Row="1" Grid.Column="0" FontSize="Medium" TextColor="{StaticResource PrudentialBlue}" Text="{Binding Message}" FontAttributes="Bold"/>
+                                    <Label Grid.Row="2" Grid.Column="0" Text="{Binding StackTrace}"/>
+                                    <Label Grid.Row="3" Grid.Column="0" Text="Error Location: " FontAttributes="Bold,Italic"/>
+                                    <Label Grid.Row="4" Grid.Column="0" Text="{Binding ErrorLocation}"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

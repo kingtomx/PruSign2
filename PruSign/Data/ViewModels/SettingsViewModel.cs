@@ -19,28 +19,25 @@ namespace PruSign.Data.ViewModels
 
         public bool IsLocked { get; set; }
 
+        // Used to show the Activity Indicator
+        private bool isLoading;
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set
+            {
+                isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
         public SettingsViewModel(INavigation navigation)
         {
+            IsLoading = false;
             OnViewLogListTappedCommand = new Command(OnViewLogListTapped);
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
             OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             Navigation = navigation;
-
-            // This Message waits for user confirmation before run the SendDeviceLogs function
-            MessagingCenter.Subscribe<SettingsPage>(this, "SettingsVM_SendLogsConfirmation", async (sender) =>
-            {
-                var response = await SenderUtil.SendDeviceLogs();
-                if (response.IsSuccessStatusCode)
-                {
-                    // If the operation was successfull, we'll show a success message
-                    MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
-                }
-                else
-                {
-                    MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsError");
-                }
-
-            });
         }
 
         public void OnViewLogListTapped()
@@ -62,6 +59,28 @@ namespace PruSign.Data.ViewModels
 
         public void OnBtnSendLogsClicked()
         {
+            // This Message waits for user confirmation before run the SendDeviceLogs function
+            MessagingCenter.Subscribe<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation", async (sender, flag) =>
+            {
+                if (flag)
+                {
+                    IsLoading = true;
+                    var response = await SenderUtil.SendDeviceLogs();
+                    IsLoading = false;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // If the operation was successfull, we'll show a success message
+                        MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
+                    }
+                    else
+                    {
+                        MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsError");
+                    }
+                }
+
+                MessagingCenter.Unsubscribe<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation");
+
+            });
             MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogs");
         }
 

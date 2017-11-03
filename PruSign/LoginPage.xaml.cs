@@ -21,11 +21,38 @@ namespace PruSign
             InitializeComponent();
             LoginVM = new LoginViewModel();
             BindingContext = LoginVM;
+        }
+
+        protected override void OnAppearing()
+        {
+            //if (LoginVM != null)
+            //{
+            //    Task.Run(async () =>
+            //    {
+            //        await LoginVM.IsAuthenticated();
+            //    });
+            //}
 
             MessagingCenter.Subscribe<LoginViewModel, string>(this, "Error", (sender, arg) =>
             {
                 DisplayAlert("Error", (string)arg, "Cancel");
             });
+            base.OnAppearing();
+
+            MessagingCenter.Subscribe<LoginViewModel>(this, "LoginVM_ErrorSavingCredentials", (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    DisplayAlert("Error", "There was an error trying to login", "Ok");
+                });
+            });
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<LoginViewModel, string>(this, "Error");
+            MessagingCenter.Unsubscribe<LoginViewModel>(this, "LoginVM_ErrorSavingCredentials");
+            base.OnDisappearing();
         }
     }
 }

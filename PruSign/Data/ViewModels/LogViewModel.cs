@@ -67,24 +67,6 @@ namespace PruSign.Data.ViewModels
             Logs = new List<LogEntry>();
             Db = new PruSignDatabase();
             ServiceLogs = new ServiceAsync<LogEntry>(Db);
-
-            // This Message waits for user confirmation before run the SendDeviceLogs function
-            MessagingCenter.Subscribe<LogPage>(this, "LogVM_SendLogsConfirmation", async (sender) =>
-            {
-                IsLoading = true;
-                var response = await SenderUtil.SendDeviceLogs();
-                IsLoading = false;
-                if (response.IsSuccessStatusCode)
-                {
-                    // If the operation was successfull, we'll show a success message
-                    MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsSuccess");
-                }
-                else
-                {
-                    MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsError");
-                }
-
-            });
         }
 
         public async Task Initialize()
@@ -118,6 +100,29 @@ namespace PruSign.Data.ViewModels
 
         public void OnBtnSendLogsClicked()
         {
+            // This Message waits for user confirmation before run the SendDeviceLogs function
+            MessagingCenter.Subscribe<LogPage, bool>(this, "LogVM_SendLogsConfirmation", async (sender, flag) =>
+            {
+                if (flag)
+                {
+                    IsLoading = true;
+                    var response = await SenderUtil.SendDeviceLogs();
+                    IsLoading = false;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // If the operation was successfull, we'll show a success message
+                        MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsSuccess");
+                    }
+                    else
+                    {
+                        MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsError");
+                    }
+                }
+
+                MessagingCenter.Unsubscribe<LogPage, bool>(this, "LogVM_SendLogsConfirmation");
+
+            });
+
             MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogs");
         }
 

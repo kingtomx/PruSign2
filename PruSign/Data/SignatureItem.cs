@@ -9,7 +9,11 @@ namespace PruSign.Data
 		[PrimaryKey, AutoIncrement]
 		public int ID { get; set; }
 
-		public string SignatureObject { get; set; }
+        public DateTime Created { get; set; }
+
+        public DateTime Updated { get; set; }
+
+        public string SignatureObject { get; set; }
 
         public string CustomerName { get; set; }
 
@@ -19,16 +23,10 @@ namespace PruSign.Data
 
 		public string AppId { get; set; }
 
-		public long CreationTimeStamp { get; set; }
-
 		public bool Sent { get; set; }
 
-		public long SentTimeStamp { get; set; }
+		public string SentFormattedDate { get; set; }
 
 		public string Miscelanea { get; set; }
-
-        public DateTime Created { get; set; }
-
-        public DateTime Updated { get; set; }
     }
 }

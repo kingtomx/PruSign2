@@ -17,6 +17,7 @@ namespace PruSignBackEnd.Data.Entities
         public string Device { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
+        public string ErrorLocation { get; set; }
         public string FormattedDate { get; set; }
     }
 }

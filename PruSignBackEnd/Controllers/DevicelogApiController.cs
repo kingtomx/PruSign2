@@ -44,6 +44,7 @@ namespace PruSignBackEnd
                     {
                         FormattedDate = item.FormattedDate,
                         Message = item.Message,
+                        ErrorLocation = item.ErrorLocation,
                         StackTrace = item.StackTrace
                     });
                 }
@@ -79,7 +80,8 @@ namespace PruSignBackEnd
                             Device = log.Device,
                             FormattedDate = item.FormattedDate,
                             Message = item.Message,
-                            StackTrace = item.StackTrace
+                            StackTrace = item.StackTrace,
+                            ErrorLocation = item.ErrorLocation
                         });
                     }
                 }

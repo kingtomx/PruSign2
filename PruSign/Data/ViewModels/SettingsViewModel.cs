@@ -26,18 +26,20 @@ namespace PruSign.Data.ViewModels
             OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             Navigation = navigation;
 
+            // This Message waits for user confirmation before run the SendDeviceLogs function
             MessagingCenter.Subscribe<SettingsPage>(this, "SettingsVM_SendLogsConfirmation", async (sender) =>
             {
-                try
+                var response = await SenderUtil.SendDeviceLogs();
+                if (response.IsSuccessStatusCode)
                 {
-                    await SenderUtil.SendDeviceLogs();
+                    // If the operation was successfull, we'll show a success message
+                    MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
                 }
-                catch (Exception ex)
+                else
                 {
-                    LogHelper.Log(ex);
                     MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsError");
-                    Console.WriteLine(ex.ToString());
                 }
+
             });
         }
 

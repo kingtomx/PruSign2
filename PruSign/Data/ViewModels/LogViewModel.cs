@@ -29,7 +29,6 @@ namespace PruSign.Data.ViewModels
             {
                 isEmpty = value;
                 OnPropertyChanged();
-                ShowNoResults = !failedToLoad && isEmpty && !isLoading;
             }
         }
 
@@ -41,31 +40,6 @@ namespace PruSign.Data.ViewModels
             set
             {
                 isLoading = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Used to show an error when there was any problem trying to retrieve the logs.
-        private bool failedToLoad;
-        public bool FailedToLoad
-        {
-            get { return failedToLoad; }
-            set
-            {
-                failedToLoad = value;
-                OnPropertyChanged();
-                ShowNoResults = !failedToLoad && isEmpty && !isLoading;
-            }
-        }
-
-        // Used to show a friendly message when there are no results to display.
-        private bool showNoResults;
-        public bool ShowNoResults
-        {
-            get { return showNoResults; }
-            set
-            {
-                showNoResults = !failedToLoad && isEmpty;
                 OnPropertyChanged();
             }
         }
@@ -88,26 +62,28 @@ namespace PruSign.Data.ViewModels
             OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
             IsLoading = true;
-            FailedToLoad = false;
             IsEmpty = false;
-            ShowNoResults = false;
             Navigation = navigation;
             Logs = new List<LogEntry>();
             Db = new PruSignDatabase();
             ServiceLogs = new ServiceAsync<LogEntry>(Db);
 
-            MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogsConfirmation", async (sender) =>
+            // This Message waits for user confirmation before run the SendDeviceLogs function
+            MessagingCenter.Subscribe<LogPage>(this, "LogVM_SendLogsConfirmation", async (sender) =>
             {
-                try
+                IsLoading = true;
+                var response = await SenderUtil.SendDeviceLogs();
+                IsLoading = false;
+                if (response.IsSuccessStatusCode)
                 {
-                    var request = await SenderUtil.SendDeviceLogs();
-                    Console.WriteLine(request);
+                    // If the operation was successfull, we'll show a success message
+                    MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsSuccess");
                 }
-                catch (Exception ex)
+                else
                 {
-                    LogHelper.Log(ex);
                     MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsError");
                 }
+
             });
         }
 
@@ -115,8 +91,7 @@ namespace PruSign.Data.ViewModels
         {
             try
             {
-                // Try to get the log list. If there is any issue retrieving results, 
-                // the application will display an alert message and return to the previous page
+                // Try to get the log list. If there is any issue retrieving results 
                 Logs = await ServiceLogs.GetAll()
                     .OrderByDescending(log => log.Created)
                     .Take(20).ToListAsync();
@@ -126,11 +101,11 @@ namespace PruSign.Data.ViewModels
             catch (Exception ex)
             {
                 LogHelper.Log(ex);
-                FailedToLoad = true;
+                //FailedToLoad = true;
+                MessagingCenter.Send<LogViewModel>(this, "LogVM_CannotGetLogs");
             }
 
             IsLoading = false;
-
         }
 
         public void OnBtnCloseClicked()

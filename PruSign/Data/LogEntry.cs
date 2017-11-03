@@ -19,6 +19,8 @@ namespace PruSign.Data
 
         public string StackTrace { get; set; }
 
+        public string ErrorLocation { get; set; }
+
         public string FormattedDate
         {
             get => Created.ToString("yyyy-MM-dd HH:mm:ss");

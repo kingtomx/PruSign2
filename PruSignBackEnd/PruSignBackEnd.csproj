@@ -110,6 +110,10 @@
     <Compile Include="Migrations\201711021152117_Change DeviceLog entity.Designer.cs">
       <DependentUpon>201711021152117_Change DeviceLog entity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711031238242_Adds ErrorLocation field.cs" />
+    <Compile Include="Migrations\201711031238242_Adds ErrorLocation field.Designer.cs">
+      <DependentUpon>201711031238242_Adds ErrorLocation field.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
     <Compile Include="Data\Entities\DeviceLog.cs" />
@@ -135,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711021152117_Change DeviceLog entity.resx">
       <DependentUpon>201711021152117_Change DeviceLog entity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711031238242_Adds ErrorLocation field.resx">
+      <DependentUpon>201711031238242_Adds ErrorLocation field.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

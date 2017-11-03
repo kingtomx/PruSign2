@@ -1,4 +1,4 @@
-﻿using PruSign.Data.ViewModels;
+﻿    using PruSign.Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +10,14 @@ using Xamarin.Forms.Xaml;
 
 namespace PruSign
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SettingsPage : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class SettingsPage : ContentPage
+    {
         private SettingsViewModel SettingsVM { get; set; }
 
-        public SettingsPage ()
-		{
-			InitializeComponent ();
+        public SettingsPage()
+        {
+            InitializeComponent();
             SettingsVM = new SettingsViewModel(Navigation);
             BindingContext = SettingsVM;
 
@@ -36,14 +36,27 @@ namespace PruSign
 
             MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError", (sender) =>
             {
-                DisplayAlert("Error", "There was an error trying to send the logs", "Ok");
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    DisplayAlert("Error", "There was an error trying to send the logs", "Ok");
+                });
+            });
+
+
+            MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess", (sender) =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    DisplayAlert("Success", "Your logs have been sent", "Ok");
+                });
             });
         }
 
         protected override void OnDisappearing()
         {
-            MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogs");
+            MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError");
+            MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
 
             base.OnDisappearing();
         }

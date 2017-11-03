@@ -13,5 +13,7 @@ namespace PruSignBackEnd.ViewModels
 
         public string FormattedDate { get; set; }
 
+        public string ErrorLocation { get; set; }
+
     }
 }

@@ -10,13 +10,14 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace PruSign
 {
     public static class SenderUtil
     {
 
-        public static async void SendSign(string name, string customerId, string documentId, string appName, string datetime)
+        public static async void SaveSign(string name, string customerId, string documentId, string appName, string datetime)
         {
             try
             {
@@ -82,9 +83,6 @@ namespace PruSign
                     DocumentId = documentId,
                     DNI = customerId,
                     AppId = appName,
-                    CreationTimeStamp = System.DateTime.Now.Ticks,
-                    Sent = false,
-                    SentTimeStamp = 0,
                     Miscelanea = "{}"
                 };
                 await serviceSignature.Add(dbItem);
@@ -95,6 +93,35 @@ namespace PruSign
             catch (Exception ex)
             {
                 LogHelper.Log(ex);
+            }
+        }
+
+        public static async void SendSign()
+        {
+            PruSignDatabase db = new PruSignDatabase();
+            var serviceSignature = new ServiceAsync<SignatureItem>(db);
+
+            var signaturesToSend = await serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
+            if (signaturesToSend.Count > 0)
+            {
+                var client = new RestClient("http://192.168.0.14");
+                var request = new RestRequest("api/signature", Method.POST);
+                request.AddHeader("Content-Type", "application/json");
+
+                request.AddJsonBody(signaturesToSend);
+
+                var response = await client.ExecuteTaskAsync(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    foreach (var s in signaturesToSend)
+                    {
+                        s.Sent = true;
+                        s.SentFormattedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        await serviceSignature.Update(s);
+                    }
+                }
+                // TO-DO 
+                // SEND DIFFERENT MESSAGES TO INDICATE IF THE SIGNATURE WERE SEND OR NOT.
             }
         }
 
@@ -141,12 +168,11 @@ namespace PruSign
             {
                 var db = new PruSignDatabase();
                 var serviceLogs = new ServiceAsync<LogEntry>(db);
-                var logsQueryable = serviceLogs.GetAll().Where(l => !l.Sent);
-                var logs = await logsQueryable.ToListAsync();
+                var logs = await serviceLogs.GetAll().Where(l => !l.Sent).ToListAsync();
 
                 if (logs.Count > 0)
                 {
-                    var client = new RestClient("http://192.168.89.36");
+                    var client = new RestClient("http://192.168.0.14");
                     var request = new RestRequest("api/devicelog", Method.POST);
                     request.AddHeader("Content-Type", "application/json");
 
@@ -166,11 +192,14 @@ namespace PruSign
                             await serviceLogs.Update(item);
                         }
                     }
-                    return new HttpResponseMessage()
+                    else
                     {
-                        StatusCode = response.StatusCode,
-                        Content = new StringContent(response.Content, Encoding.UTF8, "application/json")
-                    };
+                        // If something went wrong, we throw a new exception to return InternalServerError.
+                        // In that way, the user will be notified about the problem and the error details will be handled
+                        // By the log helper.
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
                 return new HttpResponseMessage(HttpStatusCode.OK);
                 
@@ -178,6 +207,7 @@ namespace PruSign
             catch (Exception ex)
             {
                 LogHelper.Log(ex);
+
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }

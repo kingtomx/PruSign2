@@ -32,18 +32,23 @@ namespace PruSign.Droid
             sensorManager = (SensorManager)GetSystemService(Context.SensorService);
             sensor = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
 
-            StartBackgroundCleanUp();
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            // Used to remove old logs and sent signatures
+            StartupCleanUp();
+
+            // Used to start synch job
+            StartBackgroundSync();
 
             LoadApplication(new App());
         }
 
 
-        private void StartBackgroundCleanUp()
+        private void StartBackgroundSync()
         {
             var periodicTask = new PeriodicTask.Builder()
                 .SetPeriod(30)
-                .SetService(Java.Lang.Class.FromType(typeof(BackgroundService)))
+                .SetService(Java.Lang.Class.FromType(typeof(BackgroundSyncService)))
                 .SetRequiredNetwork(0)
                 .SetTag("com.prudential.prusign")
                 .Build();
@@ -51,12 +56,16 @@ namespace PruSign.Droid
             GcmNetworkManager.GetInstance(this).Schedule(periodicTask);
         }
 
+        private void StartupCleanUp()
+        {
+            CleanUpHelper.CleanOldLogs();
+            CleanUpHelper.CleanSentSignatures();
+        }
+
         protected override void OnStop()
         {
+            ThreadPool.QueueUserWorkItem(async o => await SendHelper.SendSignatures());
             base.OnStop();
-
-            ThreadPool.QueueUserWorkItem(o => SendHelper.SendSignatures());
-
         }
 
         protected override void OnResume()

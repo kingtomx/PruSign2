@@ -29,7 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\LogViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\SettingsViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CleanHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CleanUpHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\LogHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ModalHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LoginPage.xaml.cs">

@@ -15,14 +15,14 @@ namespace PruSign.Droid.Binders
 {
     class BackgroundServiceBinder : Binder
     {
-        BackgroundService service;
+        BackgroundSyncService service;
 
-        public BackgroundServiceBinder(BackgroundService service)
+        public BackgroundServiceBinder(BackgroundSyncService service)
         {
             this.service = service;
         }
 
-        public BackgroundService GetBackgroundService()
+        public BackgroundSyncService GetBackgroundService()
         {
             return service;
         }

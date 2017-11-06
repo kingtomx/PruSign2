@@ -1,16 +1,30 @@
 ﻿using System;
+using SQLite;
+using PruSign.Data.Entities;
+
 namespace PruSign.Data.Entities
 {
-	public class Signature
+	public class Signature : IEntity
 	{
-		public byte[] image;
-		public object points;
-		public String datetime;
-		public String customerName;
-		public String customerId;
-		public String documentId;
-		public String applicationId;
-		public String hash;
+		[PrimaryKey, AutoIncrement]
+		public int ID { get; set; }
 
-	}
+        public DateTime Created { get; set; }
+
+        public DateTime Updated { get; set; }
+
+        public string SignatureObject { get; set; }
+
+        public string CustomerName { get; set; }
+
+		public string DocumentId { get; set; }
+
+		public string CustomerId { get; set; }
+
+		public string AppId { get; set; }
+
+		public bool Sent { get; set; }
+
+		public DateTime SentDate { get; set; }
+    }
 }

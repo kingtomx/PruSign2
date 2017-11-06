@@ -20,10 +20,7 @@ namespace PruSign
             InitializeComponent();
             SettingsVM = new SettingsViewModel(Navigation);
             BindingContext = SettingsVM;
-        }
 
-        protected override void OnAppearing()
-        {
             MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogs", (sender) =>
             {
                 DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
@@ -49,7 +46,6 @@ namespace PruSign
                     DisplayAlert("Success", "Your logs have been sent", "Ok");
                 });
             });
-            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PruSign.Data
+namespace PruSign.Data.Entities
 {
     class UserCredentials : IEntity
     {

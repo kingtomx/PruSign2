@@ -16,18 +16,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomViews\EnhancedButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\ISQLite.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Service.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ServiceAsync.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\UserCredentials.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\UserCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\HomeViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\LogViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CleanHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\LogHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ModalHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LoginPage.xaml.cs">
@@ -40,11 +42,11 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomViews\ImageWithTouch.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SenderUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\Signature.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SendHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ViewModels\SignatureViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IFileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PruSignDatabase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\SignatureItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\Signature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LongRunningTasks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsPage.xaml.cs">

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PruSign.Data
+namespace PruSign.Data.Entities
 {
     public class LogEntry : IEntity
     {
@@ -28,5 +28,7 @@ namespace PruSign.Data
         }
 
         public bool Sent { get; set; }
+
+        public DateTime SentDate { get; set; }
     }
 }

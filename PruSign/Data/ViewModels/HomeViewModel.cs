@@ -104,7 +104,7 @@ namespace PruSign.Data.ViewModels
                 }
                 else
                 {
-                    SenderUtil.SaveSign(ClientName, ClientId, DocumentId, Application, CurrentDate);
+                    SendHelper.SaveSign(ClientName, ClientId, DocumentId, Application, CurrentDate);
                     MessagingCenter.Send<HomeViewModel>(this, "HomeSuccess");
                     return;
                 }

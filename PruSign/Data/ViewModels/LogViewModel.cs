@@ -1,4 +1,5 @@
-﻿using PruSign.Helpers;
+﻿using PruSign.Data.Entities;
+using PruSign.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -106,7 +107,7 @@ namespace PruSign.Data.ViewModels
                 if (flag)
                 {
                     IsLoading = true;
-                    var response = await SenderUtil.SendDeviceLogs();
+                    var response = await SendHelper.SendDeviceLogs();
                     IsLoading = false;
                     if (response.IsSuccessStatusCode)
                     {

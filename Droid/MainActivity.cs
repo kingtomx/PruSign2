@@ -5,11 +5,13 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Hardware;
 using System.Threading;
-using Flurl;
-using Flurl.Http;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
 using PruSign.Data;
+using PruSign.Helpers;
+using System.Collections.Generic;
+using RestSharp;
+using System.Net;
+using Android.Gms.Gcm;
+using PruSign.Droid.Services;
 
 namespace PruSign.Droid
 {
@@ -19,7 +21,6 @@ namespace PruSign.Droid
         private static readonly object _syncLock = new object();
         private SensorManager sensorManager;
         private Sensor sensor;
-        private ShakeDetector shakeDetector;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -31,80 +32,41 @@ namespace PruSign.Droid
             sensorManager = (SensorManager)GetSystemService(Context.SensorService);
             sensor = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
 
-            shakeDetector = new ShakeDetector();
-            shakeDetector.Shaked += (sender, shakeCount) =>
-                {
-                    lock (_syncLock)
-                    {
-                        // Accion a realizar en el caso de que se detecte que el dispositivo ha sido agitado
-                    }
-                };
-
-
+            StartBackgroundCleanUp();
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             LoadApplication(new App());
         }
 
 
+        private void StartBackgroundCleanUp()
+        {
+            var periodicTask = new PeriodicTask.Builder()
+                .SetPeriod(30)
+                .SetService(Java.Lang.Class.FromType(typeof(BackgroundService)))
+                .SetRequiredNetwork(0)
+                .SetTag("com.prudential.prusign")
+                .Build();
+
+            GcmNetworkManager.GetInstance(this).Schedule(periodicTask);
+        }
 
         protected override void OnStop()
         {
             base.OnStop();
 
-            ThreadPool.QueueUserWorkItem(o => sendRestSignature());
+            ThreadPool.QueueUserWorkItem(o => SendHelper.SendSignatures());
 
         }
-
-        private async void sendRestSignature()
-        {
-            try
-            {
-                FileHelper fh = new FileHelper();
-                PruSignDatabase db = new PruSignDatabase();
-                ServiceAsync<SignatureItem> serviceSignature = new ServiceAsync<SignatureItem>(db);
-                System.Threading.Tasks.Task<System.Collections.Generic.List<SignatureItem>> items = serviceSignature.GetAll().Where(i => i.Sent == false).ToListAsync();
-                foreach (var item in items.Result)
-                {
-                    try
-                    {
-                        Signature requestItem = Signature.LoadFromJson(item.SignatureObject);
-                        var response = await "http://10.0.2.2:8080/api/SignatureApi".PostJsonAsync(requestItem);
-                        item.Sent = true;
-                        item.SentFormattedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        await serviceSignature.Update(item);
-                    }
-                    catch (FlurlHttpTimeoutException timeOutException)
-                    {
-                        item.Miscelanea = timeOutException.Message;
-                        await serviceSignature.Update(item);
-                    }
-                    catch (FlurlHttpException generalException)
-                    {
-                        item.Miscelanea = generalException.Message;
-                        await serviceSignature.Update(item);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                String error = ex.Message;
-            }
-        }
-
 
         protected override void OnResume()
         {
             base.OnResume();
-
-            sensorManager.RegisterListener(shakeDetector, sensor, SensorDelay.Ui);
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-
-            sensorManager.UnregisterListener(shakeDetector);
         }
 
 

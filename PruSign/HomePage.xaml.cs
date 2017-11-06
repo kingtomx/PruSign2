@@ -25,16 +25,6 @@ namespace PruSign
             });
         }
 
-        protected override void OnAppearing()
-        {
-            if(HomeVM != null)
-            {
-                // TO-DO Check if the user credentials are stored in the database
-
-            }
-            base.OnAppearing(); 
-        }
-
         protected override void OnDisappearing()
         {
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeError");

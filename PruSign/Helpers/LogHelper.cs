@@ -1,4 +1,5 @@
 ﻿using PruSign.Data;
+using PruSign.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

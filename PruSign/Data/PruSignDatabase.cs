@@ -15,12 +15,12 @@ namespace PruSign.Data
         public PruSignDatabase()
 		{
             ConnectionAsync = DependencyService.Get<ISQLite>().GetConnectionAsync();
-            ConnectionAsync.CreateTableAsync<SignatureItem>();
+            ConnectionAsync.CreateTableAsync<Signature>();
             ConnectionAsync.CreateTableAsync<UserCredentials>();
             ConnectionAsync.CreateTableAsync<LogEntry>();
 
             Connection = DependencyService.Get<ISQLite>().GetConnection();
-            Connection.CreateTable<SignatureItem>();
+            Connection.CreateTable<Signature>();
             Connection.CreateTable<UserCredentials>();
             Connection.CreateTable<LogEntry>();
         }

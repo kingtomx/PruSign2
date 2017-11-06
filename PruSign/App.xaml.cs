@@ -1,5 +1,6 @@
 ﻿using PruSign;
 using PruSign.Data;
+using PruSign.Data.Entities;
 using PruSign.Data.ViewModels;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -23,7 +24,7 @@ namespace PruSign
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    if(result < 0)
+                    if(result > 0)
                     {
                         MainPage = new HomePage();
                     }

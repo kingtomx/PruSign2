@@ -1,4 +1,5 @@
-﻿using PruSign.Helpers;
+﻿using PruSign.Data.Entities;
+using PruSign.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

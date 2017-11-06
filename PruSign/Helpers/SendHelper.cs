@@ -11,10 +11,11 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using PruSign.Data.ViewModels;
 
-namespace PruSign
+namespace PruSign.Helpers
 {
-    public static class SenderUtil
+    public static class SendHelper
     {
 
         public static async void SaveSign(string name, string customerId, string documentId, string appName, string datetime)
@@ -24,14 +25,17 @@ namespace PruSign
                 var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 var directoryname = System.IO.Path.Combine(documents, "temporalSignatures");
 
-                if (!System.IO.File.Exists(System.IO.Path.Combine(directoryname, "signature.png")) ||
-                    !System.IO.File.Exists(System.IO.Path.Combine(directoryname, "points.json")))
+                var signatureFilePath = System.IO.Path.Combine(directoryname, "signature.png");
+                var pointsFilePath = System.IO.Path.Combine(directoryname, "points.json");
+
+                if (!System.IO.File.Exists(signatureFilePath) ||
+                    !System.IO.File.Exists(pointsFilePath))
                 {
                     throw new Exception("No signatures found to be sent");
                 }
 
-                byte[] signatureFile = System.IO.File.ReadAllBytes(System.IO.Path.Combine(directoryname, "signature.png"));
-                String pointsString = System.IO.File.ReadAllText(System.IO.Path.Combine(directoryname, "points.json"));
+                byte[] signatureFile = System.IO.File.ReadAllBytes(signatureFilePath);
+                String pointsString = System.IO.File.ReadAllText(pointsFilePath);
 
                 var points = JsonConvert.DeserializeObject(pointsString);
 
@@ -54,7 +58,7 @@ namespace PruSign
                 var outboxFolder = System.IO.Path.Combine(documents, "outbox");
                 System.IO.Directory.CreateDirectory(outboxFolder);
 
-                Signature sign = new Signature
+                SignatureViewModel sign = new SignatureViewModel
                 {
                     points = points,
                     customerName = name,
@@ -74,21 +78,20 @@ namespace PruSign
                 }
 
                 PruSignDatabase db = new PruSignDatabase();
-                var serviceSignature = new ServiceAsync<SignatureItem>(db);
+                var serviceSignature = new ServiceAsync<Signature>(db);
 
-                SignatureItem dbItem = new SignatureItem()
+                Signature dbItem = new Signature()
                 {
                     SignatureObject = json,
                     CustomerName = name,
                     DocumentId = documentId,
-                    DNI = customerId,
+                    CustomerId = customerId,
                     AppId = appName,
-                    Miscelanea = "{}"
                 };
                 await serviceSignature.Add(dbItem);
                 System.IO.File.Delete(filename);
-                //System.IO.File.Delete(System.IO.Path.Combine(directoryname, "signature.png"));
-                //System.IO.File.Delete(System.IO.Path.Combine(directoryname, "points.json"));
+                System.IO.File.Delete(signatureFilePath);
+                System.IO.File.Delete(pointsFilePath);
             }
             catch (Exception ex)
             {
@@ -96,33 +99,46 @@ namespace PruSign
             }
         }
 
-        public static async void SendSign()
+        public static async Task<HttpResponseMessage> SendSignatures()
         {
-            PruSignDatabase db = new PruSignDatabase();
-            var serviceSignature = new ServiceAsync<SignatureItem>(db);
-
-            var signaturesToSend = await serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
-            if (signaturesToSend.Count > 0)
+            try
             {
-                var client = new RestClient("http://192.168.0.14");
-                var request = new RestRequest("api/signature", Method.POST);
-                request.AddHeader("Content-Type", "application/json");
+                PruSignDatabase db = new PruSignDatabase();
+                var serviceSignature = new ServiceAsync<Signature>(db);
 
-                request.AddJsonBody(signaturesToSend);
-
-                var response = await client.ExecuteTaskAsync(request);
-                if (response.StatusCode == HttpStatusCode.OK)
+                var signaturesToSend = await serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
+                if (signaturesToSend.Count > 0)
                 {
-                    foreach (var s in signaturesToSend)
+                    var client = new RestClient(Constants.BackendHostName);
+                    var request = new RestRequest("api/signature", Method.POST);
+                    request.AddHeader("Content-Type", "application/json");
+
+                    request.AddJsonBody(signaturesToSend);
+
+                    var response = await client.ExecuteTaskAsync(request);
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        s.Sent = true;
-                        s.SentFormattedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        await serviceSignature.Update(s);
+                        foreach (var s in signaturesToSend)
+                        {
+                            s.Sent = true;
+                            s.SentDate = DateTime.Now;
+                            await serviceSignature.Update(s);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
                     }
                 }
-                // TO-DO 
-                // SEND DIFFERENT MESSAGES TO INDICATE IF THE SIGNATURE WERE SEND OR NOT.
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
+            catch (Exception ex)
+            {
+                LogHelper.Log(ex);
+
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+
         }
 
         public static async void SaveCredentials(string username, string password)
@@ -172,7 +188,7 @@ namespace PruSign
 
                 if (logs.Count > 0)
                 {
-                    var client = new RestClient("http://192.168.0.14");
+                    var client = new RestClient(Constants.BackendHostName);
                     var request = new RestRequest("api/devicelog", Method.POST);
                     request.AddHeader("Content-Type", "application/json");
 
@@ -189,6 +205,7 @@ namespace PruSign
                         foreach (var item in logs)
                         {
                             item.Sent = true;
+                            item.SentDate = DateTime.Now;
                             await serviceLogs.Update(item);
                         }
                     }
@@ -202,7 +219,7 @@ namespace PruSign
 
                 }
                 return new HttpResponseMessage(HttpStatusCode.OK);
-                
+
             }
             catch (Exception ex)
             {

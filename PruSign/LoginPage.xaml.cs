@@ -21,17 +21,6 @@ namespace PruSign
             InitializeComponent();
             LoginVM = new LoginViewModel();
             BindingContext = LoginVM;
-        }
-
-        protected override void OnAppearing()
-        {
-            //if (LoginVM != null)
-            //{
-            //    Task.Run(async () =>
-            //    {
-            //        await LoginVM.IsAuthenticated();
-            //    });
-            //}
 
             MessagingCenter.Subscribe<LoginViewModel, string>(this, "Error", (sender, arg) =>
             {
@@ -52,6 +41,7 @@ namespace PruSign
         {
             MessagingCenter.Unsubscribe<LoginViewModel, string>(this, "Error");
             MessagingCenter.Unsubscribe<LoginViewModel>(this, "LoginVM_ErrorSavingCredentials");
+            LoginVM = null;
             base.OnDisappearing();
         }
     }

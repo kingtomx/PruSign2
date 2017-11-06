@@ -7,107 +7,101 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using PruSign.Data;
 using PruSign.Helpers;
+using RestSharp;
+using System.Net;
+using PruSign.Data.Entities;
 
 namespace PruSign.iOS
 {
-	[Register("AppDelegate")]
-	public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
-	{
+    [Register("AppDelegate")]
+    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    {
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            global::Xamarin.Forms.Forms.Init();
+            LoadApplication(new App());
+            UIApplication.SharedApplication.ApplicationSupportsShakeToEdit = true;
+
+            return base.FinishedLaunching(app, options);
+        }
+
+        public override void DidEnterBackground(UIApplication app)
+        {
+            SendRestSignature();
+        }
 
 
-		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-		{
-			global::Xamarin.Forms.Forms.Init();
-			/*
-			MessagingCenter.Subscribe<StartLongRunningTaskMessage>(this, "StartLongRunningTaskMessage", async message => {
-				iOSLongRunningTask longRunningTask = new iOSLongRunningTask();
-            	longRunningTask.Start();
-        	});
-			*/
-			LoadApplication(new App());
-			UIApplication.SharedApplication.ApplicationSupportsShakeToEdit = true;
+        private void SendRestSignature()
+        {
+            nint taskID = UIApplication.SharedApplication.BeginBackgroundTask(async () =>
+            {
+                try
+                {
+                    PruSignDatabase db = new PruSignDatabase();
+                    ServiceAsync<Signature> serviceSignature = new ServiceAsync<Signature>(db);
+                    List<Signature> signaturesToSend = await serviceSignature.GetAll().Where(i => !i.Sent).ToListAsync();
 
-			return base.FinishedLaunching(app, options);
-		}
+                    var client = new RestClient(Constants.BackendHostName);
+                    var request = new RestRequest("api/signature", Method.POST);
+                    request.AddHeader("Content-Type", "application/json");
 
-		public override void DidEnterBackground(UIApplication app)
-		{
-			SendRestSignature();
-		}
+                    request.AddJsonBody(signaturesToSend);
+                    var response = await client.ExecuteTaskAsync(request);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        foreach (var item in signaturesToSend)
+                        {
+                            item.Sent = true;
+                            item.SentDate = DateTime.Now;
+                            await serviceSignature.Update(item);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Log(ex);
+                }
 
+            });
 
-		private async void SendRestSignature()
-		{
-			nint taskID = UIApplication.SharedApplication.BeginBackgroundTask(() =>
-			{
+            UIApplication.SharedApplication.EndBackgroundTask(taskID);
+        }
 
-			});
-			new Task(async () =>
-						{
-							try
-							{
-								PruSignDatabase db = new PruSignDatabase();
-                                ServiceAsync<SignatureItem> serviceSignature = new ServiceAsync<SignatureItem>(db);
-								Task<List<SignatureItem>> items = serviceSignature.GetAll().Where(s => s.Sent == false).ToListAsync();
+        private NSHttpUrlResponse Post(string url, string jsonMessage)
+        {
+            NSUrlSession session = null;
 
-								foreach (var item in items.Result)
-								{
-									try
-									{
-										PruSign.HttpUtils.Post("https://api.prudentialseguros.com.ar:4043", "/Prusign/Api/SignatureApi", item.SignatureObject);
-										item.Sent = true;
-										item.SentFormattedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-										item.SignatureObject = "";
-                                        await serviceSignature.Update(item);
-									}
-									catch (Exception ex)
-									{
-                                        // POR AHORA HAGAMOS ESTO EN CASO DE ERROR
-                                        item.Miscelanea = ex.Message;
-                                        await serviceSignature.Update(item);
-									}
-								}
+            NSUrlSessionConfiguration configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration("com.SimpleBackgroundTransfer.BackgroundSession");
+            session = NSUrlSession.FromConfiguration(configuration, (NSUrlSessionDelegate)new MySessionDelegate(), new NSOperationQueue());
 
-								UIApplication.SharedApplication.EndBackgroundTask(taskID);
-							}
-							catch (Exception ex)
-							{
-                                LogHelper.Log(ex);
-                            }
-						}).Start();			
-		}
+            // URL
+            NSMutableUrlRequest request = new NSMutableUrlRequest(new NSUrl(url));
+            // METHOD
+            request.HttpMethod = "POST";
+            // HEADERS
+            var keys = new object[] { "Content-Type" };
+            var objects = new object[] { "application/json" };
+            var dictionnary = NSDictionary.FromObjectsAndKeys(objects, keys);
+            request.Headers = dictionnary;
+            // BODY
+            NSString postString = (NSString)jsonMessage;
+            NSData postData = NSData.FromString(postString);
+            request.Body = postData;
 
-		private NSHttpUrlResponse Post(string url, string jsonMessage)
-		{
-			NSUrlSession session = null;
+            NSUrlSessionUploadTask uploadTask = session.CreateUploadTask(request);
+            uploadTask.Resume();
+            return (Foundation.NSHttpUrlResponse)uploadTask.Response;
 
-			NSUrlSessionConfiguration configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration("com.SimpleBackgroundTransfer.BackgroundSession");
-			session = NSUrlSession.FromConfiguration(configuration, (NSUrlSessionDelegate)new MySessionDelegate(), new NSOperationQueue());
-
-			// URL
-			NSMutableUrlRequest request = new NSMutableUrlRequest(new NSUrl(url));
-			// METHOD
-			request.HttpMethod = "POST";
-			// HEADERS
-			var keys = new object[] { "Content-Type" };
-			var objects = new object[] { "application/json" };
-			var dictionnary = NSDictionary.FromObjectsAndKeys(objects, keys);
-			request.Headers = dictionnary;
-			// BODY
-			NSString postString = (NSString)jsonMessage;
-			NSData postData = NSData.FromString(postString);
-			request.Body = postData;
-
-			NSUrlSessionUploadTask uploadTask = session.CreateUploadTask(request);
-			uploadTask.Resume();
-			return (Foundation.NSHttpUrlResponse)uploadTask.Response;
-
-		}
+        }
 
 
 
 
-	}
+    }
 
 
 }

@@ -4,7 +4,12 @@
              x:Class="PruSign.LogPage">
     <ContentPage.Content>
         <StackLayout>
-            
+            <StackLayout.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,20,0,0" />
+                    <On Platform="Android, WinPhone, Windows" Value="0,0,0,0" />
+                </OnPlatform>
+            </StackLayout.Margin>
             <!--This will only be visible when the page is loading -->
             <StackLayout IsVisible="{Binding IsLoading}" VerticalOptions="FillAndExpand">
                 <ActivityIndicator VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand" IsRunning="True" IsVisible="True"
@@ -12,20 +17,19 @@
                 <Label Text="Loading..." VerticalOptions="StartAndExpand" HorizontalTextAlignment="Center"
                        HorizontalOptions="FillAndExpand"></Label>
             </StackLayout>
-            
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White"
                      IsVisible="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
                 <AbsoluteLayout HeightRequest="60" BackgroundColor="{StaticResource PrudentialBlue}" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
-                    <Image VerticalOptions="Center" 
+                    <StackLayout InputTransparent="True" HorizontalOptions="FillAndExpand" VerticalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1">
+                        <Label  Text="Logs" FontSize="Large" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
+                    </StackLayout>
+                    <Image VerticalOptions="Center"
                        AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1" 
                        HorizontalOptions="Start" Source="ic_close_white.png" WidthRequest="50" BackgroundColor="Transparent">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Command="{ Binding OnBtnCloseClickedCommand }" />
                         </Image.GestureRecognizers>
                     </Image>
-                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1">
-                        <Label  Text="Logs" FontSize="Large" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
-                    </StackLayout>
                     <Image VerticalOptions="Center" 
                        AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1" 
                        HorizontalOptions="End" Source="ic_send_white.png" WidthRequest="50" BackgroundColor="Transparent">

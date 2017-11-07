@@ -66,7 +66,7 @@
     <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer: tomas.pascual.files@gmail.com (SM7DCEUQLF)</CodesignKey>
+    <CodesignKey>iPhone Developer: maurogarcia0209@gmail.com (L5LH5H5SG8)</CodesignKey>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchFastDev>true</MtouchFastDev>
@@ -77,7 +77,12 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <PlatformTarget>x86</PlatformTarget>
-    <CodesignProvision>a6692952-879b-40ff-888c-05cbead0a706</CodesignProvision>
+    <CodesignProvision>
+    </CodesignProvision>
+    <MtouchSdkVersion>11.1</MtouchSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -220,6 +225,9 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ic_send_white_3x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\prudential_white.png" />
   </ItemGroup>
   <Import Project="..\PruSign\PruSign.projitems" Label="Shared" Condition="Exists('..\PruSign\PruSign.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

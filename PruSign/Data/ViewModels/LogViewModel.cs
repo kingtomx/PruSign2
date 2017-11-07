@@ -60,8 +60,8 @@ namespace PruSign.Data.ViewModels
 
         public LogViewModel(INavigation navigation)
         {
-            OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
+            OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             IsLoading = true;
             IsEmpty = false;
             Navigation = navigation;
@@ -93,9 +93,9 @@ namespace PruSign.Data.ViewModels
 
         public void OnBtnCloseClicked()
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
-                await Navigation.PopModalAsync();
+                Navigation.PopModalAsync();
             });
         }
 

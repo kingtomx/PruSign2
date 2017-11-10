@@ -22,12 +22,10 @@ namespace PruSign.Droid.Services
         IBinder binder;
         public override int OnRunTask(TaskParams @params)
         {
-            System.Threading.Tasks.Task.Run(async () =>
-            {
-                SendHelper.SendSignatures();
-                // TO-DO Check if the logs should be sent in background like the signatures.
-                //await SendHelper.SendDeviceLogs();
-            });
+            SendHelper.SendSignatures();
+            // TO-DO Check if the logs should be sent in background like the signatures.
+            //await SendHelper.SendDeviceLogs();
+
             return GcmNetworkManager.ResultSuccess;
         }
 

@@ -14,13 +14,10 @@ namespace PruSignBackEnd.Data.Entities
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
-        public string Image { get; set; }
-        public virtual ICollection<PointWhen> Points { get; set; }
 		public string CustomerName { get; set; }
         public string CustomerId { get; set; }
         public string DocumentId { get; set; }
         public string ApplicationId { get; set; }
-        public string Hash { get; set; }
-
+        public string SignatureObject { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace PruSign.Droid
         private void StartBackgroundSync()
         {
             var periodicTask = new PeriodicTask.Builder()
-                .SetPeriod(30)
+                .SetPeriod(Constants.BACKGROUND_SEND_INTERVAL)
                 .SetService(Java.Lang.Class.FromType(typeof(BackgroundSyncService)))
                 .SetRequiredNetwork(0)
                 .SetTag("com.prudential.prusign")
@@ -64,7 +64,7 @@ namespace PruSign.Droid
 
         protected override void OnStop()
         {
-            ThreadPool.QueueUserWorkItem(async o => await SendHelper.SendSignatures());
+            ThreadPool.QueueUserWorkItem(o => SendHelper.SendSignatures());
             base.OnStop();
         }
 

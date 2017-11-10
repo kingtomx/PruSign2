@@ -86,7 +86,7 @@ namespace PruSign.Helpers
                     CustomerName = name,
                     DocumentId = documentId,
                     CustomerId = customerId,
-                    AppId = appName,
+                    ApplicationId = appName,
                 };
                 await serviceSignature.Add(dbItem);
                 System.IO.File.Delete(filename);
@@ -99,7 +99,7 @@ namespace PruSign.Helpers
             }
         }
 
-        public static async Task<HttpResponseMessage> SendSignatures()
+        public static async Task SendSignatures()
         {
             try
             {
@@ -109,7 +109,7 @@ namespace PruSign.Helpers
                 var signaturesToSend = await serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
                 if (signaturesToSend.Count > 0)
                 {
-                    var client = new RestClient(Constants.BackendHostName);
+                    var client = new RestClient(Constants.BACKEND_HOST_NAME);
                     var request = new RestRequest("api/signature", Method.POST);
                     request.AddHeader("Content-Type", "application/json");
 
@@ -130,13 +130,10 @@ namespace PruSign.Helpers
                         throw new Exception(response.ErrorMessage);
                     }
                 }
-                return new HttpResponseMessage(HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 LogHelper.Log(ex);
-
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
 
         }
@@ -188,7 +185,7 @@ namespace PruSign.Helpers
 
                 if (logs.Count > 0)
                 {
-                    var client = new RestClient(Constants.BackendHostName);
+                    var client = new RestClient(Constants.BACKEND_HOST_NAME);
                     var request = new RestRequest("api/devicelog", Method.POST);
                     request.AddHeader("Content-Type", "application/json");
 

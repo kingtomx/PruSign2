@@ -42,7 +42,7 @@ namespace PruSignBackEnd
                 {
                     formattedLogs.Add(new DeviceLogEntriesViewModel()
                     {
-                        FormattedDate = item.FormattedDate,
+                        Created = item.Created,
                         Message = item.Message,
                         ErrorLocation = item.ErrorLocation,
                         StackTrace = item.StackTrace
@@ -78,7 +78,7 @@ namespace PruSignBackEnd
                         serviceDeviceLog.Add(new DeviceLog()
                         {
                             Device = log.Device,
-                            FormattedDate = item.FormattedDate,
+                            LogDate = item.Created,
                             Message = item.Message,
                             StackTrace = item.StackTrace,
                             ErrorLocation = item.ErrorLocation

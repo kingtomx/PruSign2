@@ -1,4 +1,5 @@
 ﻿using PruSign;
+using PruSign.Background;
 using PruSign.Data;
 using PruSign.Data.Entities;
 using PruSign.Data.ViewModels;
@@ -14,6 +15,7 @@ namespace PruSign
         public App()
         {
             InitializeComponent();
+            MainPage = new LoadingPage();
 
             Task.Run(async () =>
             {
@@ -35,8 +37,6 @@ namespace PruSign
                 });
             });
 
-            MainPage = new LoginPage();
-
             MessagingCenter.Subscribe<LoginViewModel>(this, "RedirectToHome", (sender) =>
             {
                 if (!IsLocked)
@@ -52,7 +52,8 @@ namespace PruSign
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            var startMessage = new StartDataSync();
+            MessagingCenter.Send(startMessage, "StartDataSyncMessage");
         }
 
         protected override void OnSleep()

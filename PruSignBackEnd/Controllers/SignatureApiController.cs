@@ -26,6 +26,29 @@ namespace PruSignBackEnd
             serviceSignature = new Service<Signature>(db);
         }
 
+        [Route("signature/all")]
+        public HttpResponseMessage Get()
+        {
+            try
+            {
+                var signatures = serviceSignature.GetAll();
+                if (!signatures.Any())
+                    return new HttpResponseMessage(HttpStatusCode.NotFound);
+
+                var resp = JsonConvert.SerializeObject(signatures);
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
         [Route("signature/")]
         public HttpResponseMessage Get(string customerid, string documentid, string applicationid)
         {
@@ -51,21 +74,24 @@ namespace PruSignBackEnd
 
         [HttpPost]
         [Route("signature/")]
-        public HttpResponseMessage Post(Signature signature)
+        public HttpResponseMessage Post(List<Signature> signatures)
         {
             try
             {
-                var newSignature = new Signature()
+                foreach (var s in signatures)
                 {
-                    ApplicationId = signature.ApplicationId,
-                    CustomerId = signature.CustomerId,
-                    CustomerName = signature.CustomerName,
-                    DocumentId = signature.DocumentId,
-                    Hash = signature.Hash,
-                    Image = signature.Image
-                };
+                    var newSignature = new Signature()
+                    {
+                        ApplicationId = s.ApplicationId,
+                        CustomerId = s.CustomerId,
+                        CustomerName = s.CustomerName,
+                        DocumentId = s.DocumentId,
+                        SignatureObject = s.SignatureObject,
+                    };
 
-                serviceSignature.Add(newSignature);
+                    serviceSignature.Add(newSignature);
+                }
+                
                 db.SaveChanges();
 
                 return new HttpResponseMessage(HttpStatusCode.OK);

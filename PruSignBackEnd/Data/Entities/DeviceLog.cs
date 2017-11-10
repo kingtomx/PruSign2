@@ -18,6 +18,14 @@ namespace PruSignBackEnd.Data.Entities
         public string Message { get; set; }
         public string StackTrace { get; set; }
         public string ErrorLocation { get; set; }
-        public string FormattedDate { get; set; }
+        public DateTime LogDate { get; set; }
+
+        public string FormattedDate
+        {
+            get => LogDate.ToString("yyyy-MM-dd HH:mm:ss");
+            set {
+                value = LogDate.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+        }
     }
 }

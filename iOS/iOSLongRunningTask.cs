@@ -4,46 +4,49 @@ using Foundation;
 using System.Threading;
 using System.Threading.Tasks;
 using UIKit;
+using PruSign.Helpers;
+using PruSign.Background;
 
 namespace PruSign.iOS
 {
 	public class iOSLongRunningTask
 	{
+        nint _taskId;
+        CancellationTokenSource _cts;
 
-		public void Start()
+		public async Task Start()
 		{
-			try {
-				Post("https://reqres.in/api/users");
-			} catch (OperationCanceledException) {
-				Device.BeginInvokeOnMainThread(() => MessagingCenter.Send("Operation Cancelled", "CancelledMessage"));
-			}
-		}
+            _cts = new CancellationTokenSource();
+            _taskId = UIApplication.SharedApplication.BeginBackgroundTask("LongRunningTask", OnExpiration);
+            try
+            {
+                await SendHelper.SendSignatures();
+            }
+            catch (OperationCanceledException ex) {
+                LogHelper.Log(ex);
+            }
+            finally
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    var stopMessage = new StopDataSync();
+                    MessagingCenter.Send(stopMessage, "StopDataSyncMessage");
+                });
+            }
+
+            UIApplication.SharedApplication.EndBackgroundTask(_taskId);
+        }
+
+        public void Stop()
+        {
+            _cts.Cancel();
+        }
+
+        public void OnExpiration()
+        {
+            _cts.Cancel();
+        }
 
 
-		public void Post(string url)
-		{
-			NSUrlSession session = null;
-
-			NSUrlSessionConfiguration configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration("com.SimpleBackgroundTransfer.BackgroundSession");
-			session = NSUrlSession.FromConfiguration(configuration, (NSUrlSessionDelegate)new MySessionDelegate(), new NSOperationQueue());
-
-			// URL
-			NSMutableUrlRequest request = new NSMutableUrlRequest(new NSUrl(url));
-			// METHOD
-			request.HttpMethod = "POST";
-			// HEADERS
-			request.HttpMethod = "POST";
-			var keys = new object[] { "Key1", "Key2" };
-			var objects = new object[] { "Value1", "Value2" };
-			var dictionnary = NSDictionary.FromObjectsAndKeys(objects, keys);
-			request.Headers = dictionnary;
-			// BODY
-			NSString postString = (NSString)"\"{\\\"name\\\": \\\"tomas\\\",\\\"job\\\": \\\"supervisor\\\"}\"";
-			NSData postData = NSData.FromString(postString);
-			request.Body = postData;
-
-			NSUrlSessionUploadTask uploadTask = session.CreateUploadTask(request);
-			uploadTask.Resume();
-		}
 	}
 }

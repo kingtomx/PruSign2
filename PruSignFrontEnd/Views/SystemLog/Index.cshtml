@@ -1,0 +1,24 @@
+﻿@model IEnumerable<PruSignFrontEnd.Models.SystemLog>
+
+@{
+    ViewBag.Title = "System Logs";
+}
+
+<h2>System Logs</h2>
+
+@foreach (var item in Model)
+{
+    <div class="list-item">
+        <div>
+            <span><strong>@Html.DisplayNameFor(model => model.FormattedCreateDate)</strong></span>
+            <span>@Html.DisplayFor(modelItem => item.FormattedCreateDate)</span>
+        </div>
+        <div>
+            <span><strong>@Html.DisplayNameFor(model => model.ErrorLocation)</strong></span>
+            <span>@Html.DisplayFor(modelItem => item.ErrorLocation)</span>
+        </div>
+        <p><strong>@Html.DisplayNameFor(model => model.StackTrace)</strong></p>
+        <p>@Html.DisplayFor(modelItem => item.StackTrace)</p>
+        <div class="line-separator"></div>
+    </div>
+}

@@ -11,8 +11,6 @@ namespace PruSign.iOS
 {
 	public class DrawView : UIView
 	{
-
-
 		private PointF PreviousPoint;
 		private CGPath DrawPath;
 		private byte IndexCount;
@@ -21,10 +19,6 @@ namespace PruSign.iOS
 		public UIColor CurrentLineColor { get; set; }
 		public float PenWidth { get; set; }
 		public List<PointWhen> points;
-
-
-
-
 
 		public DrawView(RectangleF frame) : base(frame)
 		{
@@ -137,7 +131,6 @@ namespace PruSign.iOS
 			InvokeOnMainThread(SetNeedsDisplay);
 		}
 
-
 		public override void Draw(CGRect rect)
 		{
 			foreach (var line in Lines)
@@ -146,7 +139,6 @@ namespace PruSign.iOS
 				line.Path.Stroke();
 			}
 		}
-
 
 		public byte[] CapturePNG(double scale, UIView area)
 		{
@@ -164,7 +156,6 @@ namespace PruSign.iOS
 			System.Runtime.InteropServices.Marshal.Copy(png.Bytes, dataBytes, 0, Convert.ToInt32(png.Length));
 			return dataBytes;
 		}
-
 
 		public UIImage ToUIImage(byte[] data)
 		{
@@ -185,7 +176,6 @@ namespace PruSign.iOS
 			return image;
 		}
 
-
 		public override void MotionEnded(UIEventSubtype motion, UIEvent evt)
 		{
 			if (motion == UIEventSubtype.MotionShake)
@@ -195,7 +185,5 @@ namespace PruSign.iOS
 			}
 
 		}
-
-
 	}
 }

@@ -81,8 +81,8 @@
                         </x:Array>
                     </Picker.ItemsSource>
                 </Picker>
-                <Button x:Name="Submit" BackgroundColor="{StaticResource PrudentialBlue}" TextColor="White" Text="Agree &amp; Send"
-                            HorizontalOptions="End" VerticalOptions="Center" Command="{Binding OnBtnSubmitTappedCommand}"></Button>
+                <controls:EnhancedButton Padding="10" x:Name="Submit" BackgroundColor="{StaticResource PrudentialBlue}" TextColor="White" Text="Agree &amp; Send"
+                            HorizontalOptions="End" VerticalOptions="Center" Command="{Binding OnBtnSubmitTappedCommand}"></controls:EnhancedButton>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

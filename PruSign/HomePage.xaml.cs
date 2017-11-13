@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using PruSign.Data.ViewModels;
+using PruSign.CustomViews;
 
 namespace PruSign
 {
@@ -27,6 +28,7 @@ namespace PruSign
 
         protected override void OnDisappearing()
         {
+            HomeVM = null;
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeError");
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeSuccess");
 

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<PruSignFrontEnd.Models.Signature>
+
+@{
+    ViewBag.Title = "Signatures";
+}
+
+<h2>Signatures</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("SearchText")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FormattedCreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FormattedUpdateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FormattedCreateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FormattedUpdateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DocumentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationId)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { customerId = item.CustomerId, documentId = item.DocumentId, applicationId = item.ApplicationId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -15,5 +15,6 @@ namespace PruSignBackEnd.Data.Entities
         public DateTime Updated { get; set; }
 
         public string StackTrace { get; set; }
+        public string ErrorLocation { get; set; }
     }
 }

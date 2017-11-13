@@ -80,7 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
   </ItemGroup>
@@ -123,6 +125,10 @@
     <Compile Include="Migrations\201711091446062_Agrega Setter para FormattedDate.Designer.cs">
       <DependentUpon>201711091446062_Agrega Setter para FormattedDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.cs" />
+    <Compile Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.Designer.cs">
+      <DependentUpon>201711131534490_Agrega columna de Error Location en SystemLogs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
     <Compile Include="Data\Entities\DeviceLog.cs" />
@@ -158,6 +164,12 @@
     <EmbeddedResource Include="Migrations\201711091446062_Agrega Setter para FormattedDate.resx">
       <DependentUpon>201711091446062_Agrega Setter para FormattedDate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.resx">
+      <DependentUpon>201711131534490_Agrega columna de Error Location en SystemLogs.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FolderProfile.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

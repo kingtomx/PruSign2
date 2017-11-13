@@ -11,6 +11,7 @@ using RestSharp;
 using System.Net;
 using PruSign.Data.Entities;
 using PruSign.Background;
+using KeyboardOverlap.Forms.Plugin.iOSUnified;
 
 namespace PruSign.iOS
 {
@@ -20,6 +21,7 @@ namespace PruSign.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            KeyboardOverlapRenderer.Init();
             LoadApplication(new App());
             UIApplication.SharedApplication.ApplicationSupportsShakeToEdit = true;
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);

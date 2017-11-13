@@ -29,12 +29,37 @@ namespace PruSignBackEnd.Controllers
         {
             try
             {
-                var logs = serviceLog.GetAll();
+                var logs = serviceLog.GetAll().OrderByDescending(l => l.Created);
                 if (!logs.Any())
                 {
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
                 }
                 
+                var resp = JsonConvert.SerializeObject(logs);
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [Route("log/search")]
+        public HttpResponseMessage Get(string searchText)
+        {
+            try
+            {
+                var logs = serviceLog.GetAll().Where(l => l.StackTrace.Contains(searchText)).OrderByDescending(l => l.Created);
+                if (!logs.Any())
+                {
+                    return new HttpResponseMessage(HttpStatusCode.NotFound);
+                }
+
                 var resp = JsonConvert.SerializeObject(logs);
                 return new HttpResponseMessage()
                 {

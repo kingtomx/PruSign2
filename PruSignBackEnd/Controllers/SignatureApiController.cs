@@ -31,7 +31,7 @@ namespace PruSignBackEnd
         {
             try
             {
-                var signatures = serviceSignature.GetAll();
+                var signatures = serviceSignature.GetAll().OrderByDescending(l => l.Created);
                 if (!signatures.Any())
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
 
@@ -52,11 +52,49 @@ namespace PruSignBackEnd
         [Route("signature/")]
         public HttpResponseMessage Get(string customerid, string documentid, string applicationid)
         {
+            var resp = "[]";
+
             try
             {
                 var signatures = serviceSignature.GetAll().Where(signature => signature.CustomerId.Equals(customerid) &&
                                                                   signature.DocumentId.Equals(documentid) &&
-                                                                  signature.ApplicationId.Equals(applicationid));
+                                                                  signature.ApplicationId.Equals(applicationid))
+                                                          .OrderByDescending(l => l.Created);
+
+                if (signatures.Any())
+                {
+                    resp = JsonConvert.SerializeObject(signatures.FirstOrDefault());
+                }
+
+
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [Route("signature/search")]
+        public HttpResponseMessage Get(string searchText)
+        {
+            try
+            {
+                var test = 0;
+                var test2 = 2 / test;
+                var signatures = serviceSignature.GetAll().Where(signature => signature.CustomerId.Contains(searchText) ||
+                                                                  signature.DocumentId.Contains(searchText) ||
+                                                                  signature.ApplicationId.Contains(searchText) ||
+                                                                  signature.CustomerName.Contains(searchText))
+                                                          .OrderByDescending(l => l.Created);
+
+                if (!signatures.Any())
+                    return new HttpResponseMessage(HttpStatusCode.NotFound);
 
                 var resp = JsonConvert.SerializeObject(signatures);
                 return new HttpResponseMessage()
@@ -91,7 +129,7 @@ namespace PruSignBackEnd
 
                     serviceSignature.Add(newSignature);
                 }
-                
+
                 db.SaveChanges();
 
                 return new HttpResponseMessage(HttpStatusCode.OK);

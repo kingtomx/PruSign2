@@ -1,0 +1,34 @@
+﻿@model IEnumerable<PruSignFrontEnd.Models.Device>
+
+@{
+    ViewBag.Title = "Devices";
+}
+
+<h2>Devices</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("SearchText")
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.User)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Index", "DeviceLog", new { username = item.User }, new { })
+        </td>
+    </tr>
+}
+
+</table>

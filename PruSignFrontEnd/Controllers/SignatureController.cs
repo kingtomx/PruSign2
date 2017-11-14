@@ -65,6 +65,7 @@ namespace PruSignFrontEnd.Controllers
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     result = JsonConvert.DeserializeObject<SignatureViewModel>(response.Content);
+                    var signature = JsonConvert.DeserializeObject<SignatureObjectViewModel>(result.SignatureObject);
                 }
                 else
                 {
@@ -79,10 +80,35 @@ namespace PruSignFrontEnd.Controllers
             return View(result);
         }
 
-        public ActionResult Imagen(string imageByteArray)
+        public async Task<ActionResult> RenderImage(int id)
         {
+            var result = new SignatureViewModel();
+            var image = new byte[] { };
+            try
+            {
+                var client = new RestClient(Constants.BACKEND_HOST_NAME);
+                var request = new RestRequest("api/signature/getbyid", Method.GET);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("id", id);
 
-            return File(imageByteArray, "image/jpeg");
+                var response = await client.ExecuteTaskAsync(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    result = JsonConvert.DeserializeObject<SignatureViewModel>(response.Content);
+                    var signatureObject = JsonConvert.DeserializeObject<SignatureObjectViewModel>(result.SignatureObject);
+                    image = signatureObject.Image;
+                }
+                else
+                {
+                    throw new Exception(response.ErrorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return File(image, "image/png");
         }
     }
 }

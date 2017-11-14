@@ -80,13 +80,38 @@ namespace PruSignBackEnd
             }
         }
 
+        [Route("signature/getbyid")]
+        public HttpResponseMessage Get(int id)
+        {
+            var resp = String.Empty;
+            try
+            {
+                var signature = serviceSignature.GetAll().Where(s => s.ID.Equals(id)).FirstOrDefault();
+
+                if (signature != null)
+                {
+                    resp = JsonConvert.SerializeObject(signature);
+                }
+
+
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
         [Route("signature/search")]
         public HttpResponseMessage Get(string searchText)
         {
             try
             {
-                var test = 0;
-                var test2 = 2 / test;
                 var signatures = serviceSignature.GetAll().Where(signature => signature.CustomerId.Contains(searchText) ||
                                                                   signature.DocumentId.Contains(searchText) ||
                                                                   signature.ApplicationId.Contains(searchText) ||

@@ -7,6 +7,6 @@ namespace PruSignFrontEnd
 {
     public class Constants
     {
-        public const string BACKEND_HOST_NAME = "http://192.168.89.194";
+        public const string BACKEND_HOST_NAME = "http://localhost:82";
     }
 }

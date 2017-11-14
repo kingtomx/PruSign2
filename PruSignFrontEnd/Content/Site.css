@@ -41,3 +41,17 @@ textarea {
     margin-bottom: 20px;
 }
 
+.signature-picture{
+    border: black thin solid;
+    width: 100%;
+}
+
+.sign-label {
+    display: inline-block;
+    width: 150px;
+}
+
+.signature-container {
+    display: inline-block;
+    width: 100%;
+}

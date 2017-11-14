@@ -15,7 +15,7 @@ namespace PruSign.Helpers
                 var db = new PruSignDatabase();
                 var serviceLogs = new ServiceAsync<LogEntry>(db);
                 var today = DateTime.Now;
-                var logs = await serviceLogs.GetAll().ToListAsync();
+                var logs = await serviceLogs.GetAll().Where(l => l.Sent).ToListAsync();
 
                 foreach (var l in logs)
                 {

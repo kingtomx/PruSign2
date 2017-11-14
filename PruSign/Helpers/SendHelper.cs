@@ -181,6 +181,8 @@ namespace PruSign.Helpers
             {
                 var db = new PruSignDatabase();
                 var serviceLogs = new ServiceAsync<LogEntry>(db);
+                var serviceUserCredentials = new ServiceAsync<UserCredentials>(db);
+                var user = await serviceUserCredentials.GetAll().FirstOrDefaultAsync();
                 var logs = await serviceLogs.GetAll().Where(l => !l.Sent).ToListAsync();
 
                 if (logs.Count > 0)
@@ -192,6 +194,7 @@ namespace PruSign.Helpers
                     var jsonBody = new
                     {
                         Device = "test",
+                        User = user.Username,
                         Entries = logs
                     };
                     request.AddJsonBody(jsonBody);

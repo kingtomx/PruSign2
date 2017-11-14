@@ -3,60 +3,29 @@
 @{
     ViewBag.Title = "Details";
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>SignatureViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DocumentId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DocumentId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ApplicationId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ApplicationId)
-        </dd>
-
-    </dl>
+<div class="col-lg-12">
+    <h2>Details</h2>
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-@*<img src="@Html.Action("/image", new { imageByteArray =  })" />*@
+<div class="signature-container">
+    <div class="col-lg-6 col-lg-8">
+        <img class="signature-picture" src="@Url.Action("RenderImage", new { id = Model.ID})" />
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <p class="sign-label"><strong>@Html.DisplayNameFor(model => model.Created)</strong></p>
+        <p> @Html.DisplayFor(model => model.Created)</p>
+        <p class="sign-label"><strong>@Html.DisplayNameFor(model => model.CustomerName)</strong></p>
+        <p> @Html.DisplayFor(model => model.CustomerName)</p>
+        <p class="sign-label"><strong>@Html.DisplayNameFor(model => model.CustomerId)</strong></p>
+        <p> @Html.DisplayFor(model => model.CustomerId)</p>
+        <p class="sign-label"><strong>@Html.DisplayNameFor(model => model.DocumentId)</strong></p>
+        <p> @Html.DisplayFor(model => model.DocumentId)</p>
+        <p class="sign-label"><strong>@Html.DisplayNameFor(model => model.ApplicationId)</strong></p>
+        <p> @Html.DisplayFor(model => model.ApplicationId)</p>
+    </div>
+</div>
 
 
 

@@ -1,27 +1,25 @@
-﻿@model IEnumerable<PruSignFrontEnd.Models.SystemLog>
+﻿@model IEnumerable<PruSignFrontEnd.Models.DeviceLog>
 
 @{
-    ViewBag.Title = "System Logs";
+    ViewBag.Title = "Index";
 }
 
-<h2>System Logs</h2>
-@using (Html.BeginForm())
-{
-    <p>
-        @Html.TextBox("SearchText")
-        <input type="submit" value="Search" />
-    </p>
-}   
+<h2>Logs for @ViewBag.DeviceUser</h2>
+
 @foreach (var item in Model)
 {
     <div class="list-item">
         <div>
-            <span><strong>@Html.DisplayNameFor(model => model.FormattedCreateDate)</strong></span>
-            <span>@Html.DisplayFor(modelItem => item.FormattedCreateDate)</span>
+            <span><strong>@Html.DisplayNameFor(model => model.FormattedDate)</strong></span>
+            <span>@Html.DisplayFor(modelItem => item.FormattedDate)</span>
         </div>
         <div>
             <span><strong>@Html.DisplayNameFor(model => model.ErrorLocation)</strong></span>
             <span>@Html.DisplayFor(modelItem => item.ErrorLocation)</span>
+        </div>
+        <div>
+            <span><strong>@Html.DisplayNameFor(model => model.Message)</strong></span>
+            <span>@Html.DisplayFor(modelItem => item.Message)</span>
         </div>
         <p><strong>@Html.DisplayNameFor(model => model.StackTrace)</strong></p>
         <p>@Html.DisplayFor(modelItem => item.StackTrace)</p>

@@ -129,6 +129,10 @@
     <Compile Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.Designer.cs">
       <DependentUpon>201711131534490_Agrega columna de Error Location en SystemLogs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711141418364_Includes User field on devicelog table.cs" />
+    <Compile Include="Migrations\201711141418364_Includes User field on devicelog table.Designer.cs">
+      <DependentUpon>201711141418364_Includes User field on devicelog table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
     <Compile Include="Data\Entities\DeviceLog.cs" />
@@ -138,6 +142,7 @@
     <Compile Include="Data\Entities\Signature.cs" />
     <Compile Include="ViewModels\DeviceLogEntriesViewModel.cs" />
     <Compile Include="ViewModels\DeviceLogViewModel.cs" />
+    <Compile Include="ViewModels\DeviceViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -166,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.resx">
       <DependentUpon>201711131534490_Agrega columna de Error Location en SystemLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711141418364_Includes User field on devicelog table.resx">
+      <DependentUpon>201711141418364_Includes User field on devicelog table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ namespace PruSignFrontEnd.ViewModels
 {
     public class SignatureViewModel
     {
+        public int ID { get; set; }
         public string Created { get; set; }
         public string CustomerName { get; set; }
         public string CustomerId { get; set; }

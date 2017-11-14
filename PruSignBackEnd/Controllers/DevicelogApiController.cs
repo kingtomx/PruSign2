@@ -26,11 +26,22 @@ namespace PruSignBackEnd
         }
 
         [Route("devicelog/")]
-        public HttpResponseMessage Get(string device)
+        public HttpResponseMessage Get(string username, string searchText)
         {
             try
             {
-                var logs = serviceDeviceLog.GetAll().Where(log => log.Device.Equals(device));
+                var logs = serviceDeviceLog.GetAll();
+                if (!String.IsNullOrEmpty(searchText))
+                {
+                    logs = logs.Where(d => d.User.Equals(username) &&
+                                          (d.StackTrace.Contains(searchText) ||
+                                           d.Message.Contains(searchText)))
+                               .OrderByDescending(l => l.Created);
+                }
+                else
+                {
+                    logs = logs.Where(log => log.User.Equals(username));
+                }
                 if (!logs.Any())
                 {
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
@@ -48,8 +59,52 @@ namespace PruSignBackEnd
                         StackTrace = item.StackTrace
                     });
                 }
-                
+
                 var resp = JsonConvert.SerializeObject(formattedLogs);
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [Route("device/")]
+        public HttpResponseMessage Get(string searchText)
+        {
+            try
+            {
+                var devices = serviceDeviceLog.GetAll()
+                    .GroupBy(l => l.User)
+                    .Select(group => group.FirstOrDefault());
+
+                if (!String.IsNullOrEmpty(searchText))
+                {
+                    devices = devices.Where(d => d.User.Contains(searchText));
+                }
+
+                if (!devices.Any())
+                {
+                    return new HttpResponseMessage(HttpStatusCode.NotFound);
+                }
+
+                List<DeviceViewModel> formattedDevices = new List<DeviceViewModel>();
+
+                foreach (var item in devices)
+                {
+                    formattedDevices.Add(new DeviceViewModel()
+                    {
+                        Name = item.Device,
+                        User = item.User
+                    });
+                }
+
+                var resp = JsonConvert.SerializeObject(formattedDevices);
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -71,13 +126,14 @@ namespace PruSignBackEnd
             {
                 foreach (var item in log.Entries)
                 {
-                    var exists = serviceDeviceLog.GetAll().Where(l => l.Device.Equals(log.Device)
+                    var exists = serviceDeviceLog.GetAll().Where(l => l.User.Equals(log.User)
                                                                    && l.FormattedDate.Equals(item.FormattedDate));
                     if (!exists.Any())
                     {
                         serviceDeviceLog.Add(new DeviceLog()
                         {
                             Device = log.Device,
+                            User = log.User,
                             LogDate = item.Created,
                             Message = item.Message,
                             StackTrace = item.StackTrace,

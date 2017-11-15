@@ -103,7 +103,7 @@ namespace PruSign.Android
 			var touchX = e.GetX();
 			var touchY = e.GetY();
 
-			var newPoint = new PointF(touchX, touchY);
+			var newPoint = new MyPointF(touchX, touchY);
 			Droid.PointWhen customPoint = new Droid.PointWhen
 			{
 				point = newPoint,

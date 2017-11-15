@@ -5,7 +5,7 @@ namespace PruSign.Droid
 {
 	public class PointWhen
 	{
-		public PointF point;
+		public MyPointF point;
 		public long when;
 	}
 }

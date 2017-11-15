@@ -53,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\Signature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LongRunningTasks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MyPointF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

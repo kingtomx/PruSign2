@@ -8,5 +8,6 @@ namespace PruSignFrontEnd
     public class Constants
     {
         public const string BACKEND_HOST_NAME = "http://localhost:82";
+        //public const string BACKEND_HOST_NAME = "https://api.prudentialseguros.com.ar:4043/prusign/api/signature/all";
     }
 }

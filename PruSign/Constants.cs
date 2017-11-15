@@ -6,7 +6,7 @@ namespace PruSign
 {
     public static class Constants
     {
-        public const string BACKEND_HOST_NAME = "http://192.168.0.14";
+        public const string BACKEND_HOST_NAME = "http://192.168.89.135";
 
         // Minimum number of seconds between a background refresh on iOS
         // 10 minutes = 10 * 60 = 600 seconds

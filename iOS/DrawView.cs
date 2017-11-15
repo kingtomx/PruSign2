@@ -84,15 +84,17 @@ namespace PruSign.iOS
 				Math.Abs(currentPoint.Y - PreviousPoint.Y) >= 4)
 			{
 
-				var newPoint = new PointF(((float)currentPoint.X + (float)PreviousPoint.X) / 2, ((float)currentPoint.Y + (float)PreviousPoint.Y) / 2);
-				PointWhen customPoint = new PointWhen
+				var newPoint = new MyPointF(((float)currentPoint.X + (float)PreviousPoint.X) / 2, ((float)currentPoint.Y + (float)PreviousPoint.Y) / 2);
+				var newCGPoint = new PointF(((float)currentPoint.X + (float)PreviousPoint.X) / 2, ((float)currentPoint.Y + (float)PreviousPoint.Y) / 2);
+
+                PointWhen customPoint = new PointWhen
 				{
 					point = newPoint,
 					when = System.DateTime.Now.Ticks
 				};
 				points.Add(customPoint);
 
-				CurrentPath.AddQuadCurveToPoint(newPoint, PreviousPoint);
+				CurrentPath.AddQuadCurveToPoint(newCGPoint, PreviousPoint);
 				PreviousPoint = (System.Drawing.PointF)currentPoint;
 			}
 			else {

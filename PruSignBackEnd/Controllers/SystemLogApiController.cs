@@ -29,7 +29,7 @@ namespace PruSignBackEnd.Controllers
         {
             try
             {
-                var logs = serviceLog.GetAll().OrderByDescending(l => l.Created);
+                var logs = serviceLog.GetAll().OrderByDescending(l => l.Created).Take(50);
                 if (!logs.Any())
                 {
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
@@ -54,7 +54,8 @@ namespace PruSignBackEnd.Controllers
         {
             try
             {
-                var logs = serviceLog.GetAll().Where(l => l.StackTrace.Contains(searchText)).OrderByDescending(l => l.Created);
+                var logs = serviceLog.GetAll().Where(l => l.StackTrace.Contains(searchText)).OrderByDescending(l => l.Created)
+                    .Take(50);
                 if (!logs.Any())
                 {
                     return new HttpResponseMessage(HttpStatusCode.NotFound);

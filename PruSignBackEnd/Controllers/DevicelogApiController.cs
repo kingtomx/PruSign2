@@ -36,7 +36,8 @@ namespace PruSignBackEnd
                     logs = logs.Where(d => d.User.Equals(username) &&
                                           (d.StackTrace.Contains(searchText) ||
                                            d.Message.Contains(searchText)))
-                               .OrderByDescending(l => l.Created);
+                               .OrderByDescending(l => l.Created)
+                               .Take(50);
                 }
                 else
                 {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace PruSignFrontEnd.Controllers
@@ -19,7 +20,7 @@ namespace PruSignFrontEnd.Controllers
             var result = new List<DeviceLog>();
             try
             {
-                var client = new RestClient(Constants.BACKEND_HOST_NAME);
+                var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
                 var request = new RestRequest("api/devicelog/", Method.GET);
                 request.AddParameter("username", username);
                 request.AddParameter("searchText", searchText);

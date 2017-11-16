@@ -6,6 +6,14 @@
 
 <h2>Logs for @ViewBag.DeviceUser</h2>
 
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("SearchText")
+        <input type="submit" value="Search" />
+    </p>
+}
+
 @foreach (var item in Model)
 {
     <div class="list-item">

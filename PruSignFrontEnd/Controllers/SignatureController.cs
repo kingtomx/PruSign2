@@ -12,6 +12,7 @@ using PruSignFrontEnd.ViewModels;
 using System.IO;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
+using System.Web.Configuration;
 
 namespace PruSignFrontEnd.Controllers
 {
@@ -23,7 +24,7 @@ namespace PruSignFrontEnd.Controllers
             var result = new List<Signature>();
             try
             {
-                var client = new RestClient(Constants.BACKEND_HOST_NAME);
+                var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
                 var request = new RestRequest("api/signature/all", Method.GET);
                 if (!String.IsNullOrEmpty(searchText))
                 {
@@ -54,7 +55,7 @@ namespace PruSignFrontEnd.Controllers
             var result = new SignatureViewModel();
             try
             {
-                var client = new RestClient(Constants.BACKEND_HOST_NAME);
+                var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
                 var request = new RestRequest("api/signature", Method.GET);
                 request.AddHeader("Content-Type", "application/json");
                 request.AddParameter("customerid", customerId);
@@ -86,7 +87,7 @@ namespace PruSignFrontEnd.Controllers
             var image = new byte[] { };
             try
             {
-                var client = new RestClient(Constants.BACKEND_HOST_NAME);
+                var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
                 var request = new RestRequest("api/signature/getbyid", Method.GET);
                 request.AddHeader("Content-Type", "application/json");
                 request.AddParameter("id", id);

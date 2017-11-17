@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
 {
-    class HomeViewModel : INotifyPropertyChanged
+    public class HomeViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }
@@ -80,6 +80,11 @@ namespace PruSign.Data.ViewModels
             OnSettingsClickedCommand = new Command(OnSettingsClicked);
             CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
             Navigation = navigation;
+        }
+
+        public HomeViewModel()
+        {
+
         }
 
         public void OnBtnSubmitTapped()

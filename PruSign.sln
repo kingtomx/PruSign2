@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruSignBackEnd", "PruSignBa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruSignFrontEnd", "PruSignFrontEnd\PruSignFrontEnd.csproj", "{3BA878CA-04C1-4DB1-B1CD-AF4026098FB6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7305546A-43B4-4CAD-A2C0-316DB365DDAD}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PruSign\PruSign.projitems*{5e1bc842-49a1-4168-9cb5-357aa951c7b7}*SharedItemsImports = 13

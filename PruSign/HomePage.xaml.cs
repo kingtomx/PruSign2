@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using PruSign.Data.ViewModels;
 using PruSign.CustomViews;
+using Xamarin.Forms.Xaml;
 
 namespace PruSign
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
         private HomeViewModel HomeVM { get; set; }
@@ -24,6 +26,10 @@ namespace PruSign
             MessagingCenter.Subscribe<HomeViewModel>(this, "HomeSuccess", (sender) => {
                 DisplayAlert("Success", "Your signature has been saved", "OK");
             });
+
+            MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) => {
+                DrawingArea.ClearSignature = true;
+            });
         }
 
         protected override void OnDisappearing()
@@ -31,6 +37,7 @@ namespace PruSign
             HomeVM = null;
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeError");
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeSuccess");
+            MessagingCenter.Unsubscribe<HomeViewModel>(this, "CleanSignature");
 
             base.OnDisappearing();
         }

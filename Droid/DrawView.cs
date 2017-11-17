@@ -4,29 +4,16 @@ using Android.Content;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace PruSign.Android
+namespace PruSign.Droid
 {
 	public class DrawView : View
 	{
 
-		private static bool doubleTapped;
 		private static long lastTouched = -1;
-		private static long oneSecond = 10000000;
 		private static long halfSecond = 5000000;
 
 		public DrawView(Context context) : base(context)
 		{
-
-			//GestureDetector gestureDetector = new GestureDetector(context, new GestureListener());
-			//gestureDetector.DoubleTap += (object sender, GestureDetector.DoubleTapEventArgs e) => {
-			//	string aux = "";
-			//};
-			//apply touch to your view
-			//this.Touch += (object sender, View.TouchEventArgs e) => {
-			//       gestureDetector.OnTouchEvent (e.Event);
-			//};
-
-
 			Start();
 		}
 
@@ -36,11 +23,9 @@ namespace PruSign.Android
 		private Paint DrawPaint;
 		private Paint DrawPaintReset;
 		private Paint CanvasPaint;
-		private Canvas DrawCanvas;
+		public Canvas DrawCanvas;
 		private Bitmap CanvasBitmap;
 		public List<Droid.PointWhen> points;
-
-
 
 		private void Start()
 		{
@@ -75,7 +60,6 @@ namespace PruSign.Android
 
 		}
 
-
 		protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
 		{
 			base.OnSizeChanged(w, h, oldw, oldh);
@@ -83,7 +67,6 @@ namespace PruSign.Android
 			CanvasBitmap = Bitmap.CreateBitmap(w, h, Bitmap.Config.Argb8888);
 			DrawCanvas = new Canvas(CanvasBitmap);
 		}
-
 
 		protected override void OnDraw(Canvas canvas)
 		{
@@ -96,10 +79,6 @@ namespace PruSign.Android
 
 		public override bool OnTouchEvent(MotionEvent e)
 		{
-
-
-
-
 			var touchX = e.GetX();
 			var touchY = e.GetY();
 
@@ -158,8 +137,6 @@ namespace PruSign.Android
 
 			return true;
 		}
-
-
 
 		public byte[] CapturePNG(View view, bool autoScale = true)
 		{

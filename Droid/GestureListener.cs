@@ -4,7 +4,7 @@ using Android.Content;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace PruSign.Android
+namespace PruSign.Droid
 {
 
 	public class GestureListener : GestureDetector.SimpleOnGestureListener

@@ -15,7 +15,7 @@ namespace PruSign.iOS
 		private CGPath DrawPath;
 		private byte IndexCount;
 		private UIBezierPath CurrentPath;
-		private List<VESLine> Lines;
+		public List<VESLine> Lines;
 		public UIColor CurrentLineColor { get; set; }
 		public float PenWidth { get; set; }
 		public List<PointWhen> points;

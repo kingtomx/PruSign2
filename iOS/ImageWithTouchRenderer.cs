@@ -25,15 +25,19 @@ namespace PruSign.iOS
 			if (e.PropertyName == ImageWithTouch.CurrentLineColorProperty.PropertyName)
 			{
 				UpdateControl();
-			}
+            }
+
+            if(e.PropertyName == ImageWithTouch.ClearSignatureProperty.PropertyName)
+            {
+                Control.Lines.Clear();
+                Element.ClearSignature = true;
+            }
 		}
 
 		private void UpdateControl()
 		{
 			Control.CurrentLineColor = Element.CurrentLineColor.ToUIColor();
 		}
-
-
 
 	}
 }

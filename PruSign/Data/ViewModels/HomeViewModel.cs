@@ -110,6 +110,7 @@ namespace PruSign.Data.ViewModels
                     Application = String.Empty;
                     ClientId = String.Empty;
                     CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
+                    MessagingCenter.Send<HomeViewModel>(this, "CleanSignature");
                     MessagingCenter.Send<HomeViewModel>(this, "HomeSuccess");
                     return;
                 }

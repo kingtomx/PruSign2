@@ -3,12 +3,14 @@ using System.ComponentModel;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using PruSign;
-using PruSign.Android;
 using PruSign.CustomViews;
+using PruSign.Droid;
+using Android.Graphics;
+
 
 [assembly: ExportRenderer(typeof(ImageWithTouch), typeof(ImageWithTouchRenderer))]
 
-namespace PruSign.Android
+namespace PruSign.Droid
 {
 	public class ImageWithTouchRenderer : ViewRenderer<ImageWithTouch, DrawView>
 	{
@@ -33,7 +35,20 @@ namespace PruSign.Android
 			{
 				UpdateControl();
 			}
-		}
+
+            if (e.PropertyName == ImageWithTouch.ClearSignatureProperty.PropertyName)
+            {
+                var PenWidth = 3.0f;
+                Paint DrawPaintReset = new Paint
+                {
+                    Color = Android.Graphics.Color.White,
+                    AntiAlias = true,
+                    StrokeWidth = PenWidth
+                };
+                Control.DrawCanvas.DrawPaint(DrawPaintReset);
+                Element.ClearSignature = false;
+            }
+        }
 
 		private void UpdateControl()
 		{

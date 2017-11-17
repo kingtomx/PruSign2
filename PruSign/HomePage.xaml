@@ -46,9 +46,9 @@
                         TextColor="{StaticResource FaluRed}" VerticalOptions="Start"></Entry>
 
             <!--Sign Area-->
-            <Frame  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand"
+            <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand"
                         BackgroundColor="Red" Padding="0" HasShadow="False" OutlineColor="{StaticResource GreenHouse}">
-                <controls:ImageWithTouch x:Name="DrawingImage" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                <controls:ImageWithTouch x:Name="DrawingArea" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                                           BackgroundColor="White" CurrentLineColor="{StaticResource HippieGreen}"></controls:ImageWithTouch>
             </Frame>
 

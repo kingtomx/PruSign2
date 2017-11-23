@@ -3,14 +3,10 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using PruSign.Data.Entities;
 using PruSign.Data;
-using PruSign.Helpers;
-using System.Collections.Generic;
 using RestSharp;
 using System.Net.Http;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using PruSign.Data.ViewModels;
 
 namespace PruSign.Helpers

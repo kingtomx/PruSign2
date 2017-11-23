@@ -9,15 +9,25 @@ using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
 {
-    class HomeViewModel : INotifyPropertyChanged
+    public class HomeViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }
         public ICommand OnSettingsClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
-        public bool IsLocked { get; set; }
 
         #region Properties
+        private bool isLocked;
+        public bool IsLocked
+        {
+            get { return isLocked; }
+            set
+            {
+                isLocked = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string clientName;
         public string ClientName
         {
@@ -80,6 +90,13 @@ namespace PruSign.Data.ViewModels
             OnSettingsClickedCommand = new Command(OnSettingsClicked);
             CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
             Navigation = navigation;
+        }
+
+        public HomeViewModel()
+        {
+            OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
+            OnSettingsClickedCommand = new Command(OnSettingsClicked);
+            CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
         }
 
         public void OnBtnSubmitTapped()

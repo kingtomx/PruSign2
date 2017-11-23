@@ -40,6 +40,11 @@ namespace PruSign.Data.ViewModels
             Navigation = navigation;
         }
 
+        public SettingsViewModel()
+        {
+
+        }
+
         public void OnViewLogListTapped()
         {
             if (!IsLocked)

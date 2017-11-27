@@ -23,7 +23,11 @@ namespace PruSign.Data.Entities
 
         public string FormattedDate
         {
-            get => Created.ToString("yyyy-MM-dd HH:mm:ss");
+            get
+            {
+                return Created.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+
             set { }
         }
 

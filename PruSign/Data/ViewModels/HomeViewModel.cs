@@ -94,9 +94,7 @@ namespace PruSign.Data.ViewModels
 
         public HomeViewModel()
         {
-            OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
-            OnSettingsClickedCommand = new Command(OnSettingsClicked);
-            CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
+            
         }
 
         public void OnBtnSubmitTapped()
@@ -138,7 +136,7 @@ namespace PruSign.Data.ViewModels
             }
         }
 
-        public void OnSettingsClicked()
+        public virtual void OnSettingsClicked()
         {
             if (!IsLocked)
             {

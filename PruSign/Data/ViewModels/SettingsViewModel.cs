@@ -1,9 +1,6 @@
 ﻿using PruSign.Helpers;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -20,13 +17,13 @@ namespace PruSign.Data.ViewModels
         public bool IsLocked { get; set; }
 
         // Used to show the Activity Indicator
-        private bool isLoading;
+        private bool _isLoading;
         public bool IsLoading
         {
-            get { return isLoading; }
+            get => _isLoading;
             set
             {
-                isLoading = value;
+                _isLoading = value;
                 OnPropertyChanged();
             }
         }
@@ -40,18 +37,11 @@ namespace PruSign.Data.ViewModels
             Navigation = navigation;
         }
 
-        public SettingsViewModel()
-        {
-
-        }
-
         public void OnViewLogListTapped()
         {
-            if (!IsLocked)
-            {
-                IsLocked = true;
-                ModalHelper.Push(Navigation, new LogPage(), () => IsLocked = false);
-            }
+            if (IsLocked) return;
+            IsLocked = true;
+            ModalHelper.Push(Navigation, new LogPage(), () => IsLocked = false);
         }
 
         public void OnBtnCloseClicked()
@@ -72,24 +62,17 @@ namespace PruSign.Data.ViewModels
                     IsLoading = true;
                     var response = await SendHelper.SendDeviceLogs();
                     IsLoading = false;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // If the operation was successfull, we'll show a success message
-                        MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
-                    }
-                    else
-                    {
-                        MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogsError");
-                    }
+                    MessagingCenter.Send(this,
+                        response.IsSuccessStatusCode ? "SettingsVM_SendLogsSuccess" : "SettingsVM_SendLogsError");
                 }
 
                 MessagingCenter.Unsubscribe<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation");
 
             });
-            MessagingCenter.Send<SettingsViewModel>(this, "SettingsVM_SendLogs");
+            MessagingCenter.Send(this, "SettingsVM_SendLogs");
         }
 
-        void OnPropertyChanged([CallerMemberName] string name = "")
+        public void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

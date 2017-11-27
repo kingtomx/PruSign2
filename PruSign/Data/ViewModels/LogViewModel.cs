@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -22,36 +20,36 @@ namespace PruSign.Data.ViewModels
         private ServiceAsync<LogEntry> ServiceLogs { get; set; }
 
         #region Properties
-        private bool isEmpty;
+        private bool _isEmpty;
         public bool IsEmpty
         {
-            get { return isEmpty; }
+            get => _isEmpty;
             set
             {
-                isEmpty = value;
+                _isEmpty = value;
                 OnPropertyChanged();
             }
         }
 
         // Used to show the Activity Indicator
-        private bool isLoading;
+        private bool _isLoading;
         public bool IsLoading
         {
-            get { return isLoading; }
+            get => _isLoading;
             set
             {
-                isLoading = value;
+                _isLoading = value;
                 OnPropertyChanged();
             }
         }
 
-        private List<LogEntry> logs;
+        private List<LogEntry> _logs;
         public List<LogEntry> Logs
         {
-            get { return logs; }
+            get => _logs;
             set
             {
-                logs = value;
+                _logs = value;
                 OnPropertyChanged();
             }
         }
@@ -78,14 +76,14 @@ namespace PruSign.Data.ViewModels
                 Logs = await ServiceLogs.GetAll()
                     .OrderByDescending(log => log.Created)
                     .Take(20).ToListAsync();
-                IsEmpty = (Logs.Count > 0) ? false : true;
+                IsEmpty = (Logs.Count <= 0);
 
             }
             catch (Exception ex)
             {
                 LogHelper.Log(ex);
                 //FailedToLoad = true;
-                MessagingCenter.Send<LogViewModel>(this, "LogVM_CannotGetLogs");
+                MessagingCenter.Send(this, "LogVM_CannotGetLogs");
             }
 
             IsLoading = false;
@@ -109,25 +107,18 @@ namespace PruSign.Data.ViewModels
                     IsLoading = true;
                     var response = await SendHelper.SendDeviceLogs();
                     IsLoading = false;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // If the operation was successfull, we'll show a success message
-                        MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsSuccess");
-                    }
-                    else
-                    {
-                        MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogsError");
-                    }
+                    MessagingCenter.Send(this,
+                        response.IsSuccessStatusCode ? "LogVM_SendLogsSuccess" : "LogVM_SendLogsError");
                 }
 
                 MessagingCenter.Unsubscribe<LogPage, bool>(this, "LogVM_SendLogsConfirmation");
 
             });
 
-            MessagingCenter.Send<LogViewModel>(this, "LogVM_SendLogs");
+            MessagingCenter.Send(this, "LogVM_SendLogs");
         }
 
-        void OnPropertyChanged([CallerMemberName] string name = "")
+        private void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

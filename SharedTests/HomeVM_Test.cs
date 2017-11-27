@@ -98,7 +98,7 @@ namespace SharedTests
 
         [Fact]
         [Trait("Category", "HomeVM - Behavior")]
-        public void Signature_Should_Not_Be_Sent_If_ClientName_Is_Empty()
+        public void Signature_Should_Not_Be_Cleaned_If_ClientName_Is_Empty()
         {
             var messageReceived = false;
 
@@ -120,7 +120,7 @@ namespace SharedTests
 
         [Fact]
         [Trait("Category", "HomeVM - Behavior")]
-        public void Signature_Should_Not_Be_Sent_If_ClientId_Is_Empty()
+        public void Signature_Should_Not_Be_Cleaned_If_ClientId_Is_Empty()
         {
             var messageReceived = false;
 
@@ -142,7 +142,7 @@ namespace SharedTests
 
         [Fact]
         [Trait("Category", "HomeVM - Behavior")]
-        public void Signature_Should_Not_Be_Sent_If_Application_Is_Empty()
+        public void Signature_Should_Not_Be_Cleaned_If_Application_Is_Empty()
         {
 
             bool messageReceived = false;
@@ -165,7 +165,7 @@ namespace SharedTests
 
         [Fact]
         [Trait("Category", "HomeVM - Behavior")]
-        public void Signature_Should_Not_Be_Sent_If_DocumentId_Is_Empty()
+        public void Signature_Should_Not_Be_Cleaned_If_DocumentId_Is_Empty()
         {
             var messageReceived = false;
 
@@ -187,7 +187,7 @@ namespace SharedTests
 
         [Fact]
         [Trait("Category", "HomeVM - Behavior")]
-        public void Signature_Should_Be_Sent_If_All_Fields_Are_Ok()
+        public void Signature_Should_Be_Cleaned_If_All_Fields_Are_Ok()
         {
             var messageReceived = false;
 
@@ -202,6 +202,129 @@ namespace SharedTests
             MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) =>
             {
                 messageReceived = true;
+            });
+            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            Assert.True(messageReceived);
+        }
+
+        [Fact]
+        [Trait("Category", "HomeVM - Behavior")]
+        public void Display_Success_Message_After_Send_If_All_Fields_Are_Ok()
+        {
+            var messageReceived = false;
+
+            var homeViewModel = new HomeViewModel(Home.Navigation)
+            {
+                ClientId = "Test",
+                Application = "Test",
+                ClientName = "Test",
+                DocumentId = "Test"
+            };
+
+            MessagingCenter.Subscribe<HomeViewModel>(this, "HomeSuccess", (sender) =>
+            {
+                messageReceived = true;
+            });
+            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            Assert.True(messageReceived);
+        }
+
+        [Fact]
+        [Trait("Category", "HomeVM - Behavior")]
+        public void Display_Error_Message_If_ClientId_Is_Empty()
+        {
+            var messageReceived = false;
+
+            var homeViewModel = new HomeViewModel(Home.Navigation)
+            {
+                Application = "Test",
+                ClientName = "Test",
+                DocumentId = "Test"
+            };
+
+            MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
+            {
+                if (message.Equals("Client Id cannot be empty"))
+                {
+                    messageReceived = true;
+                }
+            });
+            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            Assert.True(messageReceived);
+        }
+
+        [Fact]
+        [Trait("Category", "HomeVM - Behavior")]
+        public void Display_Error_Message_If_Application_Is_Empty()
+        {
+            var messageReceived = false;
+
+            var homeViewModel = new HomeViewModel(Home.Navigation)
+            {
+                ClientId = "Test",
+                ClientName = "Test",
+                DocumentId = "Test"
+            };
+
+            MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
+            {
+                if (message.Equals("Select an Application to send the signature"))
+                {
+                    messageReceived = true;
+                }
+            });
+            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            Assert.True(messageReceived);
+        }
+
+        [Fact]
+        [Trait("Category", "HomeVM - Behavior")]
+        public void Display_Error_Message_If_ClientName_Is_Empty()
+        {
+            var messageReceived = false;
+
+            var homeViewModel = new HomeViewModel(Home.Navigation)
+            {
+                ClientId = "Test",
+                Application = "Test",
+                DocumentId = "Test"
+            };
+
+            MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
+            {
+                if (message.Equals("Name cannot be empty"))
+                {
+                    messageReceived = true;
+                }
+            });
+            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            Assert.True(messageReceived);
+        }
+
+        [Fact]
+        [Trait("Category", "HomeVM - Behavior")]
+        public void Display_Error_Message_If_DocumentId_Is_Empty()
+        {
+            var messageReceived = false;
+
+            var homeViewModel = new HomeViewModel(Home.Navigation)
+            {
+                ClientId = "Test",
+                Application = "Test",
+                ClientName = "Test"
+            };
+
+            MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
+            {
+                if (message.Equals("Document Id cannot be empty"))
+                {
+                    messageReceived = true;
+                }
             });
             homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 

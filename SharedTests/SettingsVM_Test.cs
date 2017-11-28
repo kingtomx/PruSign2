@@ -40,17 +40,17 @@ namespace SharedTests
 
         [Trait("Category", "SettingsVM - Behavior")]
         [Fact]
-        public void Tap_ListView_Should_Lock_The_Screen()
+        public void Tap_LogErrorList_Button_Should_Lock_The_Screen()
         {
             bool invoked = false;
             var settingsViewModel = new SettingsViewModel(Settings.Navigation);
 
             settingsViewModel.PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName.Equals("IsLoading"))
+                if (e.PropertyName.Equals("IsLocked"))
                     invoked = true;
             };
-            settingsViewModel.IsLoading = true;
+            settingsViewModel.OnViewLogListTappedCommand.Execute(null);
 
             Assert.True(invoked);
         }

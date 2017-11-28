@@ -5,11 +5,11 @@ using Xunit;
 
 namespace SharedTests
 {
-    public class HomeVM_Test
+    public class HomeVmTest
     {
         public HomePage Home { get; set; }
 
-        public HomeVM_Test()
+        public HomeVmTest()
         {
             MockForms.Init();
             var app = new App();
@@ -18,9 +18,9 @@ namespace SharedTests
 
         [Trait("Category", "HomeVM - Property Change")]
         [Fact]
-        public void SetClientNamePropertyShouldRaisePropertyChanged()
+        public void Set_ClientName_Property_Should_Raise_PropertyChanged()
         {
-            bool invoked = false;
+            var invoked = false;
             var homeViewModel = new HomeViewModel();
 
             homeViewModel.PropertyChanged += (sender, e) =>
@@ -90,8 +90,7 @@ namespace SharedTests
         {
             var homeViewModel = new HomeViewModel();
 
-            var currentDateSetted = false;
-            currentDateSetted = homeViewModel.CurrentDate != string.Empty;
+            var currentDateSetted = homeViewModel.CurrentDate != string.Empty;
 
             Assert.True(currentDateSetted);
         }

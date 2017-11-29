@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
 {
-    public class HomeViewModel : INotifyPropertyChanged
+    public class HomeViewModel : IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }

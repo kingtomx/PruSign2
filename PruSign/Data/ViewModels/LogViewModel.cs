@@ -10,7 +10,7 @@ using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
 {
-    class LogViewModel : INotifyPropertyChanged
+    class LogViewModel : IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnCloseClickedCommand { get; set; }

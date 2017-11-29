@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
 {
-    class LoginViewModel : INotifyPropertyChanged
+    class LoginViewModel : IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }

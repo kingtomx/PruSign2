@@ -11,6 +11,5 @@ namespace PruSign.Data.ViewModels
 		public String documentId;
 		public String applicationId;
 		public String hash;
-
 	}
 }

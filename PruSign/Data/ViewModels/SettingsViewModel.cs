@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
 {
-    class SettingsViewModel : INotifyPropertyChanged
+    class SettingsViewModel : IViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnViewLogListTappedCommand { get; set; }

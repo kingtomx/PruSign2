@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Autofac;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,13 +13,16 @@ namespace PruSign
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
     {
-        private SettingsViewModel SettingsVM { get; set; }
+        private SettingsViewModel _settingsVm { get; set; }
 
         public SettingsPage()
         {
             InitializeComponent();
-            SettingsVM = new SettingsViewModel(Navigation);
-            BindingContext = SettingsVM;
+            using (var scope = App.Container.BeginLifetimeScope())
+            {
+                _settingsVm = App.Container.Resolve<SettingsViewModel>(new TypedParameter(typeof(INavigation), Navigation));
+                BindingContext = _settingsVm;
+            }
         }
 
         protected override void OnAppearing()
@@ -57,7 +60,7 @@ namespace PruSign
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogs");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
-            SettingsVM = null;
+            _settingsVm = null;
             base.OnDisappearing();
         }
     }

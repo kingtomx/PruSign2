@@ -1,10 +1,9 @@
-﻿using PruSign.Helpers;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Input;
+using Autofac;
+using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
@@ -15,86 +14,85 @@ namespace PruSign.Data.ViewModels
         public ICommand OnBtnSubmitTappedCommand { get; set; }
         public ICommand OnSettingsClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
+        private IModalService _modalService { get; set; }
+        private ISignatureService _signatureService { get; set; }
 
         #region Properties
-        private bool isLocked;
+        private bool _isLocked;
         public bool IsLocked
         {
-            get { return isLocked; }
+            get => _isLocked;
             set
             {
-                isLocked = value;
+                _isLocked = value;
                 OnPropertyChanged();
             }
         }
 
-        private string clientName;
+        private string _clientName;
         public string ClientName
         {
-            get { return clientName; }
+            get => _clientName;
             set
             {
-                clientName = value;
+                _clientName = value;
                 OnPropertyChanged();
             }
         }
 
-        private string clientId;
+        private string _clientId;
         public string ClientId
         {
-            get { return clientId; }
+            get => _clientId;
             set
             {
-                clientId = value;
+                _clientId = value;
                 OnPropertyChanged();
             }
         }
 
-        private string documentId;
+        private string _documentId;
         public string DocumentId
         {
-            get { return documentId; }
+            get => _documentId;
             set
             {
-                documentId = value;
+                _documentId = value;
                 OnPropertyChanged();
             }
         }
 
-        private string application;
+        private string _application;
         public string Application
         {
-            get { return application; }
+            get => _application;
             set
             {
-                application = value;
+                _application = value;
                 OnPropertyChanged();
             }
         }
 
-        private string currentDate;
+        private string _currentDate;
         public string CurrentDate
         {
-            get { return currentDate; }
+            get => _currentDate;
             set
             {
-                currentDate = value;
+                _currentDate = value;
                 OnPropertyChanged();
             }
         }
         #endregion
 
-        public HomeViewModel(INavigation navigation)
+        public HomeViewModel(INavigation navigation, IModalService modalService, ISignatureService signatureService)
         {
+            _signatureService = signatureService;
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
             OnSettingsClickedCommand = new Command(OnSettingsClicked);
             CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
             Navigation = navigation;
-        }
-
-        public HomeViewModel()
-        {
-            
+            _modalService = modalService;
         }
 
         public void OnBtnSubmitTapped()
@@ -119,15 +117,14 @@ namespace PruSign.Data.ViewModels
                 }
                 else
                 {
-                    SendHelper.SaveSign(ClientName, ClientId, DocumentId, Application, CurrentDate);
+                    _signatureService.SaveSign(ClientName, ClientId, DocumentId, Application, CurrentDate);
                     ClientName = String.Empty;
                     DocumentId = String.Empty;
                     Application = String.Empty;
                     ClientId = String.Empty;
                     CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
-                    MessagingCenter.Send<HomeViewModel>(this, "CleanSignature");
-                    MessagingCenter.Send<HomeViewModel>(this, "HomeSuccess");
-                    return;
+                    MessagingCenter.Send(this, "CleanSignature");
+                    MessagingCenter.Send(this, "HomeSuccess");
                 }
             }
             catch (Exception ex)
@@ -141,16 +138,20 @@ namespace PruSign.Data.ViewModels
             if (!IsLocked)
             {
                 IsLocked = true;
-                ModalHelper.Push(Navigation, new SettingsPage(), () => IsLocked = false);
+                using (var scope = App.Container.BeginLifetimeScope())
+                {
+                    var settingsPage = App.Container.Resolve<SettingsPage>();
+                    _modalService.Push(Navigation, settingsPage, () => IsLocked = false);
+                }
             }
         }
 
-        void SendError(string errorMessage)
+        public void SendError(string errorMessage)
         {
-            MessagingCenter.Send<HomeViewModel, string>(this, "HomeError", errorMessage);
+            MessagingCenter.Send(this, "HomeError", errorMessage);
         }
 
-        void OnPropertyChanged([CallerMemberName] string name = "")
+        public void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

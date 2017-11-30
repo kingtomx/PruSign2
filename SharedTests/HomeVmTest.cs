@@ -21,7 +21,7 @@ namespace SharedTests
         public void Set_ClientName_Property_Should_Raise_PropertyChanged()
         {
             var invoked = false;
-            var homeViewModel = new HomeViewModel();
+            var homeViewModel = new HomeViewModel(Home.Navigation);
 
             homeViewModel.PropertyChanged += (sender, e) =>
             {
@@ -38,7 +38,7 @@ namespace SharedTests
         public void Set_ClientId_Property_Should_Raise_PropertyChanged()
         {
             bool invoked = false;
-            var homeViewModel = new HomeViewModel();
+            var homeViewModel = new HomeViewModel(Home.Navigation);
 
             homeViewModel.PropertyChanged += (sender, e) =>
             {
@@ -55,7 +55,7 @@ namespace SharedTests
         public void Set_DocumentId_Property_Should_Raise_PropertyChanged()
         {
             bool invoked = false;
-            var homeViewModel = new HomeViewModel();
+            var homeViewModel = new HomeViewModel(Home.Navigation);
 
             homeViewModel.PropertyChanged += (sender, e) =>
             {
@@ -72,7 +72,7 @@ namespace SharedTests
         public void Set_ApplicationId_Property_Should_Raise_PropertyChanged()
         {
             var invoked = false;
-            var homeViewModel = new HomeViewModel();
+            var homeViewModel = new HomeViewModel(Home.Navigation);
 
             homeViewModel.PropertyChanged += (sender, e) =>
             {
@@ -88,7 +88,7 @@ namespace SharedTests
         [Fact]
         public void Creating_ViewModel_Should_Set_CurrentDate_Property()
         {
-            var homeViewModel = new HomeViewModel();
+            var homeViewModel = new HomeViewModel(Home.Navigation);
 
             var currentDateSetted = homeViewModel.CurrentDate != string.Empty;
 

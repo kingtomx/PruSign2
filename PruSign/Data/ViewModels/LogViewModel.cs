@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
@@ -16,8 +17,10 @@ namespace PruSign.Data.ViewModels
         public ICommand OnBtnCloseClickedCommand { get; set; }
         public ICommand OnBtnSendLogsClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
-        private PruSignDatabase Db { get; set; }
         private ServiceAsync<LogEntry> ServiceLogs { get; set; }
+
+        private IDBService _db { get; set; }
+        private IDeviceLogService _deviceLogService { get; set; }
 
         #region Properties
         private bool _isEmpty;
@@ -56,16 +59,17 @@ namespace PruSign.Data.ViewModels
 
         #endregion
 
-        public LogViewModel(INavigation navigation)
+        public LogViewModel(INavigation navigation, IDBService db, IDeviceLogService deviceLogService)
         {
+            _db = db;
+            _deviceLogService = deviceLogService;
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
             OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             IsLoading = true;
             IsEmpty = false;
             Navigation = navigation;
             Logs = new List<LogEntry>();
-            Db = new PruSignDatabase();
-            ServiceLogs = new ServiceAsync<LogEntry>(Db);
+            ServiceLogs = new ServiceAsync<LogEntry>(_db);
         }
 
         public async Task Initialize()
@@ -81,7 +85,7 @@ namespace PruSign.Data.ViewModels
             }
             catch (Exception ex)
             {
-                LogHelper.Log(ex);
+                _deviceLogService.Log(ex);
                 //FailedToLoad = true;
                 MessagingCenter.Send(this, "LogVM_CannotGetLogs");
             }
@@ -105,7 +109,7 @@ namespace PruSign.Data.ViewModels
                 if (flag)
                 {
                     IsLoading = true;
-                    var response = await SendHelper.SendDeviceLogs();
+                    var response = await _deviceLogService.SendDeviceLogs();
                     IsLoading = false;
                     MessagingCenter.Send(this,
                         response.IsSuccessStatusCode ? "LogVM_SendLogsSuccess" : "LogVM_SendLogsError");

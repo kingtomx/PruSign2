@@ -4,6 +4,10 @@ using PruSign.Data;
 using PruSign.Data.Entities;
 using PruSign.Data.ViewModels;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Core;
+using PruSign.Data.Interfaces;
+using PruSign.Data.Services;
 using Xamarin.Forms;
 
 namespace PruSign
@@ -11,30 +15,34 @@ namespace PruSign
     public partial class App : Application
     {
         public bool IsLocked { get; set; }
+        public static IContainer Container;
 
-        public App()
+        public App(IModule[] platformSpecificModules)
         {
+            PrepareContainer(platformSpecificModules);
             InitializeComponent();
             MainPage = new LoadingPage();
-
             Task.Run(async () =>
             {
                 // Checking if the credentials are stored in the database
-                var db = new PruSignDatabase();
-                var userCredentialService = new ServiceAsync<UserCredentials>(db);
-                int result = await userCredentialService.GetAll().CountAsync();
-
-                Device.BeginInvokeOnMainThread(() =>
+                using (var scope = App.Container.BeginLifetimeScope())
                 {
-                    if(result > 0)
+                    var db = Container.Resolve<IDBService>();
+                    var userCredentialService = new ServiceAsync<UserCredentials>(db);
+                    int result = await userCredentialService.GetAll().CountAsync();
+
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        MainPage = new HomePage();
-                    }
-                    else
-                    {
-                        MainPage = new LoginPage();
-                    }
-                });
+                        if (result > 0)
+                        {
+                            MainPage = Container.Resolve<HomePage>();
+                        }
+                        else
+                        {
+                            MainPage = Container.Resolve<LoginPage>();
+                        }
+                    });
+                }
             });
 
             MessagingCenter.Subscribe<LoginViewModel>(this, "RedirectToHome", (sender) =>
@@ -44,10 +52,42 @@ namespace PruSign
                     IsLocked = true;
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        MainPage = new HomePage();
+                        MainPage = Container.Resolve<HomePage>();
                     });
                 }
             });
+        }
+
+        private static void PrepareContainer(IModule[] platformSpecificModules)
+        {
+            var containerBuilder = new Autofac.ContainerBuilder();
+
+            RegisterPlatformSpecificModules(platformSpecificModules, containerBuilder);
+
+            containerBuilder.RegisterType<ModalService>().As<IModalService>().SingleInstance();
+            containerBuilder.RegisterType<DeviceLogService>().As<IDeviceLogService>().SingleInstance();
+            containerBuilder.RegisterType<SignatureService>().As<ISignatureService>().SingleInstance();
+            containerBuilder.RegisterType<DBService>().As<IDBService>().SingleInstance();
+
+            containerBuilder.RegisterType<HomePage>().SingleInstance();
+            containerBuilder.RegisterType<LoginPage>().SingleInstance();
+            containerBuilder.RegisterType<SettingsPage>().SingleInstance();
+            containerBuilder.RegisterType<LogPage>().SingleInstance();
+
+            containerBuilder.RegisterType<HomeViewModel>().SingleInstance();
+            containerBuilder.RegisterType<LoginViewModel>().SingleInstance();
+            containerBuilder.RegisterType<SettingsViewModel>().SingleInstance();
+            containerBuilder.RegisterType<LogViewModel>().SingleInstance();
+
+            Container = containerBuilder.Build();
+        }
+
+        private static void RegisterPlatformSpecificModules(IModule[] platformSpecificModules, ContainerBuilder containerBuilder)
+        {
+            foreach (var platformSpecificModule in platformSpecificModules)
+            {
+                containerBuilder.RegisterModule(platformSpecificModule);
+            }
         }
 
         protected override void OnStart()

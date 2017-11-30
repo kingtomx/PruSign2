@@ -1,29 +1,38 @@
 ﻿using System;
 using Xamarin.Forms;
-using Foundation;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using UIKit;
-using PruSign.Helpers;
 using PruSign.Background;
+using PruSign.Data.Services;
 
 namespace PruSign.iOS
 {
-	public class iOSLongRunningTask
-	{
+    public class iOSLongRunningTask
+    {
         nint _taskId;
         CancellationTokenSource _cts;
 
-		public async Task Start()
-		{
+        public async Task Start()
+        {
             _cts = new CancellationTokenSource();
             _taskId = UIApplication.SharedApplication.BeginBackgroundTask("LongRunningTask", OnExpiration);
             try
             {
-                await SendHelper.SendSignatures();
+                using (var scope = App.Container.BeginLifetimeScope())
+                {
+                    var signatureService = App.Container.Resolve<SignatureService>();
+                    await signatureService.SendSignatures();
+                }
             }
-            catch (OperationCanceledException ex) {
-                LogHelper.Log(ex);
+            catch (OperationCanceledException ex)
+            {
+                using (var scope = App.Container.BeginLifetimeScope())
+                {
+                    var deviceLogService = App.Container.Resolve<DeviceLogService>();
+                    deviceLogService.Log(ex);
+                }
             }
             finally
             {
@@ -48,5 +57,5 @@ namespace PruSign.iOS
         }
 
 
-	}
+    }
 }

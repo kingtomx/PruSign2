@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Foundation;
 using UIKit;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using PruSign.Data;
-using PruSign.Helpers;
-using RestSharp;
-using System.Net;
-using PruSign.Data.Entities;
+using Autofac;
+using Autofac.Core;
 using PruSign.Background;
 using KeyboardOverlap.Forms.Plugin.iOSUnified;
+using PruSign.Data.Services;
 
 namespace PruSign.iOS
 {
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    public class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
+            Forms.Init();
             KeyboardOverlapRenderer.Init();
-            LoadApplication(new App());
+            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
             UIApplication.SharedApplication.ApplicationSupportsShakeToEdit = true;
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
             WireUpBackgroundDataSync();
@@ -31,25 +27,33 @@ namespace PruSign.iOS
 
         public override void DidEnterBackground(UIApplication app)
         {
-            nint taskID = UIApplication.SharedApplication.BeginBackgroundTask(() => { });
+            var taskId = UIApplication.SharedApplication.BeginBackgroundTask(() => { });
             new Task(async () =>
             {
-                await SendHelper.SendSignatures();
-                UIApplication.SharedApplication.EndBackgroundTask(taskID);
+                using (var scope = App.Container.BeginLifetimeScope())
+                {
+                    var signatureService = App.Container.Resolve<SignatureService>();
+                    await signatureService.SendSignatures();
+                    UIApplication.SharedApplication.EndBackgroundTask(taskId);
+                }
             }).Start();
 
         }
 
         public override async void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
-            await SendHelper.SendSignatures();
-            completionHandler(UIBackgroundFetchResult.NewData);
-
+            using (var scope = App.Container.BeginLifetimeScope())
+            {
+                var signatureService = App.Container.Resolve<SignatureService>();
+                await signatureService.SendSignatures();
+                completionHandler(UIBackgroundFetchResult.NewData);
+            }
         }
 
         public void WireUpBackgroundDataSync()
         {
-            MessagingCenter.Subscribe<StartDataSync>(this, "StartDataSyncMessage", async message => {
+            MessagingCenter.Subscribe<StartDataSync>(this, "StartDataSyncMessage", async message =>
+            {
                 var asyncTask = new iOSLongRunningTask();
                 await asyncTask.Start();
             });
@@ -58,7 +62,8 @@ namespace PruSign.iOS
             {
                 await Task.Delay(TimeSpan.FromMinutes(1));
                 var startMessage = new StartDataSync();
-                Device.BeginInvokeOnMainThread(() => {
+                Device.BeginInvokeOnMainThread(() =>
+                {
                     MessagingCenter.Send(startMessage, "StartDataSyncMessage");
                 });
             });

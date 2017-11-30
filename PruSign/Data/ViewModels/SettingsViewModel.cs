@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Autofac;
+using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
@@ -13,6 +15,9 @@ namespace PruSign.Data.ViewModels
         public ICommand OnBtnSendLogsClickedCommand { get; set; }
         public ICommand OnBtnCloseClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
+
+        private IModalService _modalService { get; set; }
+        private IDeviceLogService _deviceLogService { get; set; }
 
         public bool IsLocked { get; set; }
 
@@ -28,8 +33,11 @@ namespace PruSign.Data.ViewModels
             }
         }
 
-        public SettingsViewModel(INavigation navigation)
+        public SettingsViewModel(INavigation navigation, IModalService modalService, IDeviceLogService deviceLogService)
         {
+            _modalService = modalService;
+            _deviceLogService = deviceLogService;
+
             IsLoading = false;
             OnViewLogListTappedCommand = new Command(OnViewLogListTapped);
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
@@ -41,7 +49,12 @@ namespace PruSign.Data.ViewModels
         {
             if (IsLocked) return;
             IsLocked = true;
-            ModalHelper.Push(Navigation, new LogPage(), () => IsLocked = false);
+            using (var scope = App.Container.BeginLifetimeScope())
+            {
+                var logPage = App.Container.Resolve<LogPage>();
+                this._modalService.Push(Navigation, logPage, () => IsLocked = false);
+            }
+
         }
 
         public void OnBtnCloseClicked()
@@ -60,7 +73,7 @@ namespace PruSign.Data.ViewModels
                 if (flag)
                 {
                     IsLoading = true;
-                    var response = await SendHelper.SendDeviceLogs();
+                    var response = await _deviceLogService.SendDeviceLogs();
                     IsLoading = false;
                     MessagingCenter.Send(this,
                         response.IsSuccessStatusCode ? "SettingsVM_SendLogsSuccess" : "SettingsVM_SendLogsError");

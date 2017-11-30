@@ -1,18 +1,19 @@
 ﻿using PruSign.Data.Entities;
 using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using PruSign.Data.Interfaces;
 
 namespace PruSign.Data
 {
     public class Service<T> where T : class, IEntity, new()
     {
         private SQLiteConnection _connection;
+        private readonly IDBService _db;
 
-        public Service(PruSignDatabase db)
+        public Service(IDBService db)
         {
-            _connection = db.Connection;
+            _db = db;
+            _connection = _db.Connection;
         }
 
         public TableQuery<T> GetAll()

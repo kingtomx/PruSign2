@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Autofac;
+using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,60 +14,63 @@ namespace PruSign
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LogPage : ContentPage
     {
-        private LogViewModel LogVM { get; set; }
+        private LogViewModel _logVm { get; set; }
 
         public LogPage()
         {
             InitializeComponent();
-            LogVM = new LogViewModel(Navigation);
-            BindingContext = LogVM;
-
-            MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogs", (sender) =>
+            using (var scope = App.Container.BeginLifetimeScope())
             {
-                DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
-                .ContinueWith(action =>
+                _logVm = App.Container.Resolve<LogViewModel>(new TypedParameter(typeof(INavigation), Navigation));
+                BindingContext = _logVm;
+
+                MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogs", (sender) =>
                 {
-                    MessagingCenter.Send<LogPage, bool>(this, "LogVM_SendLogsConfirmation", action.Result);
+                    DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
+                        .ContinueWith(action =>
+                        {
+                            MessagingCenter.Send<LogPage, bool>(this, "LogVM_SendLogsConfirmation", action.Result);
+                        });
                 });
-            });
 
-            MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogsError", (sender) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
+                MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogsError", (sender) =>
                 {
-                    DisplayAlert("Error", "There was an error trying to send the logs", "Ok");
-                });
-            });
-
-            MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogsSuccess", (sender) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    DisplayAlert("Success", "Your logs have been sent", "Ok");
-                });
-            });
-
-            MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_CannotGetLogs", (sender) =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    DisplayAlert("Error", "There was an error trying to get the logs", "Ok")
-                    .ContinueWith(action =>
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        
+                        DisplayAlert("Error", "There was an error trying to send the logs", "Ok");
                     });
                 });
-            });
+
+                MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_SendLogsSuccess", (sender) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        DisplayAlert("Success", "Your logs have been sent", "Ok");
+                    });
+                });
+
+                MessagingCenter.Subscribe<LogViewModel>(this, "LogVM_CannotGetLogs", (sender) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        DisplayAlert("Error", "There was an error trying to get the logs", "Ok")
+                            .ContinueWith(action =>
+                            {
+
+                            });
+                    });
+                });
+            }
         }
 
         protected override void OnAppearing()
         {
-            if (LogVM != null)
+            if (_logVm != null)
             {
                 Task.Run(async () =>
                 {
-                    if (LogVM.IsLoading)
-                        await LogVM.Initialize();
+                    if (_logVm.IsLoading)
+                        await _logVm.Initialize();
                 });
             }
 
@@ -79,7 +83,7 @@ namespace PruSign
             MessagingCenter.Unsubscribe<LogViewModel>(this, "LogVM_SendLogsError");
             MessagingCenter.Unsubscribe<LogViewModel>(this, "LogVM_SendLogsSuccess");
             MessagingCenter.Unsubscribe<LogViewModel>(this, "LogVM_CannotGetLogs");
-            LogVM = null;
+            _logVm = null;
             base.OnDisappearing();
         }
     }

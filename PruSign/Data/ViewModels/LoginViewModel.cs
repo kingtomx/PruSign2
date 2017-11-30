@@ -1,12 +1,9 @@
 ﻿using PruSign.Data.Entities;
-using PruSign.Helpers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
 namespace PruSign.Data.ViewModels
@@ -15,45 +12,40 @@ namespace PruSign.Data.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }
+        private readonly IDBService _db;
+        private readonly IDeviceLogService _deviceLogService;
 
         #region Properties
-        private string username;
+        private string _username;
         public string Username
         {
-            get { return username; }
+            get { return _username; }
             set
             {
-                username = value;
+                _username = value;
                 OnPropertyChanged();
             }
         }
 
-        private string password;
+        private string _password;
+
         public string Password
         {
-            get { return password; }
+            get { return _password; }
             set
             {
-                password = value;
+                _password = value;
                 OnPropertyChanged();
             }
         }
         #endregion
 
-        public LoginViewModel()
+        public LoginViewModel(IDBService db, IDeviceLogService deviceLogService)
         {
+            _db = db;
+            _deviceLogService = deviceLogService;
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
         }
-
-        //public async Task IsAuthenticated()
-        //{
-        //    // Checking if the credentials are stored in the database
-        //    var db = new PruSignDatabase();
-        //    var userCredentialService = new ServiceAsync<UserCredentials>(db);
-        //    int result = await userCredentialService.GetAll().CountAsync();
-        //    if(result > 0)
-        //        MessagingCenter.Send<LoginViewModel>(this, "RedirectToHome");
-        //}
 
         public async void OnBtnSubmitTapped()
         {
@@ -74,19 +66,18 @@ namespace PruSign.Data.ViewModels
                     // Saving credentials
                     try
                     {
-                        var db = new PruSignDatabase();
-                        var userCredentialService = new ServiceAsync<UserCredentials>(db);
+                        var userCredentialService = new ServiceAsync<UserCredentials>(_db);
                         await userCredentialService.Add(new UserCredentials()
                         {
-                            Username = this.Username,
-                            Password = this.Password
+                            Username = Username,
+                            Password = Password
                         });
-                        MessagingCenter.Send<LoginViewModel>(this, "RedirectToHome");
+                        MessagingCenter.Send(this, "RedirectToHome");
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.Log(ex);
-                        MessagingCenter.Send<LoginViewModel>(this, "LoginVM_ErrorSavingCredentials");
+                        _deviceLogService.Log(ex);
+                        MessagingCenter.Send(this, "LoginVM_ErrorSavingCredentials");
                     }
                 }
             }
@@ -98,7 +89,7 @@ namespace PruSign.Data.ViewModels
 
         void SendError(string errorMessage)
         {
-            MessagingCenter.Send<LoginViewModel, string>(this, "Error", errorMessage);
+            MessagingCenter.Send(this, "Error", errorMessage);
         }
 
         void OnPropertyChanged([CallerMemberName] string name = "")

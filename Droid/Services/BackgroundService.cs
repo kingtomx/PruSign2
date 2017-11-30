@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.Gms.Gcm;
+using Autofac;
+using PruSign.Data.Interfaces;
+using PruSign.Data.Services;
 using PruSign.Droid.Binders;
-using PruSign.Helpers;
 
 namespace PruSign.Droid.Services
 {
@@ -19,20 +13,34 @@ namespace PruSign.Droid.Services
     [IntentFilter(new[] { "com.google.android.gms.gcm.ACTION_TASK_READY" })]
     public class BackgroundSyncService : GcmTaskService
     {
-        IBinder binder;
+
+        private IDeviceLogService _deviceLogService { get; set; }
+
+        public BackgroundSyncService()
+        {
+                
+        }
+
+        BackgroundSyncService(IDeviceLogService deviceLogService)
+        {
+            _deviceLogService = deviceLogService;
+        }
+
+        IBinder _binder;
         public override int OnRunTask(TaskParams @params)
         {
-            SendHelper.SendSignatures();
+            var signatureService = App.Container.Resolve<SignatureService>();
+            signatureService.SendSignatures();
             // TO-DO Check if the logs should be sent in background like the signatures.
-            //await SendHelper.SendDeviceLogs();
+            //await _deviceLogService.SendDeviceLogs();
 
             return GcmNetworkManager.ResultSuccess;
         }
 
         public override IBinder OnBind(Intent intent)
         {
-            binder = new BackgroundServiceBinder(this);
-            return binder;
+            _binder = new BackgroundServiceBinder(this);
+            return _binder;
         }
     }
 }

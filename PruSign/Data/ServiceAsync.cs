@@ -1,4 +1,5 @@
 ﻿using PruSign.Data.Entities;
+using PruSign.Data.Interfaces;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,12 @@ namespace PruSign.Data
     public class ServiceAsync<T> where T : class, IEntity, new()
     {
         private SQLiteAsyncConnection _asyncConnection;
+        private IDBService _db;
 
-        public ServiceAsync(PruSignDatabase db)
+        public ServiceAsync(IDBService db)
         {
-            _asyncConnection = db.ConnectionAsync;
+            _db = db;
+            _asyncConnection = _db.ConnectionAsync;
         }
 
         public AsyncTableQuery<T> GetAll()

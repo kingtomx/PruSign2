@@ -128,12 +128,13 @@ namespace SharedTests
     {
         public IResourceDictionary GetSystemResources()
         {
-            var dictionary = new ResourceDictionary();
-
-            dictionary["PrudentialBlue"] = Color.FromHex("0679BD");
-            dictionary["FaluRed"] = Color.FromHex("801515");
-            dictionary["HippieGreen"] = Color.FromHex("5C8F49");
-            dictionary["GreenHouse"] = Color.FromHex("22540F");
+            var dictionary = new ResourceDictionary
+            {
+                ["PrudentialBlue"] = Color.FromHex("0679BD"),
+                ["FaluRed"] = Color.FromHex("801515"),
+                ["HippieGreen"] = Color.FromHex("5C8F49"),
+                ["GreenHouse"] = Color.FromHex("22540F")
+            };
 
             return dictionary;
         }

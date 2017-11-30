@@ -1,27 +1,18 @@
-using System;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Hardware;
 using System.Threading;
-using PruSign.Data;
-using PruSign.Helpers;
-using System.Collections.Generic;
-using RestSharp;
-using System.Net;
 using Android.Gms.Gcm;
+using Autofac;
+using Autofac.Core;
+using PruSign.Data.Interfaces;
 using PruSign.Droid.Services;
 
 namespace PruSign.Droid
 {
     [Activity(Label = "PruSign.Droid", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        private static readonly object _syncLock = new object();
-        private SensorManager sensorManager;
-        private Sensor sensor;
-
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -29,10 +20,8 @@ namespace PruSign.Droid
 
             base.OnCreate(bundle);
 
-            sensorManager = (SensorManager)GetSystemService(Context.SensorService);
-            sensor = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
-
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            Xamarin.Forms.Forms.Init(this, bundle);
+            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
 
             // Used to remove old logs and sent signatures
             StartupCleanUp();
@@ -40,7 +29,6 @@ namespace PruSign.Droid
             // Used to start synch job
             StartBackgroundSync();
 
-            LoadApplication(new App());
         }
 
 
@@ -58,26 +46,24 @@ namespace PruSign.Droid
 
         private void StartupCleanUp()
         {
-            CleanUpHelper.CleanOldLogs();
-            CleanUpHelper.CleanSentSignatures();
+            using (var scope = App.Container.BeginLifetimeScope())
+            {
+                var signatureService = App.Container.Resolve<ISignatureService>();
+                var deviceLogService = App.Container.Resolve<IDeviceLogService>();
+
+                deviceLogService.CleanOldLogs();
+                signatureService.CleanSentSignatures();
+            }
         }
 
         protected override void OnStop()
         {
-            ThreadPool.QueueUserWorkItem(o => SendHelper.SendSignatures());
-            base.OnStop();
+            using (var scope = App.Container.BeginLifetimeScope())
+            {
+                var signatureService = App.Container.Resolve<ISignatureService>();
+                ThreadPool.QueueUserWorkItem(async o => await signatureService.SendSignatures());
+                base.OnStop();
+            }
         }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-        }
-
-
     }
 }

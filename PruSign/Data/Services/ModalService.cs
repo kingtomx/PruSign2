@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
-namespace PruSign.Helpers
+namespace PruSign.Data.Services
 {
-    public static class ModalHelper
+    public class ModalService : IModalService
     {
-        public static void Push(INavigation navigation, Page page, Action callback)
+        public void Push(INavigation navigation, Page page, Action callback)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {

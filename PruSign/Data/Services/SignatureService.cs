@@ -12,22 +12,20 @@ namespace PruSign.Data.Services
 {
     public class SignatureService : ISignatureService
     {
-        private readonly IDBService _db;
         private readonly IDeviceLogService _deviceLogService;
+        private readonly IServiceAsync<Signature> _serviceSignature;
 
-        public SignatureService(IDBService db, IDeviceLogService deviceLogService)
+        public SignatureService(IDeviceLogService deviceLogService, IServiceAsync<Signature> serviceSignature)
         {
-            _db = db;
             _deviceLogService = deviceLogService;
+            _serviceSignature = serviceSignature;
         }
 
         public async Task SendSignatures()
         {
             try
             {
-                var serviceSignature = new ServiceAsync<Signature>(_db);
-
-                var signaturesToSend = await serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
+                var signaturesToSend = await _serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
                 if (signaturesToSend.Count > 0)
                 {
                     var client = new RestClient(Constants.BACKEND_HOST_NAME);
@@ -43,7 +41,7 @@ namespace PruSign.Data.Services
                         {
                             s.Sent = true;
                             s.SentDate = DateTime.Now;
-                            await serviceSignature.Update(s);
+                            await _serviceSignature.Update(s);
                         }
                     }
                     else
@@ -117,8 +115,6 @@ namespace PruSign.Data.Services
                     streamWriter.Close();
                 }
 
-                var serviceSignature = new ServiceAsync<Signature>(_db);
-
                 Signature dbItem = new Signature()
                 {
                     SignatureObject = json,
@@ -127,7 +123,7 @@ namespace PruSign.Data.Services
                     CustomerId = customerId,
                     ApplicationId = appName,
                 };
-                await serviceSignature.Add(dbItem);
+                await _serviceSignature.Add(dbItem);
                 System.IO.File.Delete(filename);
                 System.IO.File.Delete(signatureFilePath);
                 System.IO.File.Delete(pointsFilePath);
@@ -142,12 +138,11 @@ namespace PruSign.Data.Services
         {
             try
             {
-                var serviceSignatures = new ServiceAsync<Signature>(_db);
-                var signatures = await serviceSignatures.GetAll().Where(s => s.Sent).ToListAsync();
+                var signatures = await _serviceSignature.GetAll().Where(s => s.Sent).ToListAsync();
 
                 foreach (var s in signatures)
                 {
-                    await serviceSignatures.Delete(s);
+                    await _serviceSignature.Delete(s);
                 }
             }
             catch (Exception ex)

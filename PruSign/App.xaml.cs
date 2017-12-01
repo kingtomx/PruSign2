@@ -1,18 +1,16 @@
-﻿using PruSign;
-using PruSign.Background;
-using PruSign.Data;
+﻿using PruSign.Background;
 using PruSign.Data.Entities;
 using PruSign.Data.ViewModels;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
 using PruSign.Data.Interfaces;
-using PruSign.Data.Services;
+using PruSign.Data.Modules;
 using Xamarin.Forms;
 
 namespace PruSign
 {
-    public partial class App : Application
+    public partial class App
     {
         public bool IsLocked { get; set; }
         public static IContainer Container;
@@ -25,11 +23,10 @@ namespace PruSign
             Task.Run(async () =>
             {
                 // Checking if the credentials are stored in the database
-                using (var scope = App.Container.BeginLifetimeScope())
+                using (Container.BeginLifetimeScope())
                 {
-                    var db = Container.Resolve<IDBService>();
-                    var userCredentialService = new ServiceAsync<UserCredentials>(db);
-                    int result = await userCredentialService.GetAll().CountAsync();
+                    var serviceUserCredentials = Container.Resolve<IServiceAsync<UserCredentials>>();
+                    int result = await serviceUserCredentials.GetAll().CountAsync();
 
                     Device.BeginInvokeOnMainThread(() =>
                     {
@@ -60,33 +57,30 @@ namespace PruSign
 
         private static void PrepareContainer(IModule[] platformSpecificModules)
         {
-            var containerBuilder = new Autofac.ContainerBuilder();
+            var containerBuilder = new ContainerBuilder();
 
+            // Platform Specific Modules Loader
             RegisterPlatformSpecificModules(platformSpecificModules, containerBuilder);
 
-            containerBuilder.RegisterType<ModalService>().As<IModalService>().SingleInstance();
-            containerBuilder.RegisterType<DeviceLogService>().As<IDeviceLogService>().SingleInstance();
-            containerBuilder.RegisterType<SignatureService>().As<ISignatureService>().SingleInstance();
-            containerBuilder.RegisterType<DBService>().As<IDBService>().SingleInstance();
-
-            containerBuilder.RegisterType<HomePage>().SingleInstance();
-            containerBuilder.RegisterType<LoginPage>().SingleInstance();
-            containerBuilder.RegisterType<SettingsPage>().SingleInstance();
-            containerBuilder.RegisterType<LogPage>().SingleInstance();
-
-            containerBuilder.RegisterType<HomeViewModel>().SingleInstance();
-            containerBuilder.RegisterType<LoginViewModel>().SingleInstance();
-            containerBuilder.RegisterType<SettingsViewModel>().SingleInstance();
-            containerBuilder.RegisterType<LogViewModel>().SingleInstance();
+            // Shared Modules Loader
+            RegisterSharedModules(new IModule[] {new ModuleLoader()}, containerBuilder);
 
             Container = containerBuilder.Build();
         }
 
         private static void RegisterPlatformSpecificModules(IModule[] platformSpecificModules, ContainerBuilder containerBuilder)
         {
-            foreach (var platformSpecificModule in platformSpecificModules)
+            foreach (var module in platformSpecificModules)
             {
-                containerBuilder.RegisterModule(platformSpecificModule);
+                containerBuilder.RegisterModule(module);
+            }
+        }
+
+        private static void RegisterSharedModules(IModule[] sharedModules, ContainerBuilder containerBuilder)
+        {
+            foreach (var module in sharedModules)
+            {
+                containerBuilder.RegisterModule(module);
             }
         }
 

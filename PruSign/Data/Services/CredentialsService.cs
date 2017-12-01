@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PruSign.Data.Entities;
+﻿using PruSign.Data.Entities;
 using PruSign.Data.Interfaces;
 
 namespace PruSign.Data.Services
 {
     class CredentialsService : ICredentialsService
     {
-        private IDBService _db;
+        private readonly IServiceAsync<UserCredentials> _serviceUserCredentials;
 
-        public CredentialsService(IDBService db)
+        public CredentialsService(IServiceAsync<UserCredentials> serviceUserCredentials)
         {
-            _db = db;
+            _serviceUserCredentials = serviceUserCredentials;
         }
 
         public async void SaveCredentials(string username, string password)
         {
-            var serviceUserCredentials = new ServiceAsync<UserCredentials>(_db);
-            UserCredentials dbItem = new UserCredentials()
+            var dbItem = new UserCredentials()
             {
                 Username = username,
                 Password = password
             };
-            await serviceUserCredentials.Add(dbItem);
+            await _serviceUserCredentials.Add(dbItem);
         }
     }
 }

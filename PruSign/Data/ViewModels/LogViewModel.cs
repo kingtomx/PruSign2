@@ -17,10 +17,10 @@ namespace PruSign.Data.ViewModels
         public ICommand OnBtnCloseClickedCommand { get; set; }
         public ICommand OnBtnSendLogsClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
-        private ServiceAsync<LogEntry> ServiceLogs { get; set; }
 
-        private IDBService _db { get; set; }
         private IDeviceLogService _deviceLogService { get; set; }
+        private IServiceAsync<LogEntry> _serviceLogEntry { get; set; }
+
 
         #region Properties
         private bool _isEmpty;
@@ -59,17 +59,16 @@ namespace PruSign.Data.ViewModels
 
         #endregion
 
-        public LogViewModel(INavigation navigation, IDBService db, IDeviceLogService deviceLogService)
+        public LogViewModel(INavigation navigation, IDeviceLogService deviceLogService, IServiceAsync<LogEntry> serviceLogEntry)
         {
-            _db = db;
             _deviceLogService = deviceLogService;
+            _serviceLogEntry = serviceLogEntry;
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
             OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
             IsLoading = true;
             IsEmpty = false;
             Navigation = navigation;
             Logs = new List<LogEntry>();
-            ServiceLogs = new ServiceAsync<LogEntry>(_db);
         }
 
         public async Task Initialize()
@@ -77,7 +76,7 @@ namespace PruSign.Data.ViewModels
             try
             {
                 // Try to get the log list. If there is any issue retrieving results 
-                Logs = await ServiceLogs.GetAll()
+                Logs = await _serviceLogEntry.GetAll()
                     .OrderByDescending(log => log.Created)
                     .Take(20).ToListAsync();
                 IsEmpty = (Logs.Count <= 0);

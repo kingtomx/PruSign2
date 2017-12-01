@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PruSign.Data.Entities
 {
-    class UserCredentials : IEntity
+    public class UserCredentials : IEntity
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }

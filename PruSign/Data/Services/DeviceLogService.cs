@@ -11,21 +11,21 @@ namespace PruSign.Data.Services
 {
     public class DeviceLogService : IDeviceLogService
     {
-        private IDBService _db;
+        private readonly IServiceAsync<LogEntry> _serviceLogEntry;
+        private readonly IServiceAsync<UserCredentials> _serviceUserCredentials;
 
-        public DeviceLogService(IDBService db)
+        public DeviceLogService(IServiceAsync<LogEntry> serviceLogEntry, IServiceAsync<UserCredentials> serviceUserCredentials)
         {
-            _db = db;
+            _serviceLogEntry = serviceLogEntry;
+            _serviceUserCredentials = serviceUserCredentials;
         }
 
         public async Task<HttpResponseMessage> SendDeviceLogs()
         {
             try
             {
-                var serviceLogs = new ServiceAsync<LogEntry>(_db);
-                var serviceUserCredentials = new ServiceAsync<UserCredentials>(_db);
-                var user = await serviceUserCredentials.GetAll().FirstOrDefaultAsync();
-                var logs = await serviceLogs.GetAll().Where(l => !l.Sent).ToListAsync();
+                var user = await _serviceUserCredentials.GetAll().FirstOrDefaultAsync();
+                var logs = await _serviceLogEntry.GetAll().Where(l => !l.Sent).ToListAsync();
 
                 if (logs.Count > 0)
                 {
@@ -48,7 +48,7 @@ namespace PruSign.Data.Services
                         {
                             item.Sent = true;
                             item.SentDate = DateTime.Now;
-                            await serviceLogs.Update(item);
+                            await _serviceLogEntry.Update(item);
                         }
                     }
                     else
@@ -85,8 +85,7 @@ namespace PruSign.Data.Services
 
                 var errorLocation = $"File: {filename}\tLine: {line}";
 
-                var serviceLog = new ServiceAsync<LogEntry>(_db);
-                await serviceLog.Add(new LogEntry()
+                await _serviceLogEntry.Add(new LogEntry()
                 {
                     Message = exception.Message,
                     StackTrace = exception.StackTrace,
@@ -103,14 +102,13 @@ namespace PruSign.Data.Services
         {
             try
             {
-                var serviceLogs = new ServiceAsync<LogEntry>(_db);
-                var logs = await serviceLogs.GetAll().Where(l => l.Sent).ToListAsync();
+                var logs = await _serviceLogEntry.GetAll().Where(l => l.Sent).ToListAsync();
 
                 foreach (var l in logs)
                 {
                     if ((DateTime.Now - l.SentDate).TotalDays >= 30)
                     {
-                        await serviceLogs.Delete(l);
+                        await _serviceLogEntry.Delete(l);
                     }
                 }
             }

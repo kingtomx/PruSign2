@@ -2,16 +2,15 @@
 using PruSign.Data.Interfaces;
 using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PruSign.Data
 {
-    public class ServiceAsync<T> where T : class, IEntity, new()
+    public class ServiceAsync<T> : IServiceAsync<T> where T : class, IEntity, new()
     {
-        private SQLiteAsyncConnection _asyncConnection;
-        private IDBService _db;
+
+        private SQLiteAsyncConnection _asyncConnection { get; }
+        private IDBService _db { get; }
 
         public ServiceAsync(IDBService db)
         {

@@ -12,8 +12,8 @@ namespace PruSign.Data.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }
-        private readonly IDBService _db;
         private readonly IDeviceLogService _deviceLogService;
+        private readonly IServiceAsync<UserCredentials> _serviceUserCredentials;
 
         #region Properties
         private string _username;
@@ -40,10 +40,10 @@ namespace PruSign.Data.ViewModels
         }
         #endregion
 
-        public LoginViewModel(IDBService db, IDeviceLogService deviceLogService)
+        public LoginViewModel(IDeviceLogService deviceLogService, IServiceAsync<UserCredentials> serviceUserCredentials)
         {
-            _db = db;
             _deviceLogService = deviceLogService;
+            _serviceUserCredentials = serviceUserCredentials;
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
         }
 
@@ -66,8 +66,7 @@ namespace PruSign.Data.ViewModels
                     // Saving credentials
                     try
                     {
-                        var userCredentialService = new ServiceAsync<UserCredentials>(_db);
-                        await userCredentialService.Add(new UserCredentials()
+                        await _serviceUserCredentials.Add(new UserCredentials()
                         {
                             Username = Username,
                             Password = Password
@@ -87,7 +86,7 @@ namespace PruSign.Data.ViewModels
             }
         }
 
-        void SendError(string errorMessage)
+        private void SendError(string errorMessage)
         {
             MessagingCenter.Send(this, "Error", errorMessage);
         }

@@ -226,7 +226,7 @@
     <AndroidResource Include="Resources\values\strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <Compile Include="Services\BackgroundService.cs" />
+    <Compile Include="Services\BackgroundSyncService.cs" />
     <Compile Include="ShakeDetector.cs" />
     <Compile Include="Signature.cs" />
     <Compile Include="GestureListener.cs" />

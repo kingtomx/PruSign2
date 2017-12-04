@@ -1,9 +1,4 @@
 ﻿using PruSign.Data.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,14 +6,14 @@ using Xamarin.Forms.Xaml;
 namespace PruSign
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SettingsPage : ContentPage
+    public partial class SettingsPage
     {
-        private SettingsViewModel _settingsVm { get; set; }
+        private SettingsViewModel _settingsVm;
 
         public SettingsPage()
         {
             InitializeComponent();
-            using (var scope = App.Container.BeginLifetimeScope())
+            using (App.Container.BeginLifetimeScope())
             {
                 _settingsVm = App.Container.Resolve<SettingsViewModel>(new TypedParameter(typeof(INavigation), Navigation));
                 BindingContext = _settingsVm;

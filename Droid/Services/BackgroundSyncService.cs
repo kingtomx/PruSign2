@@ -3,7 +3,6 @@ using Android.Content;
 using Android.OS;
 using Android.Gms.Gcm;
 using Autofac;
-using PruSign.Data.Interfaces;
 using PruSign.Data.Services;
 using PruSign.Droid.Binders;
 
@@ -13,27 +12,14 @@ namespace PruSign.Droid.Services
     [IntentFilter(new[] { "com.google.android.gms.gcm.ACTION_TASK_READY" })]
     public class BackgroundSyncService : GcmTaskService
     {
-
-        private IDeviceLogService _deviceLogService { get; set; }
-
-        public BackgroundSyncService()
-        {
-                
-        }
-
-        BackgroundSyncService(IDeviceLogService deviceLogService)
-        {
-            _deviceLogService = deviceLogService;
-        }
-
         IBinder _binder;
         public override int OnRunTask(TaskParams @params)
         {
-            var signatureService = App.Container.Resolve<SignatureService>();
-            signatureService.SendSignatures();
-            // TO-DO Check if the logs should be sent in background like the signatures.
-            //await _deviceLogService.SendDeviceLogs();
-
+            using (App.Container.BeginLifetimeScope())
+            {
+                var signatureService = App.Container.Resolve<SignatureService>();
+                signatureService.SendSignatures();
+            }
             return GcmNetworkManager.ResultSuccess;
         }
 

@@ -24,13 +24,12 @@ namespace PruSign.Droid
             LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
 
             // Used to remove old logs and sent signatures
-            //StartupCleanUp();
+            StartupCleanUp();
 
             // Used to start synch job
-            //StartBackgroundSync();
+            StartBackgroundSync();
 
         }
-
 
         private void StartBackgroundSync()
         {
@@ -44,9 +43,9 @@ namespace PruSign.Droid
             GcmNetworkManager.GetInstance(this).Schedule(periodicTask);
         }
 
-        private void StartupCleanUp()
+        private static void StartupCleanUp()
         {
-            using (var scope = App.Container.BeginLifetimeScope())
+            using (App.Container.BeginLifetimeScope())
             {
                 var signatureService = App.Container.Resolve<ISignatureService>();
                 var deviceLogService = App.Container.Resolve<IDeviceLogService>();
@@ -58,7 +57,7 @@ namespace PruSign.Droid
 
         protected override void OnStop()
         {
-            using (var scope = App.Container.BeginLifetimeScope())
+            using (App.Container.BeginLifetimeScope())
             {
                 var signatureService = App.Container.Resolve<ISignatureService>();
                 ThreadPool.QueueUserWorkItem(async o => await signatureService.SendSignatures());

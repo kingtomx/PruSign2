@@ -13,18 +13,18 @@ using PruSign.Droid.Services;
 
 namespace PruSign.Droid.Binders
 {
-    class BackgroundServiceBinder : Binder
+    public class BackgroundServiceBinder : Binder
     {
-        BackgroundSyncService service;
+        private readonly BackgroundSyncService _service;
 
         public BackgroundServiceBinder(BackgroundSyncService service)
         {
-            this.service = service;
+            this._service = service;
         }
 
         public BackgroundSyncService GetBackgroundService()
         {
-            return service;
+            return _service;
         }
 
     }

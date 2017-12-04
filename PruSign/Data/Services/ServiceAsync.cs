@@ -4,7 +4,7 @@ using SQLite;
 using System;
 using System.Threading.Tasks;
 
-namespace PruSign.Data
+namespace PruSign.Data.Services
 {
     public class ServiceAsync<T> : IServiceAsync<T> where T : class, IEntity, new()
     {

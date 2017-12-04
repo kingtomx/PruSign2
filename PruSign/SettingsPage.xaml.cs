@@ -32,7 +32,7 @@ namespace PruSign
                 DisplayAlert("Send Confirmation", "Please confirm that you want to send the logs", "Send", "Cancel")
                 .ContinueWith(action =>
                 {
-                    MessagingCenter.Send<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation", action.Result);
+                    MessagingCenter.Send(_settingsVm, "SettingsVM_SendLogsConfirmation", action.Result);
                 });
             });
 

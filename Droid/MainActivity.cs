@@ -24,10 +24,10 @@ namespace PruSign.Droid
             LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
 
             // Used to remove old logs and sent signatures
-            StartupCleanUp();
+            //StartupCleanUp();
 
             // Used to start synch job
-            StartBackgroundSync();
+            //StartBackgroundSync();
 
         }
 

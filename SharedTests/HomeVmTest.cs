@@ -1,4 +1,5 @@
-﻿using PruSign;
+﻿using Moq;
+using PruSign.Data.Interfaces;
 using PruSign.Data.ViewModels;
 using Xamarin.Forms;
 using Xunit;
@@ -7,29 +8,32 @@ namespace SharedTests
 {
     public class HomeVmTest
     {
-        public HomePage Home { get; set; }
+        private readonly HomeViewModel _homeViewModel;
 
         public HomeVmTest()
         {
-            MockForms.Init();
-            var app = new App();
-            Home = new HomePage();
+            var mockModalService = new Mock<IModalService>();
+            var mockSignatureService = new Mock<ISignatureService>();
+            var mockNavigation = new Mock<INavigation>();
+            _homeViewModel = new HomeViewModel(mockNavigation.Object, mockModalService.Object, mockSignatureService.Object);
         }
 
         [Trait("Category", "HomeVM - Property Change")]
         [Fact]
         public void Set_ClientName_Property_Should_Raise_PropertyChanged()
         {
+            // ARRANGE
             var invoked = false;
-            var homeViewModel = new HomeViewModel(Home.Navigation);
-
-            homeViewModel.PropertyChanged += (sender, e) =>
+            _homeViewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName.Equals("ClientName"))
                     invoked = true;
             };
-            homeViewModel.ClientName = "Client Name Property Change";
 
+            // ACT
+            _homeViewModel.ClientName = "Client Name Property Change";
+
+            // ASSERT
             Assert.True(invoked);
         }
 
@@ -37,16 +41,18 @@ namespace SharedTests
         [Fact]
         public void Set_ClientId_Property_Should_Raise_PropertyChanged()
         {
-            bool invoked = false;
-            var homeViewModel = new HomeViewModel(Home.Navigation);
-
-            homeViewModel.PropertyChanged += (sender, e) =>
+            // ARRANGE
+            var invoked = false;
+            _homeViewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName.Equals("ClientId"))
                     invoked = true;
             };
-            homeViewModel.ClientId = "Client Id Property Change";
 
+            // ACT
+            _homeViewModel.ClientId = "Client Id Property Change";
+
+            // ASSERT
             Assert.True(invoked);
         }
 
@@ -54,16 +60,18 @@ namespace SharedTests
         [Fact]
         public void Set_DocumentId_Property_Should_Raise_PropertyChanged()
         {
+            // ARRANGE
             bool invoked = false;
-            var homeViewModel = new HomeViewModel(Home.Navigation);
-
-            homeViewModel.PropertyChanged += (sender, e) =>
+            _homeViewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName.Equals("DocumentId"))
                     invoked = true;
             };
-            homeViewModel.DocumentId = "Document Id Property Change";
 
+            // ACT
+            _homeViewModel.DocumentId = "Document Id Property Change";
+
+            // ASSERT
             Assert.True(invoked);
         }
 
@@ -71,16 +79,18 @@ namespace SharedTests
         [Fact]
         public void Set_ApplicationId_Property_Should_Raise_PropertyChanged()
         {
+            // ARRANGE
             var invoked = false;
-            var homeViewModel = new HomeViewModel(Home.Navigation);
-
-            homeViewModel.PropertyChanged += (sender, e) =>
+            _homeViewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName.Equals("Application"))
                     invoked = true;
             };
-            homeViewModel.Application = "Application Property Change";
 
+            // ACT
+            _homeViewModel.Application = "Application Property Change";
+
+            // ASSERT
             Assert.True(invoked);
         }
 
@@ -88,10 +98,12 @@ namespace SharedTests
         [Fact]
         public void Creating_ViewModel_Should_Set_CurrentDate_Property()
         {
-            var homeViewModel = new HomeViewModel(Home.Navigation);
+            // ARRANGE
 
-            var currentDateSetted = homeViewModel.CurrentDate != string.Empty;
+            // ACT
+            var currentDateSetted = _homeViewModel.CurrentDate != string.Empty;
 
+            // ASSERT
             Assert.True(currentDateSetted);
         }
 
@@ -99,21 +111,20 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Signature_Should_Not_Be_Cleaned_If_ClientName_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                DocumentId = "Test",
-                Application = "Test",
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.DocumentId = "Test";
+            _homeViewModel.Application = "Test";
             MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) =>
             {
                 messageReceived = true;
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.False(messageReceived);
         }
 
@@ -121,21 +132,20 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Signature_Should_Not_Be_Cleaned_If_ClientId_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientName = "Test",
-                DocumentId = "Test",
-                Application = "Test",
-            };
-
+            _homeViewModel.ClientName = "Test";
+            _homeViewModel.DocumentId = "Test";
+            _homeViewModel.Application = "Test";
             MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) =>
             {
                 messageReceived = true;
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.False(messageReceived);
         }
 
@@ -143,22 +153,20 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Signature_Should_Not_Be_Cleaned_If_Application_Is_Empty()
         {
-
-            bool messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                DocumentId = "Test",
-                ClientName = "Test",
-            };
-
+            // ARRANGE
+            var messageReceived = false;
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.DocumentId = "Test";
+            _homeViewModel.ClientName = "Test";
             MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) =>
             {
                 messageReceived = true;
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.False(messageReceived);
         }
 
@@ -166,21 +174,20 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Signature_Should_Not_Be_Cleaned_If_DocumentId_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                Application = "Test",
-                ClientName = "Test",
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.Application = "Test";
+            _homeViewModel.ClientName = "Test";
             MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) =>
             {
                 messageReceived = true;
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.False(messageReceived);
         }
 
@@ -188,22 +195,21 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Signature_Should_Be_Cleaned_If_All_Fields_Are_Ok()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                Application = "Test",
-                ClientName = "Test",
-                DocumentId = "Test"
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.Application = "Test";
+            _homeViewModel.ClientName = "Test";
+            _homeViewModel.DocumentId = "Test";
             MessagingCenter.Subscribe<HomeViewModel>(this, "CleanSignature", (sender) =>
             {
                 messageReceived = true;
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(messageReceived);
         }
 
@@ -211,22 +217,22 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Display_Success_Message_After_Send_If_All_Fields_Are_Ok()
         {
+            // ARRANGE
             var messageReceived = false;
 
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                Application = "Test",
-                ClientName = "Test",
-                DocumentId = "Test"
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.Application = "Test";
+            _homeViewModel.ClientName = "Test";
+            _homeViewModel.DocumentId = "Test";
             MessagingCenter.Subscribe<HomeViewModel>(this, "HomeSuccess", (sender) =>
             {
                 messageReceived = true;
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(messageReceived);
         }
 
@@ -234,15 +240,11 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Display_Error_Message_If_ClientId_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                Application = "Test",
-                ClientName = "Test",
-                DocumentId = "Test"
-            };
-
+            _homeViewModel.Application = "Test";
+            _homeViewModel.ClientName = "Test";
+            _homeViewModel.DocumentId = "Test";
             MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
             {
                 if (message.Equals("Client Id cannot be empty"))
@@ -250,8 +252,11 @@ namespace SharedTests
                     messageReceived = true;
                 }
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(messageReceived);
         }
 
@@ -259,15 +264,11 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Display_Error_Message_If_Application_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                ClientName = "Test",
-                DocumentId = "Test"
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.ClientName = "Test";
+            _homeViewModel.DocumentId = "Test";
             MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
             {
                 if (message.Equals("Select an Application to send the signature"))
@@ -275,8 +276,11 @@ namespace SharedTests
                     messageReceived = true;
                 }
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(messageReceived);
         }
 
@@ -284,15 +288,11 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Display_Error_Message_If_ClientName_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                Application = "Test",
-                DocumentId = "Test"
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.Application = "Test";
+            _homeViewModel.DocumentId = "Test";
             MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
             {
                 if (message.Equals("Name cannot be empty"))
@@ -300,8 +300,11 @@ namespace SharedTests
                     messageReceived = true;
                 }
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(messageReceived);
         }
 
@@ -309,15 +312,11 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Display_Error_Message_If_DocumentId_Is_Empty()
         {
+            // ARRANGE
             var messageReceived = false;
-
-            var homeViewModel = new HomeViewModel(Home.Navigation)
-            {
-                ClientId = "Test",
-                Application = "Test",
-                ClientName = "Test"
-            };
-
+            _homeViewModel.ClientId = "Test";
+            _homeViewModel.Application = "Test";
+            _homeViewModel.ClientName = "Test";
             MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, message) =>
             {
                 if (message.Equals("Document Id cannot be empty"))
@@ -325,8 +324,11 @@ namespace SharedTests
                     messageReceived = true;
                 }
             });
-            homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
 
+            // ACT
+            _homeViewModel.OnBtnSubmitTappedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(messageReceived);
         }
 
@@ -334,16 +336,18 @@ namespace SharedTests
         [Trait("Category", "HomeVM - Behavior")]
         public void Tap_Settings_Button_Should_Lock_The_Screen()
         {
+            // ARRANGE
             var invoked = true;
-            var viewModel = new HomeViewModel(Home.Navigation);
-
-            viewModel.PropertyChanged += (sender, e) =>
+            _homeViewModel.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName.Equals("IsLocked"))
                     invoked = true;
             };
 
-            viewModel.OnSettingsClickedCommand.Execute(null);
+            // ACT
+            _homeViewModel.OnSettingsClickedCommand.Execute(null);
+
+            // ASSERT
             Assert.True(invoked);
         }
     }

@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Autofac;
 using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
@@ -13,9 +12,9 @@ namespace PruSign.Data.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand OnBtnSubmitTappedCommand { get; set; }
         public ICommand OnSettingsClickedCommand { get; set; }
-        public INavigation Navigation { get; set; }
-        private IModalService _modalService { get; set; }
-        private ISignatureService _signatureService { get; set; }
+        private readonly INavigation _navigation;
+        private readonly IModalService _modalService;
+        private readonly ISignatureService _signatureService;
 
         #region Properties
         private bool _isLocked;
@@ -91,7 +90,7 @@ namespace PruSign.Data.ViewModels
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
             OnSettingsClickedCommand = new Command(OnSettingsClicked);
             CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
-            Navigation = navigation;
+            _navigation = navigation;
             _modalService = modalService;
         }
 
@@ -118,10 +117,10 @@ namespace PruSign.Data.ViewModels
                 else
                 {
                     _signatureService.SaveSign(ClientName, ClientId, DocumentId, Application, CurrentDate);
-                    ClientName = String.Empty;
-                    DocumentId = String.Empty;
-                    Application = String.Empty;
-                    ClientId = String.Empty;
+                    ClientName = string.Empty;
+                    DocumentId = string.Empty;
+                    Application = string.Empty;
+                    ClientId = string.Empty;
                     CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
                     MessagingCenter.Send(this, "CleanSignature");
                     MessagingCenter.Send(this, "HomeSuccess");
@@ -135,15 +134,9 @@ namespace PruSign.Data.ViewModels
 
         public virtual void OnSettingsClicked()
         {
-            if (!IsLocked)
-            {
-                IsLocked = true;
-                using (var scope = App.Container.BeginLifetimeScope())
-                {
-                    var settingsPage = App.Container.Resolve<SettingsPage>();
-                    _modalService.Push(Navigation, settingsPage, () => IsLocked = false);
-                }
-            }
+            if (IsLocked) return;
+            IsLocked = true;
+            _modalService.Push(_navigation, typeof(SettingsPage), () => IsLocked = false);
         }
 
         public void SendError(string errorMessage)

@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ICredentialsService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IDeviceLogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IDBService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IPageResolverService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IServiceAsync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ISignatureService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Modules\ContentPages.cs" />
@@ -33,8 +34,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Modules\ModuleLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Modules\Services.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Modules\ViewModels.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Service.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ServiceAsync.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Services\PageResolverService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Services\ServiceAsync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\UserCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModalService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Services\CredentialsService.cs" />

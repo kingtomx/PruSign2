@@ -1,5 +1,4 @@
 ﻿using PruSign.Data.Entities;
-using PruSign.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,8 +17,8 @@ namespace PruSign.Data.ViewModels
         public ICommand OnBtnSendLogsClickedCommand { get; set; }
         public INavigation Navigation { get; set; }
 
-        private IDeviceLogService _deviceLogService { get; set; }
-        private IServiceAsync<LogEntry> _serviceLogEntry { get; set; }
+        private readonly IDeviceLogService _deviceLogService;
+        private readonly IServiceAsync<LogEntry> _serviceLogEntry;
 
 
         #region Properties

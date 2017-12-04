@@ -26,7 +26,7 @@ namespace PruSign
                 using (Container.BeginLifetimeScope())
                 {
                     var serviceUserCredentials = Container.Resolve<IServiceAsync<UserCredentials>>();
-                    int result = await serviceUserCredentials.GetAll().CountAsync();
+                    var result = await serviceUserCredentials.GetAll().CountAsync();
 
                     Device.BeginInvokeOnMainThread(() =>
                     {
@@ -76,7 +76,7 @@ namespace PruSign
             }
         }
 
-        private static void RegisterSharedModules(IModule[] sharedModules, ContainerBuilder containerBuilder)
+        public static void RegisterSharedModules(IModule[] sharedModules, ContainerBuilder containerBuilder)
         {
             foreach (var module in sharedModules)
             {

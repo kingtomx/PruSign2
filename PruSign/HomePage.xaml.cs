@@ -6,21 +6,21 @@ using Xamarin.Forms.Xaml;
 namespace PruSign
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : ContentPage
+    public partial class HomePage
     {
-        private HomeViewModel _homeVm { get; set; }
+        private HomeViewModel _homeVm;
 
         public HomePage()
         {
             InitializeComponent();
-            using (var scope = App.Container.BeginLifetimeScope())
+            using (App.Container.BeginLifetimeScope())
             {
                 _homeVm = App.Container.Resolve<HomeViewModel>(new TypedParameter(typeof(INavigation), Navigation));
                 BindingContext = _homeVm;
 
                 MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, arg) =>
                 {
-                    DisplayAlert("Error", (string)arg, "Cancel");
+                    DisplayAlert("Error", arg, "Cancel");
                 });
 
                 MessagingCenter.Subscribe<HomeViewModel>(this, "HomeSuccess", (sender) =>

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using PruSign.Data.Interfaces;
+using PruSign.Data.Services;
 
 namespace PruSign.Data.Modules
 {

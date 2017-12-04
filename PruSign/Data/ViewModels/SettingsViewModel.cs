@@ -1,8 +1,6 @@
-﻿using PruSign.Helpers;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Autofac;
 using PruSign.Data.Interfaces;
 using Xamarin.Forms;
 
@@ -14,12 +12,21 @@ namespace PruSign.Data.ViewModels
         public ICommand OnViewLogListTappedCommand { get; set; }
         public ICommand OnBtnSendLogsClickedCommand { get; set; }
         public ICommand OnBtnCloseClickedCommand { get; set; }
-        public INavigation Navigation { get; set; }
+        private readonly INavigation _navigation;
 
-        private IModalService _modalService { get; set; }
-        private IDeviceLogService _deviceLogService { get; set; }
+        private readonly IModalService _modalService;
+        private readonly IDeviceLogService _deviceLogService;
 
-        public bool IsLocked { get; set; }
+        private bool _isLocked;
+        public bool IsLocked
+        {
+            get => _isLocked;
+            set
+            {
+                _isLocked = value;
+                OnPropertyChanged();
+            }
+        }
 
         // Used to show the Activity Indicator
         private bool _isLoading;
@@ -42,18 +49,14 @@ namespace PruSign.Data.ViewModels
             OnViewLogListTappedCommand = new Command(OnViewLogListTapped);
             OnBtnSendLogsClickedCommand = new Command(OnBtnSendLogsClicked);
             OnBtnCloseClickedCommand = new Command(OnBtnCloseClicked);
-            Navigation = navigation;
+            _navigation = navigation;
         }
 
         public void OnViewLogListTapped()
         {
             if (IsLocked) return;
             IsLocked = true;
-            using (var scope = App.Container.BeginLifetimeScope())
-            {
-                var logPage = App.Container.Resolve<LogPage>();
-                this._modalService.Push(Navigation, logPage, () => IsLocked = false);
-            }
+            _modalService.Push(_navigation, typeof(LogPage), () => IsLocked = false);
 
         }
 
@@ -61,14 +64,14 @@ namespace PruSign.Data.ViewModels
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await Navigation.PopModalAsync();
+                await _navigation.PopModalAsync();
             });
         }
 
         public void OnBtnSendLogsClicked()
         {
             // This Message waits for user confirmation before run the SendDeviceLogs function
-            MessagingCenter.Subscribe<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation", async (sender, flag) =>
+            MessagingCenter.Subscribe<SettingsViewModel, bool>(this, "SettingsVM_SendLogsConfirmation", async (sender, flag) =>
             {
                 if (flag)
                 {
@@ -79,7 +82,7 @@ namespace PruSign.Data.ViewModels
                         response.IsSuccessStatusCode ? "SettingsVM_SendLogsSuccess" : "SettingsVM_SendLogsError");
                 }
 
-                MessagingCenter.Unsubscribe<SettingsPage, bool>(this, "SettingsVM_SendLogsConfirmation");
+                MessagingCenter.Unsubscribe<SettingsViewModel, bool>(this, "SettingsVM_SendLogsConfirmation");
 
             });
             MessagingCenter.Send(this, "SettingsVM_SendLogs");

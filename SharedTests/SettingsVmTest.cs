@@ -110,7 +110,36 @@ namespace SharedTests
 
         [Trait("Category", "SettingsVM - Behavior")]
         [Fact]
-        public void Try_To_Send_Logs_If_User_Confirm_Shipping()
+        public void Confirm_Send_Logs_If_User_Confirm_Shipping()
+        {
+            // ARRANGE
+            var shippingConfirmed = false;
+            const bool confirm = true;
+            _mockDeviceLogService.Setup(dl => dl.SendDeviceLogs()).Returns(() =>
+            {
+                return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
+            });
+            var settingsViewModel = new SettingsViewModel(_mockNavigation.Object, _mockModalService.Object, _mockDeviceLogService.Object);
+            MessagingCenter.Subscribe<SettingsViewModel>(settingsViewModel, "SettingsVM_SendLogsSuccess", (sender) =>
+            {
+                shippingConfirmed = true;
+            });
+            MessagingCenter.Subscribe<SettingsViewModel>(settingsViewModel, "SettingsVM_SendLogsError", (sender) =>
+            {
+                shippingConfirmed = true;
+            });
+
+            // ACT
+            settingsViewModel.OnBtnSendLogsClickedCommand.Execute(null);
+            MessagingCenter.Send(_settingsViewModel, "SettingsVM_SendLogsConfirmation", confirm);
+
+            // ASSERT
+            Assert.True(shippingConfirmed);
+        }
+
+        [Trait("Category", "SettingsVM - Behavior")]
+        [Fact]
+        public void Show_Success_Message_If_Logs_Were_Send()
         {
             // ARRANGE
             var shippingConfirmed = false;
@@ -133,7 +162,30 @@ namespace SharedTests
             Assert.True(shippingConfirmed);
         }
 
-        //Ideas
+        [Trait("Category", "SettingsVM - Behavior")]
+        [Fact]
+        public void Show_Error_Message_If_Logs_Cannot_Be_Sent()
+        {
+            // ARRANGE
+            var errorMessageDisplayed = false;
+            const bool confirm = true;
+            _mockDeviceLogService.Setup(dl => dl.SendDeviceLogs()).Returns(() =>
+            {
+                return Task.Run(() => new HttpResponseMessage(HttpStatusCode.InternalServerError));
+            });
+            var settingsViewModel = new SettingsViewModel(_mockNavigation.Object, _mockModalService.Object, _mockDeviceLogService.Object);
+            MessagingCenter.Subscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError", (sender) =>
+            {
+                errorMessageDisplayed = true;
+            });
+
+            // ACT
+            _settingsViewModel.OnBtnSendLogsClickedCommand.Execute(null);
+            MessagingCenter.Send(settingsViewModel, "SettingsVM_SendLogsConfirmation", confirm);
+
+            // ASSERT
+            Assert.True(errorMessageDisplayed);
+        }
 
     }
 }

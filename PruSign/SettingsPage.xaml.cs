@@ -55,7 +55,6 @@ namespace PruSign
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogs");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsError");
             MessagingCenter.Unsubscribe<SettingsViewModel>(this, "SettingsVM_SendLogsSuccess");
-            _settingsVm = null;
             base.OnDisappearing();
         }
     }

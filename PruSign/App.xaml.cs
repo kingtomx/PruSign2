@@ -20,16 +20,15 @@ namespace PruSign
             PrepareContainer(platformSpecificModules);
             InitializeComponent();
             MainPage = new LoadingPage();
-            Task.Run(async () =>
+            Task.Run(() =>
             {
-                // Checking if the credentials are stored in the database
-                using (Container.BeginLifetimeScope())
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    var serviceUserCredentials = Container.Resolve<IServiceAsync<UserCredentials>>();
-                    var result = await serviceUserCredentials.GetAll().CountAsync();
-
-                    Device.BeginInvokeOnMainThread(() =>
+                    // Checking if the credentials are stored in the database
+                    using (Container.BeginLifetimeScope())
                     {
+                        var serviceUserCredentials = Container.Resolve<IServiceAsync<UserCredentials>>();
+                        var result = await serviceUserCredentials.GetAll().CountAsync();
                         if (result > 0)
                         {
                             MainPage = Container.Resolve<HomePage>();
@@ -38,8 +37,9 @@ namespace PruSign
                         {
                             MainPage = Container.Resolve<LoginPage>();
                         }
-                    });
-                }
+                    }
+
+                });
             });
 
             MessagingCenter.Subscribe<LoginViewModel>(this, "RedirectToHome", (sender) =>
@@ -63,7 +63,7 @@ namespace PruSign
             RegisterPlatformSpecificModules(platformSpecificModules, containerBuilder);
 
             // Shared Modules Loader
-            RegisterSharedModules(new IModule[] {new ModuleLoader()}, containerBuilder);
+            RegisterSharedModules(new IModule[] { new ModuleLoader() }, containerBuilder);
 
             Container = containerBuilder.Build();
         }

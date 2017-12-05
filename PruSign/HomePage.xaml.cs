@@ -44,5 +44,11 @@ namespace PruSign
 
             base.OnDisappearing();
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _homeVm = App.Container.Resolve<HomeViewModel>(new TypedParameter(typeof(INavigation), Navigation));
+        }
     }
 }

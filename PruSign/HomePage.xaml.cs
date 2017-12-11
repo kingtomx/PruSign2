@@ -1,6 +1,7 @@
 ﻿using Xamarin.Forms;
 using Autofac;
 using PruSign.Data.ViewModels;
+using PruSign.Droid;
 using Xamarin.Forms.Xaml;
 
 namespace PruSign
@@ -10,12 +11,12 @@ namespace PruSign
     {
         private HomeViewModel _homeVm;
 
-        public HomePage()
+        public HomePage(SignatureViewModel initialData)
         {
             InitializeComponent();
             using (App.Container.BeginLifetimeScope())
             {
-                _homeVm = App.Container.Resolve<HomeViewModel>(new TypedParameter(typeof(INavigation), Navigation));
+                _homeVm = App.Container.Resolve<HomeViewModel>(new TypedParameter(typeof(INavigation), Navigation), new TypedParameter(typeof(SignatureViewModel), initialData ?? new SignatureViewModel()));
                 BindingContext = _homeVm;
 
                 MessagingCenter.Subscribe<HomeViewModel, string>(this, "HomeError", (sender, arg) =>
@@ -37,7 +38,6 @@ namespace PruSign
 
         protected override void OnDisappearing()
         {
-            _homeVm = null;
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeError");
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "HomeSuccess");
             MessagingCenter.Unsubscribe<HomeViewModel>(this, "CleanSignature");

@@ -177,19 +177,15 @@
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
       <Visible>false</Visible>
-      <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\Contents.json">
       <Visible>false</Visible>
-      <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29%401x.png">
       <Visible>false</Visible>
-      <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-57x57%401x.png">
       <Visible>false</Visible>
-      <InProject>false</InProject>
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +280,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Droid\PruSign.Droid.csproj">
+      <Project>{C2140252-4366-4002-8392-05CBFE935635}</Project>
+      <Name>PruSign.Droid</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\PruSign\PruSign.projitems" Label="Shared" Condition="Exists('..\PruSign\PruSign.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

@@ -55,13 +55,13 @@
             <!--Client Name Entry-->
             <Entry  x:Name="ClientName" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="End"
                         HorizontalOptions="FillAndExpand" Placeholder="Customer name" PlaceholderColor="Gray"
-                        Text="{Binding ClientName}">
+                        Text="{Binding ClientName, Mode=TwoWay}">
             </Entry>
 
             <!--Client ID Entry-->
             <Entry  x:Name="ClientID" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End"
                         HorizontalOptions="FillAndExpand" Placeholder="Customer Id" PlaceholderColor="Gray"
-                        Text="{Binding ClientId}">
+                        Text="{Binding ClientId, Mode=TwoWay}">
             </Entry>
 
             <!--Document ID Entry-->

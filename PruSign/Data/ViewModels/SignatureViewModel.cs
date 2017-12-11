@@ -11,5 +11,13 @@ namespace PruSign.Data.ViewModels
 		public String documentId;
 		public String applicationId;
 		public String hash;
+
+	    public SignatureViewModel()
+	    {
+	        this.customerName = "";
+	        this.customerId = "";
+	        this.documentId = "";
+	        this.applicationId = "";
+	    }
 	}
 }

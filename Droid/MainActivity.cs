@@ -2,15 +2,25 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using System.Threading;
+using Android.Content;
 using Android.Gms.Gcm;
 using Autofac;
 using Autofac.Core;
+using Java.Lang;
 using PruSign.Data.Interfaces;
 using PruSign.Droid.Services;
+using Xamarin.Forms;
+using System;
+using PruSign.Data.ViewModels;
 
 namespace PruSign.Droid
 {
-    [Activity(Label = "PruSign.Droid", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [IntentFilter(new[] { Intent.ActionSend },
+        Categories = new[] { Intent.CategoryDefault },
+        Icon = "@drawable/icon",
+        DataMimeType = "text/plain"
+        )]
+    [Activity(Label = "PruSign", Name = "com.prudential.prusign.activity", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -21,7 +31,19 @@ namespace PruSign.Droid
             base.OnCreate(bundle);
 
             Xamarin.Forms.Forms.Init(this, bundle);
-            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
+
+            var customerName = Intent.GetStringExtra("customerName");
+            var customerId = Intent.GetStringExtra("customerId");
+            var initialData = new SignatureViewModel();
+            if (customerName != null && customerId != null)
+            {
+                initialData.customerName = customerName;
+                initialData.customerId = customerId;
+            }
+
+            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }, initialData));
+
+            
 
             // Used to remove old logs and sent signatures
             StartupCleanUp();
@@ -45,14 +67,22 @@ namespace PruSign.Droid
 
         private static void StartupCleanUp()
         {
-            using (App.Container.BeginLifetimeScope())
+            try
             {
-                var signatureService = App.Container.Resolve<ISignatureService>();
-                var deviceLogService = App.Container.Resolve<IDeviceLogService>();
+                using (App.Container.BeginLifetimeScope())
+                {
+                    var signatureService = App.Container.Resolve<ISignatureService>();
+                    var deviceLogService = App.Container.Resolve<IDeviceLogService>();
 
-                deviceLogService.CleanOldLogs();
-                signatureService.CleanSentSignatures();
+                    deviceLogService.CleanOldLogs();
+                    signatureService.CleanSentSignatures();
+                }
             }
+            catch(System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
         }
 
         protected override void OnStop()

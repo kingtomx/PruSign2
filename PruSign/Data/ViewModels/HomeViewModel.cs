@@ -84,7 +84,7 @@ namespace PruSign.Data.ViewModels
         }
         #endregion
 
-        public HomeViewModel(INavigation navigation, IModalService modalService, ISignatureService signatureService)
+        public HomeViewModel(INavigation navigation, IModalService modalService, ISignatureService signatureService, SignatureViewModel initialData)
         {
             _signatureService = signatureService;
             OnBtnSubmitTappedCommand = new Command(OnBtnSubmitTapped);
@@ -92,6 +92,16 @@ namespace PruSign.Data.ViewModels
             CurrentDate = DateTime.Now.ToString("dd-MM-yyy hh:mm:ss tt");
             _navigation = navigation;
             _modalService = modalService;
+            SetupInitialData(initialData);
+
+        }
+
+        private void SetupInitialData(SignatureViewModel initialData)
+        {
+            this.ClientName = initialData.customerName;
+            this.ClientId = initialData.customerId;
+            this.Application = initialData.applicationId;
+            this.DocumentId = initialData.documentId;
         }
 
         public void OnBtnSubmitTapped()

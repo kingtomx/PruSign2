@@ -15,7 +15,7 @@ namespace PruSign
         public bool IsLocked { get; set; }
         public static IContainer Container;
 
-        public App(IModule[] platformSpecificModules)
+        public App(IModule[] platformSpecificModules, SignatureViewModel initialData)
         {
             PrepareContainer(platformSpecificModules);
             InitializeComponent();
@@ -31,7 +31,7 @@ namespace PruSign
                         var result = await serviceUserCredentials.GetAll().CountAsync();
                         if (result > 0)
                         {
-                            MainPage = Container.Resolve<HomePage>();
+                            MainPage = Container.Resolve<HomePage>(new TypedParameter(typeof(SignatureViewModel), initialData));
                         }
                         else
                         {
@@ -49,7 +49,7 @@ namespace PruSign
                     IsLocked = true;
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        MainPage = Container.Resolve<HomePage>();
+                        MainPage = Container.Resolve<HomePage>(new TypedParameter(typeof(SignatureViewModel), initialData));
                     });
                 }
             });

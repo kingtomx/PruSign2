@@ -34,14 +34,18 @@ namespace PruSign.Droid
 
             var customerName = Intent.GetStringExtra("customerName");
             var customerId = Intent.GetStringExtra("customerId");
-            var initialData = new SignatureViewModel();
             if (customerName != null && customerId != null)
             {
-                initialData.customerName = customerName;
-                initialData.customerId = customerId;
+                ((PruSign.App)App.Current).SetAppProperty("customerName",customerName);
+                ((PruSign.App)App.Current).SetAppProperty("customerId", customerId);
+                if (((PruSign.App)App.Current).Properties.ContainsKey("isOpen"))
+                {
+                    // TO-DO call Update
+                    ((PruSign.App)App.Current).UpdateIncomingData();
+                }
             }
 
-            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }, initialData));
+            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
 
             
 

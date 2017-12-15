@@ -4,8 +4,8 @@
              xmlns:converter="clr-namespace:PruSign.Converters"
              x:Class="PruSign.App">
 	<Application.Resources>
+        
         <ResourceDictionary>
-            
             <!--Colors-->
             <Color x:Key="FaluRed">#801515</Color>
             <Color x:Key="HippieGreen">#5C8F49</Color>

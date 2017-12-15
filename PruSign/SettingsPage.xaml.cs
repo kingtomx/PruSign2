@@ -6,7 +6,7 @@ using Xamarin.Forms.Xaml;
 namespace PruSign
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SettingsPage
+    public partial class SettingsPage : ContentPage
     {
         private SettingsViewModel _settingsVm;
 

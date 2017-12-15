@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Autofac;
-using Foundation;
+﻿using Autofac;
 using PruSign.Data.Entities;
 using PruSign.iOS.Data;
-using UIKit;
 
 namespace PruSign.iOS
 {

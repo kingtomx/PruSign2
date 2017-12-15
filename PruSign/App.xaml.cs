@@ -7,15 +7,16 @@ using Autofac.Core;
 using PruSign.Data.Interfaces;
 using PruSign.Data.Modules;
 using Xamarin.Forms;
+using System;
 
 namespace PruSign
 {
-    public partial class App
+    public partial class App : Application
     {
         public bool IsLocked { get; set; }
         public static IContainer Container;
-
-        public App(IModule[] platformSpecificModules, SignatureViewModel initialData)
+        private string _incomingData { get; set; }
+        public App(IModule[] platformSpecificModules)
         {
             PrepareContainer(platformSpecificModules);
             InitializeComponent();
@@ -31,12 +32,13 @@ namespace PruSign
                         var result = await serviceUserCredentials.GetAll().CountAsync();
                         if (result > 0)
                         {
-                            MainPage = Container.Resolve<HomePage>(new TypedParameter(typeof(SignatureViewModel), initialData));
+                            MainPage = Container.Resolve<HomePage>();
                         }
                         else
                         {
                             MainPage = Container.Resolve<LoginPage>();
                         }
+                        MessagingCenter.Send(this, "startIOSBackgroundSync");
                     }
 
                 });
@@ -49,7 +51,7 @@ namespace PruSign
                     IsLocked = true;
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        MainPage = Container.Resolve<HomePage>(new TypedParameter(typeof(SignatureViewModel), initialData));
+                        MainPage = Container.Resolve<HomePage>();
                     });
                 }
             });
@@ -82,6 +84,39 @@ namespace PruSign
             {
                 containerBuilder.RegisterModule(module);
             }
+        }
+
+        public void UpdateIncomingData()
+        {
+            MessagingCenter.Send(this, "showDataFromOtherApp");
+        }
+
+        public void ParseIncomingData(string url)
+        {
+            try
+            {
+                url = url.Split('?')[1];
+
+                var incomingParams = url.Split('&');
+                foreach (var param in incomingParams)
+                {
+                    var key = param.Split('=')[0];
+                    var value = param.Split('=')[1];
+                    // TO-DO Check why I need to decode two times. I think the error is in the sender app
+                    value = System.Web.HttpUtility.UrlDecode(value);
+                    value = System.Web.HttpUtility.UrlDecode(value);
+                    SetAppProperty(key, value);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        public void SetAppProperty(string key, string value)
+        {
+            App.Current.Properties[key] = value;
         }
 
         protected override void OnStart()

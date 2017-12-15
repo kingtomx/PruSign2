@@ -39,7 +39,6 @@
                 </Image>
             </AbsoluteLayout>
 
-
             <!--Date Time Field-->
             <Entry  x:Name="DateTimeEntry" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" 
                         IsEnabled="false" Text="{Binding CurrentDate}" PlaceholderColor="Gray" 

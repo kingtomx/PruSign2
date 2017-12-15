@@ -8,6 +8,7 @@ using Autofac.Core;
 using PruSign.Background;
 using KeyboardOverlap.Forms.Plugin.iOSUnified;
 using PruSign.Data.Services;
+using PruSign.Data.ViewModels;
 
 namespace PruSign.iOS
 {
@@ -18,7 +19,7 @@ namespace PruSign.iOS
         {
             Forms.Init();
             KeyboardOverlapRenderer.Init();
-            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
+            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }, new SignatureViewModel()));
             UIApplication.SharedApplication.ApplicationSupportsShakeToEdit = true;
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
             WireUpBackgroundDataSync();

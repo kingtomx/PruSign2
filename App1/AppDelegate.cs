@@ -82,14 +82,7 @@ namespace App1
 
         public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
         {
-            ((PruSign.App)App.Current).ParseIncomingData(url.AbsoluteString);
-            // Check if the application is already open when the parameters are sent
-            if (((PruSign.App)App.Current).Properties.ContainsKey("isOpen"))
-            {
-                // TO-DO call Update
-                ((PruSign.App)App.Current).UpdateIncomingData();
-            }
-
+            ((PruSign.App)App.Current).HandleIncomingDataForIOS(url.AbsoluteString);
             return true;
         }
 

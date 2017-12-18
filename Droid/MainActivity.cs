@@ -32,22 +32,20 @@ namespace PruSign.Droid
 
             Xamarin.Forms.Forms.Init(this, bundle);
 
+            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
+
             var customerName = Intent.GetStringExtra("customerName");
             var customerId = Intent.GetStringExtra("customerId");
             if (customerName != null && customerId != null)
             {
-                ((PruSign.App)App.Current).SetAppProperty("customerName",customerName);
-                ((PruSign.App)App.Current).SetAppProperty("customerId", customerId);
-                if (((PruSign.App)App.Current).Properties.ContainsKey("isOpen"))
+                var signatureData = new SignatureViewModel()
                 {
-                    // TO-DO call Update
-                    ((PruSign.App)App.Current).UpdateIncomingData();
-                }
+                    customerName = customerName,
+                    customerId = customerId
+                };
+
+                ((PruSign.App)App.Current).HandleIncomingDataForAndroid(signatureData);
             }
-
-            LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
-
-            
 
             // Used to remove old logs and sent signatures
             StartupCleanUp();

@@ -91,7 +91,15 @@ namespace PruSign
             MessagingCenter.Send(this, "showDataFromOtherApp");
         }
 
-        public void ParseIncomingData(string url)
+        public void HandleIncomingDataForAndroid(SignatureViewModel signatureData)
+        {
+            SetAppProperty("customerName", signatureData.customerName);
+            SetAppProperty("customerId", signatureData.customerId);
+
+            CheckIfApplicationIsOpen();
+        }
+
+        public void HandleIncomingDataForIOS(string url)
         {
             try
             {
@@ -111,6 +119,18 @@ namespace PruSign
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+            }
+
+            CheckIfApplicationIsOpen();
+        }
+
+        public void CheckIfApplicationIsOpen()
+        {
+            // Check if the application is already open when the parameters are sent
+            if (Properties.ContainsKey("isOpen"))
+            {
+                // TO-DO call Update
+                UpdateIncomingData();
             }
         }
 

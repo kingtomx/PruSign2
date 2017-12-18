@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>PruSign.iOS</string>
+	<string>PruSign</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.prudential.prusign</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,5 +53,9 @@
 			<string>Viewer</string>
 		</dict>
 	</array>
+	<key>XSLaunchImageAssets</key>
+	<string>Resources/Media.xcassets/LaunchImages.launchimage</string>
+	<key>XSAppIconAssets</key>
+	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
 </dict>
 </plist>

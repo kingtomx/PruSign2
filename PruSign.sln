@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7305546A-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedTests", "SharedTests\SharedTests.csproj", "{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App1", "App1\App1.csproj", "{9E11912A-7B55-4E69-A3CF-0B842CB1E6B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruSign.iOS", "App1\PruSign.iOS.csproj", "{9E11912A-7B55-4E69-A3CF-0B842CB1E6B7}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

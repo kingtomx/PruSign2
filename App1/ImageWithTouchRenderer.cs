@@ -1,12 +1,12 @@
-﻿using System.Drawing;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Drawing;
 using PruSign.CustomViews;
-using App1;
+using PruSign.iOS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(ImageWithTouch), typeof(ImageWithTouchRenderer))]
-namespace App1
+namespace PruSign.iOS
 {
 	public class ImageWithTouchRenderer : ViewRenderer<ImageWithTouch, DrawView>
 	{

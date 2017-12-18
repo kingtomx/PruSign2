@@ -1,8 +1,7 @@
 ﻿using System;
 using Foundation;
-using MultipeerConnectivity;
 
-namespace App1
+namespace PruSign.iOS
 {
 	public class MySessionDelegate : NSUrlSessionDelegate	{
 		

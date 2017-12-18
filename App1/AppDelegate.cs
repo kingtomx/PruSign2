@@ -1,17 +1,15 @@
 ﻿using System;
-using Foundation;
-using UIKit;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 using Autofac;
 using Autofac.Core;
-using PruSign.Background;
+using Foundation;
 using KeyboardOverlap.Forms.Plugin.iOSUnified;
+using PruSign.Background;
 using PruSign.Data.Services;
-using PruSign.Data.ViewModels;
-using PruSign;
+using UIKit;
+using Xamarin.Forms;
 
-namespace App1
+namespace PruSign.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate

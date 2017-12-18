@@ -1,12 +1,10 @@
 ﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 using System.Threading.Tasks;
 using UIKit;
-using System.Drawing;
-using CoreGraphics;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
-namespace App1
+namespace PruSign.iOS
 {
 	public static class ImageTools
 	{

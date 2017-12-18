@@ -2,7 +2,7 @@
 using PruSign.Data.Entities;
 using PruSign.iOS.Data;
 
-namespace App1
+namespace PruSign.iOS
 {
     public class PlatformSpecificModule : Module
     {

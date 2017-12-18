@@ -1,6 +1,4 @@
-﻿using PruSign;
-
-namespace App1
+﻿namespace PruSign.iOS
 {
     public class PointWhen
 	{

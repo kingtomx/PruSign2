@@ -1,14 +1,13 @@
 ﻿using System;
-using Xamarin.Forms;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using UIKit;
 using PruSign.Background;
 using PruSign.Data.Services;
-using PruSign;
+using UIKit;
+using Xamarin.Forms;
 
-namespace App1
+namespace PruSign.iOS
 {
     public class iOSLongRunningTask
     {

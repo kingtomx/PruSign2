@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace App1
+namespace PruSign.iOS
 {
 	public class VESLine
 	{

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>App1</string>
+	<string>PruSign.iOS</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.prudential.app1</string>
+	<string>com.prudential.prusign</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>

@@ -1,11 +1,10 @@
-﻿using App1;
-using PruSign;
-using System;
+﻿using System;
 using System.IO;
+using PruSign.iOS;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(FileHelper))]
-namespace App1
+namespace PruSign.iOS
 {
 
     public class FileHelper : IFileHelper

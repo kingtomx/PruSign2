@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using CoreGraphics;
 using Foundation;
-using UIKit;
 using Newtonsoft.Json;
-using PruSign;
+using UIKit;
 
-namespace App1
+namespace PruSign.iOS
 {
 	public class DrawView : UIView
 	{

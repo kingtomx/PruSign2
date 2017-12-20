@@ -36,22 +36,21 @@ namespace PruSign.iOS
 
         public override void DidEnterBackground(UIApplication app)
         {
-            //var taskId = UIApplication.SharedApplication.BeginBackgroundTask(() => { });
-            //new Task(async () =>
-            //{
-            //    using (var scope = App.Container.BeginLifetimeScope())
-            //    {
-            //        var signatureService = App.Container.Resolve<SignatureService>();
-            //        await signatureService.SendSignatures();
-            //        UIApplication.SharedApplication.EndBackgroundTask(taskId);
-            //    }
-            //}).Start();
-
+            var taskId = UIApplication.SharedApplication.BeginBackgroundTask(() => { });
+            new Task(async () =>
+            {
+                using (App.Container.BeginLifetimeScope())
+                {
+                    var signatureService = App.Container.Resolve<SignatureService>();
+                    await signatureService.SendSignatures();
+                    UIApplication.SharedApplication.EndBackgroundTask(taskId);
+                }
+            }).Start();
         }
 
         public override async void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
-            using (var scope = App.Container.BeginLifetimeScope())
+            using (App.Container.BeginLifetimeScope())
             {
                 var signatureService = App.Container.Resolve<SignatureService>();
                 await signatureService.SendSignatures();

@@ -35,7 +35,7 @@ namespace PruSign.Data.Services
 
                     var jsonBody = new
                     {
-                        Device = "test",
+                        Device = App.GetImei(),
                         User = user.Username,
                         Entries = logs
                     };

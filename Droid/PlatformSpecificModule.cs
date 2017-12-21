@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using PruSign.Data.Entities;
+using PruSign.Data.Interfaces;
 using PruSign.Droid.Data;
 
 namespace PruSign.Droid
@@ -10,6 +11,7 @@ namespace PruSign.Droid
         {
             base.Load(builder);
             builder.RegisterType<SQLiteAndroid>().As<ISQLite>();
+            builder.RegisterType<UniqueIdAndroid>().As<IDevice>();
         }
     }
 }

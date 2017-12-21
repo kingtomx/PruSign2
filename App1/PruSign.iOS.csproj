@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CustomRenderers\EnhancedButtonRenderer.cs" />
     <Compile Include="Data\SQLiteIOS.cs" />
+    <Compile Include="Data\UniqueIdIOS.cs" />
     <Compile Include="DrawView.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="ImageTools.cs" />

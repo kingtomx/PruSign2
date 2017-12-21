@@ -55,6 +55,12 @@ namespace PruSign
                     });
                 }
             });
+
+            // The IMEI will be stored the first time the user loads the application
+            if (!App.Current.Properties.ContainsKey("IMEI"))
+            {
+                SetImei();
+            }
         }
 
         private static void PrepareContainer(IModule[] platformSpecificModules)
@@ -137,6 +143,21 @@ namespace PruSign
         public void SetAppProperty(string key, string value)
         {
             App.Current.Properties[key] = value;
+        }
+
+        public void SetImei()
+        {
+            var deviceDetails = Container.Resolve<IDevice>();
+            this.SetAppProperty("IMEI", deviceDetails.GetIdentifier());
+        }
+
+        public static string GetImei()
+        {
+            if (App.Current.Properties.ContainsKey("IMEI"))
+            {
+                return Current.Properties["IMEI"] as string;
+            }
+            return string.Empty;
         }
 
         protected override void OnStart()

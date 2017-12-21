@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using PruSign.Data.Entities;
+using PruSign.Data.Interfaces;
 using PruSign.iOS.Data;
 
 namespace PruSign.iOS
@@ -10,6 +11,7 @@ namespace PruSign.iOS
         {
             base.Load(builder);
             builder.RegisterType<SQLiteIOS>().As<ISQLite>();
+            builder.RegisterType<UniqueIdIOS>().As<IDevice>();
         }
     }
 }

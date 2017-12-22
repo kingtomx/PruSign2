@@ -6,7 +6,7 @@ namespace PruSign
 {
     public static class Constants
     {
-        public const string BACKEND_HOST_NAME = "http://192.168.0.14";
+        public const string BACKEND_HOST_NAME = "http://192.168.0.13";
         //public const string BACKEND_HOST_NAME = "https://api.prudentialseguros.com.ar:4043/prusign";
 
         // Minimum number of seconds between a background refresh on iOS

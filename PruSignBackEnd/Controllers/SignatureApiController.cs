@@ -86,7 +86,7 @@ namespace PruSignBackEnd
             var resp = String.Empty;
             try
             {
-                var signature = serviceSignature.GetAll().Where(s => s.ID.Equals(id)).FirstOrDefault();
+                var signature = serviceSignature.GetAll().FirstOrDefault(s => s.ID.Equals(id));
 
                 if (signature != null)
                 {

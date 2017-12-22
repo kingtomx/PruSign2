@@ -17,10 +17,10 @@ namespace PruSignFrontEnd.Controllers
     {
         // GET: DeviceLog
         [Route("device/{deviceId}/logs", Name = "selectedDeviceLogs")]
-        public async Task<ActionResult> Index(HttpActionContext actionContext, string searchText)
+        public async Task<ActionResult> Index(string searchText)
         {
             var result = new List<DeviceLog>();
-            var username = actionContext.ControllerContext.RouteData.Values["deviceId"].ToString();
+            var username = this.RouteData.Values["deviceId"].ToString();
             try
             {
                 var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);

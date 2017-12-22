@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using PruSign.Data.Interfaces;
 using PruSign.Droid.Data;
 using Xamarin.Forms;
 using static Android.Provider.Settings;
@@ -16,7 +17,7 @@ using static Android.Provider.Settings;
 [assembly: Xamarin.Forms.Dependency(typeof(UniqueIdAndroid))]
 namespace PruSign.Droid.Data
 {
-    public class UniqueIdAndroid
+    public class UniqueIdAndroid : IDevice
     {
         public string GetIdentifier()
         {

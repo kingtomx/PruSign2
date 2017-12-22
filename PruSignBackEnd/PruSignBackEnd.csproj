@@ -90,6 +90,8 @@
     <Compile Include="Controllers\DeviceLogApiController.cs" />
     <Compile Include="Controllers\SystemLogApiController.cs" />
     <Compile Include="Data\DB\Service.cs" />
+    <Compile Include="Data\Entities\Answer.cs" />
+    <Compile Include="Data\Entities\Question.cs" />
     <Compile Include="Data\Entities\SystemLog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -133,6 +135,10 @@
     <Compile Include="Migrations\201711141418364_Includes User field on devicelog table.Designer.cs">
       <DependentUpon>201711141418364_Includes User field on devicelog table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712211438370_Adds Answer and Question entities.cs" />
+    <Compile Include="Migrations\201712211438370_Adds Answer and Question entities.Designer.cs">
+      <DependentUpon>201712211438370_Adds Answer and Question entities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
     <Compile Include="Data\Entities\DeviceLog.cs" />
@@ -174,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711141418364_Includes User field on devicelog table.resx">
       <DependentUpon>201711141418364_Includes User field on devicelog table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712211438370_Adds Answer and Question entities.resx">
+      <DependentUpon>201712211438370_Adds Answer and Question entities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

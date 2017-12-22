@@ -8,6 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Http.Controllers;
 using System.Web.Mvc;
 
 namespace PruSignFrontEnd.Controllers
@@ -15,9 +16,11 @@ namespace PruSignFrontEnd.Controllers
     public class DeviceLogController : Controller
     {
         // GET: DeviceLog
-        public async Task<ActionResult> Index(string username, string searchText)
+        [Route("device/{deviceId}/logs", Name = "selectedDeviceLogs")]
+        public async Task<ActionResult> Index(HttpActionContext actionContext, string searchText)
         {
             var result = new List<DeviceLog>();
+            var username = actionContext.ControllerContext.RouteData.Values["deviceId"].ToString();
             try
             {
                 var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);

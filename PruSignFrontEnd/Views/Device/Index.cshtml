@@ -26,7 +26,8 @@
             @Html.DisplayFor(modelItem => item.User)
         </td>
         <td>
-            @Html.ActionLink("Details", "Index", "DeviceLog", new { username = item.User }, new { })
+            <a href="@Url.RouteUrl("selectedDevice", new RouteValueDictionary(new {deviceId = item.User}))">Ingresar</a>
+            @*@Html.ActionLink("Details", "Index", "DeviceLog", new { username = item.User }, new { })*@
         </td>
     </tr>
 }

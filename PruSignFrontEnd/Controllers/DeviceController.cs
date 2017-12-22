@@ -41,5 +41,12 @@ namespace PruSignFrontEnd.Controllers
 
             return View(result);
         }
+
+        [Route("device/{deviceId}", Name = "selectedDevice")]
+        public ActionResult SelectedDevice(string deviceId)
+        {
+            return View((object)deviceId);
+        }
+
     }
 }

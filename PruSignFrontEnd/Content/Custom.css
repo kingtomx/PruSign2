@@ -1,0 +1,16 @@
+﻿.ddbutton {
+    background-color: #0679BD;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+#device-buttons-container {
+    overflow: auto;
+}
+
+.ddbutton-container > a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}

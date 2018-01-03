@@ -19,5 +19,7 @@ namespace PruSignBackEnd.Data.DB
         public DbSet<Point> Points { get; set; }
         public DbSet<DeviceLog> DeviceLogs { get; set; }
         public DbSet<SystemLog> SystemLogs { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
     }
 }

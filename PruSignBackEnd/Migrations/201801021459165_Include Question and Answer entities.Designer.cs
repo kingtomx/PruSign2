@@ -7,13 +7,13 @@ namespace PruSignBackEnd.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Pointentitymodification : IMigrationMetadata
+    public sealed partial class IncludeQuestionandAnswerentities : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Pointentitymodification));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(IncludeQuestionandAnswerentities));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710311410004_Point entity modification"; }
+            get { return "201801021459165_Include Question and Answer entities"; }
         }
         
         string IMigrationMetadata.Source

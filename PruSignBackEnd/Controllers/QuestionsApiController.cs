@@ -45,13 +45,13 @@ namespace PruSignBackEnd.Controllers
         [Route("questions/getbyid")]
         public HttpResponseMessage GetById(int id)
         {
-            var questions = serviceQuestions.GetAll().FirstOrDefault(question => question.ID == id);
-            if (questions == null)
+            var question = serviceQuestions.GetAll().FirstOrDefault(q => q.ID == id);
+            if (question == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
 
-            var resp = JsonConvert.SerializeObject(questions);
+            var resp = JsonConvert.SerializeObject(question);
             return new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,

@@ -25,7 +25,7 @@ namespace PruSignFrontEnd.Controllers
                 var request = new RestRequest("api/questions/all", Method.GET);
                 request.AddHeader("Content-Type", "application/json");
                 var response = await client.ExecuteTaskAsync(request);
-                if (response.StatusCode != HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     throw new Exception(response.ErrorMessage);
                 }
@@ -38,7 +38,7 @@ namespace PruSignFrontEnd.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 ViewBag.ErrorMessage = "There was an error trying to retrieve questions";
-                return View("~/Views/Signature/Index.cshtml");
+                return RedirectToAction("Index", "Signature");
             }
         }
 
@@ -61,14 +61,15 @@ namespace PruSignFrontEnd.Controllers
                 {
                     throw new Exception(response.ErrorMessage);
                 }
-                return View("Index");
+                return RedirectToAction("Index", "Questions");
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 ViewBag.ErrorMessage = "There was an error trying to create a new question";
-                return View("~/Views/Questions/Create.cshtml");
+                return RedirectToAction("Create", "Questions");
+
             }
         }
 
@@ -96,7 +97,8 @@ namespace PruSignFrontEnd.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 ViewBag.ErrorMessage = "There was an error trying to edit a question";
-                return View("~/Views/Signature/Index.cshtml");
+                return RedirectToAction("Index", "Questions");
+
             }
             return View();
         }
@@ -114,14 +116,15 @@ namespace PruSignFrontEnd.Controllers
                 {
                     throw new Exception(response.ErrorMessage);
                 }
-                return View("Index");
+                return RedirectToAction("Index", "Questions");
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 ViewBag.ErrorMessage = "There was an error trying to edit a question";
-                return View("~/Views/Questions/Edit.cshtml");
+                return RedirectToAction("Edit", "Questions");
+
             }
         }
 

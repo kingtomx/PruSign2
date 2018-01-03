@@ -97,5 +97,24 @@ namespace PruSignBackEnd.Controllers
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
+
+        [HttpDelete]
+        [Route("questions/")]
+        public HttpResponseMessage Delete(int id)
+        {
+            try
+            {
+                var entityToDelete = serviceQuestions.Get(id);
+                serviceQuestions.Detele(entityToDelete);
+                db.SaveChanges();
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                Helpers.SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
     }
 }

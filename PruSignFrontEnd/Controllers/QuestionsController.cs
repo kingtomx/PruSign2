@@ -100,7 +100,6 @@ namespace PruSignFrontEnd.Controllers
                 return RedirectToAction("Index", "Questions");
 
             }
-            return View();
         }
 
         public async Task<ActionResult> Update(Question updatedQuestion)
@@ -127,6 +126,32 @@ namespace PruSignFrontEnd.Controllers
 
             }
         }
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
+                var request = new RestRequest("api/questions/", Method.DELETE);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("id", id);
+                var response = await client.ExecuteTaskAsync(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception(response.ErrorMessage);
+                }
+                return RedirectToAction("Index", "Questions");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                ViewBag.ErrorMessage = "There was an error trying to edit a question";
+                return RedirectToAction("Index", "Questions");
+
+            }
+        }
+
 
     }
 }

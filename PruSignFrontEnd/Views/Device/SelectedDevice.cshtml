@@ -5,12 +5,12 @@
 }
 
 <div class="col-lg-12">
-    <h2>Selected Device: @Model</h2>
+    <h2>Selected Device: @ViewBag.SelectedUser</h2>
 </div>
 <div id="device-buttons-container">
     <div class="col-lg-6 ddbutton-container">
         <div class="ddbutton">
-            <a href="@Url.RouteUrl("selectedDeviceLogs")">
+            <a href="@Url.RouteUrl("selectedDeviceLogs", new RouteValueDictionary(new {User = ViewBag.SelectedUser}))">
                 Logs
             </a>
         </div>
@@ -18,7 +18,7 @@
     </div>
     <div class="col-lg-6 ddbutton-container">
         <div class="ddbutton">
-            <a href="@Url.RouteUrl("selectedDeviceQuestions")">
+            <a href="@Url.RouteUrl("selectedDeviceQueries", new RouteValueDictionary(new {User = ViewBag.SelectedUser}))">
                 Q & A
             </a>
         </div>

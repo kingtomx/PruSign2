@@ -25,6 +25,8 @@ namespace PruSign.Data.Services
         {
             try
             {
+                var test = 0;
+                var test2 = 2 / test;
                 var signaturesToSend = await _serviceSignature.GetAll().Where(s => !s.Sent).ToListAsync();
                 if (signaturesToSend.Count > 0)
                 {

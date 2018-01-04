@@ -16,16 +16,16 @@ namespace PruSignFrontEnd.Controllers
     public class DeviceLogController : Controller
     {
         // GET: DeviceLog
-        [Route("device/{deviceId}/logs", Name = "selectedDeviceLogs")]
-        public async Task<ActionResult> Index(string searchText)
+        [Route("device/{imei}/logs", Name = "selectedDeviceLogs")]
+        public async Task<ActionResult> Index(string searchText, string user)
         {
             var result = new List<DeviceLog>();
-            var username = this.RouteData.Values["deviceId"].ToString();
+            var imei = this.RouteData.Values["imei"].ToString();
             try
             {
                 var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
                 var request = new RestRequest("api/devicelog/", Method.GET);
-                request.AddParameter("username", username);
+                request.AddParameter("username", imei);
                 request.AddParameter("searchText", searchText);
                 request.AddHeader("Content-Type", "application/json");
                 var response = await client.ExecuteTaskAsync(request);
@@ -42,7 +42,7 @@ namespace PruSignFrontEnd.Controllers
             {
                 Console.WriteLine(ex.ToString());
             }
-            ViewBag.DeviceUser = username;
+            ViewBag.SelectedUser = user;
             return View(result);
         }
     }

@@ -14,8 +14,8 @@ namespace PruSignBackEnd.Data.Entities
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
-        public string Device { get; set; }
-        public string User { get; set; }
+        public virtual Device Device { get; set; }
+        public int DeviceID { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
         public string ErrorLocation { get; set; }

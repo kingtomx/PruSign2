@@ -166,7 +166,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Device.cs" />
     <Compile Include="Models\DeviceLog.cs" />
     <Compile Include="Models\Signature.cs" />
     <Compile Include="Models\SystemLog.cs" />
@@ -223,6 +222,7 @@
     <Content Include="Views\Questions\Create.cshtml" />
     <Content Include="Views\Questions\Index.cshtml" />
     <Content Include="Views\Questions\Edit.cshtml" />
+    <Content Include="Views\DeviceQueries\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

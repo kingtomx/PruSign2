@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,11 +40,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -57,6 +64,27 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.Services" />
@@ -78,8 +106,28 @@
     <Reference Include="System.Web.Http.WebHost">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -87,12 +135,17 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\DeviceLogApiController.cs" />
     <Compile Include="Controllers\DeviceQueriesApiController.cs" />
     <Compile Include="Controllers\QuestionsApiController.cs" />
     <Compile Include="Controllers\SystemLogApiController.cs" />
     <Compile Include="Data\DB\Service.cs" />
     <Compile Include="Data\Entities\Answer.cs" />
+    <Compile Include="Data\Entities\Device.cs" />
     <Compile Include="Data\Entities\Question.cs" />
     <Compile Include="Data\Entities\SystemLog.cs" />
     <Compile Include="Global.asax.cs">
@@ -101,41 +154,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SignatureApiController.cs" />
     <Compile Include="Helpers\SystemLogHelper.cs" />
-    <Compile Include="Migrations\201710311400173_First migration.cs" />
-    <Compile Include="Migrations\201710311400173_First migration.Designer.cs">
-      <DependentUpon>201710311400173_First migration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710311421263_New fields included.cs" />
-    <Compile Include="Migrations\201710311421263_New fields included.Designer.cs">
-      <DependentUpon>201710311421263_New fields included.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711021152117_Change DeviceLog entity.cs" />
-    <Compile Include="Migrations\201711021152117_Change DeviceLog entity.Designer.cs">
-      <DependentUpon>201711021152117_Change DeviceLog entity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711031238242_Adds ErrorLocation field.cs" />
-    <Compile Include="Migrations\201711031238242_Adds ErrorLocation field.Designer.cs">
-      <DependentUpon>201711031238242_Adds ErrorLocation field.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711081204461_Delete signature properties.cs" />
-    <Compile Include="Migrations\201711081204461_Delete signature properties.Designer.cs">
-      <DependentUpon>201711081204461_Delete signature properties.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711091446062_Agrega Setter para FormattedDate.cs" />
-    <Compile Include="Migrations\201711091446062_Agrega Setter para FormattedDate.Designer.cs">
-      <DependentUpon>201711091446062_Agrega Setter para FormattedDate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.cs" />
-    <Compile Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.Designer.cs">
-      <DependentUpon>201711131534490_Agrega columna de Error Location en SystemLogs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711141418364_Includes User field on devicelog table.cs" />
-    <Compile Include="Migrations\201711141418364_Includes User field on devicelog table.Designer.cs">
-      <DependentUpon>201711141418364_Includes User field on devicelog table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201801021459165_Include Question and Answer entities.cs" />
-    <Compile Include="Migrations\201801021459165_Include Question and Answer entities.Designer.cs">
-      <DependentUpon>201801021459165_Include Question and Answer entities.cs</DependentUpon>
+    <Compile Include="Migrations\201801041243233_Init.cs" />
+    <Compile Include="Migrations\201801041243233_Init.Designer.cs">
+      <DependentUpon>201801041243233_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
@@ -153,42 +174,31 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710311400173_First migration.resx">
-      <DependentUpon>201710311400173_First migration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710311421263_New fields included.resx">
-      <DependentUpon>201710311421263_New fields included.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711021152117_Change DeviceLog entity.resx">
-      <DependentUpon>201711021152117_Change DeviceLog entity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711031238242_Adds ErrorLocation field.resx">
-      <DependentUpon>201711031238242_Adds ErrorLocation field.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711081204461_Delete signature properties.resx">
-      <DependentUpon>201711081204461_Delete signature properties.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711091446062_Agrega Setter para FormattedDate.resx">
-      <DependentUpon>201711091446062_Agrega Setter para FormattedDate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711131534490_Agrega columna de Error Location en SystemLogs.resx">
-      <DependentUpon>201711131534490_Agrega columna de Error Location en SystemLogs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711141418364_Includes User field on devicelog table.resx">
-      <DependentUpon>201711141418364_Includes User field on devicelog table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801021459165_Include Question and Answer entities.resx">
-      <DependentUpon>201801021459165_Include Question and Answer entities.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="FolderProfile.pubxml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\web.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201801041243233_Init.resx">
+      <DependentUpon>201801041243233_Init.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\Device\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

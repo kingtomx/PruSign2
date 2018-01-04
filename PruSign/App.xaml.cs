@@ -8,6 +8,7 @@ using PruSign.Data.Interfaces;
 using PruSign.Data.Modules;
 using Xamarin.Forms;
 using System;
+using Device = Xamarin.Forms.Device;
 
 namespace PruSign
 {

@@ -20,5 +20,8 @@ namespace PruSignBackEnd.ViewModels
 
         public string ErrorLocation { get; set; }
 
+        public string DeviceUser { get; set; }
+
+        public string DeviceImei { get; set; }
     }
 }

@@ -8,8 +8,7 @@ namespace PruSignBackEnd.ViewModels
 {
     public class DeviceLogViewModel
     {
-        public string Device { get; set; }
-        public string User { get; set; }
+        public Device Device { get; set; }
         public List<DeviceLogEntriesViewModel> Entries { get; set; }
     }
 }

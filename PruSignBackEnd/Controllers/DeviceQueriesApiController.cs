@@ -5,10 +5,12 @@ using PruSignBackEnd.Helpers;
 using PruSignBackEnd.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace PruSignBackEnd.Controllers
@@ -25,22 +27,24 @@ namespace PruSignBackEnd.Controllers
         }
 
         [Route("devicequeries/")]
-        public HttpResponseMessage Get(string deviceId)
+        public async Task<HttpResponseMessage> Get(string imei)
         {
             try
             {
-                var answers = serviceDeviceAnswers.GetAll().Where(answer => answer.Device.Equals(deviceId));
-                if (!answers.Any())
+                var answers = serviceDeviceAnswers.GetAll().Where(answer => answer.Device.Imei.Equals(imei));
+                var answersList = await answers.ToListAsync();
+                if (!answersList.Any())
                 {
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
                 }
                 else
                 {
                     var formattedAnswers = new List<DeviceQueryViewModel>();
-                    foreach (var item in answers)
+                    foreach (var item in answersList)
                     {
                         formattedAnswers.Add(new DeviceQueryViewModel()
                         {
+                            Created = item.Created,
                             QuestionCode = item.Question.Code,
                             QuestionDescription = item.Question.Description,
                             Status = item.Status == 0 ? "Waiting for Answer" : "Done",
@@ -48,7 +52,7 @@ namespace PruSignBackEnd.Controllers
                         });
                     }
 
-                    var resp = JsonConvert.SerializeObject(answers);
+                    var resp = JsonConvert.SerializeObject(formattedAnswers);
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.OK,
@@ -62,6 +66,24 @@ namespace PruSignBackEnd.Controllers
                 SystemLogHelper.LogNewError(ex);
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
+        }
+
+        [HttpPost]
+        [Route("devicequeries/")]
+        public HttpResponseMessage Post(Answer answer)
+        {
+            try
+            {
+                serviceDeviceAnswers.Add(answer);
+                db.SaveChanges();
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                SystemLogHelper.LogNewError(ex);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+
         }
 
     }

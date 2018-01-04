@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using PruSign.Data.Interfaces;
 using Xamarin.Forms;
+using Device = Xamarin.Forms.Device;
 
 namespace PruSign.Data.ViewModels
 {

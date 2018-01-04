@@ -35,8 +35,11 @@ namespace PruSign.Data.Services
 
                     var jsonBody = new
                     {
-                        Device = App.GetImei(),
-                        User = user.Username,
+                        Device = new Device()
+                        {
+                            Imei = App.GetImei(),
+                            User = user.Username
+                        },
                         Entries = logs
                     };
                     request.AddJsonBody(jsonBody);

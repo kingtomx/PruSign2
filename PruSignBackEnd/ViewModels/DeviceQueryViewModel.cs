@@ -19,5 +19,8 @@ namespace PruSignBackEnd.ViewModels
 
         [Display(Name = "Response")]
         public string Response { get; set; }
+
+        [Display(Name = "Created")]
+        public DateTime Created { get; set; }
     }
 }

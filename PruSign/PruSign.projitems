@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomViews\EnhancedButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\Device.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\ISQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\LogEntry.cs" />

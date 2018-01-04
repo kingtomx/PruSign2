@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PruSignFrontEnd.Models.Device>
+﻿@model IEnumerable<PruSignBackEnd.Data.Entities.Device>
 
 @{
     ViewBag.Title = "Devices";
@@ -26,7 +26,7 @@
             @Html.DisplayFor(modelItem => item.User)
         </td>
         <td>
-            <a href="@Url.RouteUrl("selectedDevice", new RouteValueDictionary(new {deviceId = item.User}))">Ingresar</a>
+            <a href="@Url.RouteUrl("selectedDevice", new RouteValueDictionary(new {imei = item.Imei, User = item.User}))">Ingresar</a>
             @*@Html.ActionLink("Details", "Index", "DeviceLog", new { username = item.User }, new { })*@
         </td>
     </tr>

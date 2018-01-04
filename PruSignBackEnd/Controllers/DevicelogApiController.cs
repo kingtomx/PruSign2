@@ -1,28 +1,45 @@
-﻿using Newtonsoft.Json;
-using PruSignBackEnd.Data.DB;
-using PruSignBackEnd.Data.Entities;
-using PruSignBackEnd.Helpers;
-using PruSignBackEnd.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Web;
 using System.Web.Http;
+using Newtonsoft.Json;
+using PruSignBackEnd.Data.DB;
+using PruSignBackEnd.Data.Entities;
+using PruSignBackEnd.Helpers;
+using PruSignBackEnd.ViewModels;
 
-namespace PruSignBackEnd
+namespace PruSignBackEnd.Controllers
 {
     [RoutePrefix("api")]
     public class DeviceLogApiController : ApiController
     {
         private PruSignContext db = new PruSignContext();
-        private Service<DeviceLog> serviceDeviceLog;
+        private readonly Service<DeviceLog> _serviceDeviceLog;
+        private readonly Service<Device> _serviceDevice;
 
         public DeviceLogApiController()
         {
-            serviceDeviceLog = new Service<DeviceLog>(db);
+            _serviceDeviceLog = new Service<DeviceLog>(db);
+            _serviceDevice = new Service<Device>(db);
+        }
+
+        public Device GetDevice(string imei)
+        {
+            return _serviceDevice.GetAll().FirstOrDefault(d => d.Imei.Equals(imei));
+        }
+
+        public void CreateDevice(Device device)
+        {
+            _serviceDevice.Add(new Device()
+            {
+                Imei = device.Imei,
+                User = device.User
+            });
+
+            db.SaveChanges();
         }
 
         [Route("devicelog/")]
@@ -30,10 +47,15 @@ namespace PruSignBackEnd
         {
             try
             {
-                var logs = serviceDeviceLog.GetAll();
+                var device = GetDevice(username);
+                if (device == null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+                var logs = _serviceDeviceLog.GetAll();
                 if (!String.IsNullOrEmpty(searchText))
                 {
-                    logs = logs.Where(d => d.User.Equals(username) &&
+                    logs = logs.Where(d => d.DeviceID == device.ID &&
                                           (d.StackTrace.Contains(searchText) ||
                                            d.Message.Contains(searchText)))
                                .OrderByDescending(l => l.Created)
@@ -41,7 +63,7 @@ namespace PruSignBackEnd
                 }
                 else
                 {
-                    logs = logs.Where(log => log.User.Equals(username));
+                    logs = logs.Where(log => log.DeviceID == device.ID);
                 }
                 if (!logs.Any())
                 {
@@ -57,55 +79,13 @@ namespace PruSignBackEnd
                         Created = item.Created,
                         Message = item.Message,
                         ErrorLocation = item.ErrorLocation,
-                        StackTrace = item.StackTrace
+                        StackTrace = item.StackTrace,
+                        DeviceImei = device.Imei,
+                        DeviceUser = device.User
                     });
                 }
 
                 var resp = JsonConvert.SerializeObject(formattedLogs);
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
-                };
-            }
-            catch (Exception ex)
-            {
-                SystemLogHelper.LogNewError(ex);
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [Route("device/")]
-        public HttpResponseMessage Get(string searchText)
-        {
-            try
-            {
-                var devices = serviceDeviceLog.GetAll()
-                    .GroupBy(l => l.User)
-                    .Select(group => group.FirstOrDefault());
-
-                if (!String.IsNullOrEmpty(searchText))
-                {
-                    devices = devices.Where(d => d.User.Contains(searchText));
-                }
-
-                if (!devices.Any())
-                {
-                    return new HttpResponseMessage(HttpStatusCode.NotFound);
-                }
-
-                List<DeviceViewModel> formattedDevices = new List<DeviceViewModel>();
-
-                foreach (var item in devices)
-                {
-                    formattedDevices.Add(new DeviceViewModel()
-                    {
-                        Name = item.Device,
-                        User = item.User
-                    });
-                }
-
-                var resp = JsonConvert.SerializeObject(formattedDevices);
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -125,22 +105,28 @@ namespace PruSignBackEnd
         {
             try
             {
+                var device = GetDevice(log.Device.Imei);
+                if (device == null)
+                {
+                    CreateDevice(log.Device);
+                    device = GetDevice(log.Device.Imei);
+                }
+
                 foreach (var item in log.Entries)
                 {
-                    var exists = serviceDeviceLog.GetAll().Where(l => l.User.Equals(log.User)
+                    // This is a control to prevent duplicated logs
+                    var exists = _serviceDeviceLog.GetAll().Where(l => l.Device.Imei.Equals(log.Device.Imei)
                                                                    && l.FormattedDate.Equals(item.FormattedDate));
-                    if (!exists.Any())
+                    if (exists.Any()) continue;
+
+                    _serviceDeviceLog.Add(new DeviceLog()
                     {
-                        serviceDeviceLog.Add(new DeviceLog()
-                        {
-                            Device = log.Device,
-                            User = log.User,
-                            LogDate = item.Created,
-                            Message = item.Message,
-                            StackTrace = item.StackTrace,
-                            ErrorLocation = item.ErrorLocation
-                        });
-                    }
+                        DeviceID = device.ID,
+                        LogDate = item.Created,
+                        Message = item.Message,
+                        StackTrace = item.StackTrace,
+                        ErrorLocation = item.ErrorLocation
+                    });
                 }
 
                 db.SaveChanges();

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using PruSignBackEnd.Data.Entities;
 
 namespace PruSignFrontEnd.Controllers
 {
@@ -42,10 +43,11 @@ namespace PruSignFrontEnd.Controllers
             return View(result);
         }
 
-        [Route("device/{deviceId}", Name = "selectedDevice")]
-        public ActionResult SelectedDevice(string deviceId)
+        [Route("device/{imei}", Name = "selectedDevice")]
+        public ActionResult SelectedDevice(string imei, string user)
         {
-            return View((object)deviceId);
+            ViewBag.SelectedUser = user;
+            return View((object)imei);
         }
 
     }

@@ -31,7 +31,7 @@ namespace PruSignBackEnd.Controllers
         {
             try
             {
-                var answers = serviceDeviceAnswers.GetAll().Where(answer => answer.Device.Imei.Equals(imei));
+                var answers = serviceDeviceAnswers.GetAll().Where(answer => answer.Device.Imei.Equals(imei)).OrderByDescending(answer => answer.Created);
                 var answersList = await answers.ToListAsync();
                 if (!answersList.Any())
                 {

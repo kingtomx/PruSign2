@@ -31,10 +31,14 @@
                 <span><strong>@Html.DisplayNameFor(model => model.Status)</strong></span>
                 <span>@Html.DisplayFor(modelItem => item.Status)</span>
             </div>
-            <div>
-                <span><strong>@Html.DisplayNameFor(model => model.Response)</strong></span>
-                <span>@Html.DisplayFor(modelItem => item.Response)</span>
-            </div>
+            @if (item.Response != null)
+            {
+                <div>
+                    <span><strong>@Html.DisplayNameFor(model => model.Response)</strong></span>
+                    <span>@Html.DisplayFor(modelItem => item.Response)</span>
+                </div>    
+            }
+            
             <div class="line-separator"></div>
         </div>
         }

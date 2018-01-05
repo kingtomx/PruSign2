@@ -4,9 +4,11 @@ using System.Net;
 using System.Net.Http;
 using PruSignBackEnd.Data.Entities;
 using System.Collections.Generic;
+using System.Data.Entity;
 using Newtonsoft.Json;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
 using PruSignBackEnd.Data.DB;
 using PruSignBackEnd.DTOs;
 using PruSignBackEnd.Helpers;
@@ -29,15 +31,16 @@ namespace PruSignBackEnd.Controllers.Api
         }
 
         [Route("signature/all")]
-        public HttpResponseMessage Get()
+        public async Task<HttpResponseMessage> Get()
         {
             try
             {
                 var signatures = _serviceSignature.GetAll().OrderByDescending(l => l.Created);
-                if (!signatures.Any())
+                var signaturesList = await signatures.ToListAsync();
+                if (!signaturesList.Any())
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-                var resp = JsonConvert.SerializeObject(signatures);
+                var resp = JsonConvert.SerializeObject(signaturesList);
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,

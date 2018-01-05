@@ -28,11 +28,11 @@ namespace PruSignBackEnd.Controllers.Api
         }
 
         [Route("devicelog/")]
-        public HttpResponseMessage Get(string username, string searchText)
+        public HttpResponseMessage Get(string imei, string searchText)
         {
             try
             {
-                var device = _serviceDevice.GetDevice(username);
+                var device = _serviceDevice.GetDevice(imei);
                 if (device == null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.InternalServerError);

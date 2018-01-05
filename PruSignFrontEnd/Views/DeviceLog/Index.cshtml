@@ -13,24 +13,32 @@
         <input type="submit" value="Search" />
     </p>
 }
-
-@foreach (var item in Model)
+@if (Model.Any())
 {
-    <div class="list-item">
-        <div>
-            <span><strong>@Html.DisplayNameFor(model => model.FormattedDate)</strong></span>
-            <span>@Html.DisplayFor(modelItem => item.FormattedDate)</span>
+    foreach (var item in Model)
+    {
+        <div class="list-item">
+            <div>
+                <span><strong>@Html.DisplayNameFor(model => model.FormattedDate)</strong></span>
+                <span>@Html.DisplayFor(modelItem => item.FormattedDate)</span>
+            </div>
+            <div>
+                <span><strong>@Html.DisplayNameFor(model => model.ErrorLocation)</strong></span>
+                <span>@Html.DisplayFor(modelItem => item.ErrorLocation)</span>
+            </div>
+            <div>
+                <span><strong>@Html.DisplayNameFor(model => model.Message)</strong></span>
+                <span>@Html.DisplayFor(modelItem => item.Message)</span>
+            </div>
+            <p><strong>@Html.DisplayNameFor(model => model.StackTrace)</strong>
+            </p>
+            <p>@Html.DisplayFor(modelItem => item.StackTrace)</p>
+            <div class="line-separator"></div>
         </div>
-        <div>
-            <span><strong>@Html.DisplayNameFor(model => model.ErrorLocation)</strong></span>
-            <span>@Html.DisplayFor(modelItem => item.ErrorLocation)</span>
-        </div>
-        <div>
-            <span><strong>@Html.DisplayNameFor(model => model.Message)</strong></span>
-            <span>@Html.DisplayFor(modelItem => item.Message)</span>
-        </div>
-        <p><strong>@Html.DisplayNameFor(model => model.StackTrace)</strong></p>
-        <p>@Html.DisplayFor(modelItem => item.StackTrace)</p>
-        <div class="line-separator"></div>
-    </div>
+    }
 }
+else
+{
+    <p>There is no data to display</p>
+}
+

@@ -160,6 +160,10 @@
     <Compile Include="Migrations\201801041243233_Init.Designer.cs">
       <DependentUpon>201801041243233_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801051440057_Device added for signatures.cs" />
+    <Compile Include="Migrations\201801051440057_Device added for signatures.Designer.cs">
+      <DependentUpon>201801051440057_Device added for signatures.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Data\Entities\IEntity.cs" />
     <Compile Include="Data\Entities\DeviceLog.cs" />
@@ -196,6 +200,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201801041243233_Init.resx">
       <DependentUpon>201801041243233_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801051440057_Device added for signatures.resx">
+      <DependentUpon>201801051440057_Device added for signatures.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

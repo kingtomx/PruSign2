@@ -25,7 +25,7 @@ namespace PruSignFrontEnd.Controllers
             {
                 var client = new RestClient(WebConfigurationManager.AppSettings["BackendHostName"]);
                 var request = new RestRequest("api/devicelog/", Method.GET);
-                request.AddParameter("username", imei);
+                request.AddParameter("imei", imei);
                 request.AddParameter("searchText", searchText);
                 request.AddHeader("Content-Type", "application/json");
                 var response = await client.ExecuteTaskAsync(request);

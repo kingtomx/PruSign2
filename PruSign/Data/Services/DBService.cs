@@ -17,11 +17,13 @@ namespace PruSign.Data.Services
             ConnectionAsync.CreateTableAsync<Signature>();
             ConnectionAsync.CreateTableAsync<UserCredentials>();
             ConnectionAsync.CreateTableAsync<LogEntry>();
+            ConnectionAsync.CreateTableAsync<Queries>();
 
             Connection = _sqlService.GetConnection();
             Connection.CreateTable<Signature>();
             Connection.CreateTable<UserCredentials>();
             Connection.CreateTable<LogEntry>();
+            Connection.CreateTable<Queries>();
         }
     }
 }

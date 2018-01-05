@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\ISQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Entities\Queries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ICredentialsService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IDeviceLogService.cs" />

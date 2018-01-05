@@ -71,6 +71,12 @@ namespace PruSign.Data.ViewModels
                             Username = Username,
                             Password = Password
                         });
+
+                        if (!App.Current.Properties.ContainsKey("Username"))
+                        {
+                            App.SetAppProperty("Username", Username);
+                        }
+
                         MessagingCenter.Send(this, "RedirectToHome");
                     }
                     catch (Exception ex)

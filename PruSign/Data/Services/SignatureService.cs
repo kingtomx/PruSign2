@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PruSign.Data.DTOs;
 using PruSign.Data.Entities;
 using PruSign.Data.Interfaces;
 using PruSign.Data.ViewModels;
@@ -32,7 +33,14 @@ namespace PruSign.Data.Services
                     var request = new RestRequest("api/signature", Method.POST);
                     request.AddHeader("Content-Type", "application/json");
 
-                    request.AddJsonBody(signaturesToSend);
+                    var data = new SignaturesDTO()
+                    {
+                        Imei = App.Current.Properties["IMEI"] as string,
+                        User = App.Current.Properties["Username"] as string,
+                        Signatures = signaturesToSend
+                    };
+
+                    request.AddJsonBody(data);
 
                     var response = await client.ExecuteTaskAsync(request);
                     if (response.StatusCode == HttpStatusCode.OK)
@@ -43,6 +51,10 @@ namespace PruSign.Data.Services
                             s.SentDate = DateTime.Now;
                             await _serviceSignature.Update(s);
                         }
+
+                        //TO-DO Handle if there is data to store on Queries table (Call SaveIncomingQueries)
+
+
                     }
                     else
                     {

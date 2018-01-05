@@ -11,7 +11,7 @@ namespace PruSign.iOS
         {
             base.Load(builder);
             builder.RegisterType<SQLiteIOS>().As<ISQLite>();
-            builder.RegisterType<UniqueIdIOS>().As<IDevice>();
+            builder.RegisterType<UniqueIdIOS>().As<IUniqueID>();
         }
     }
 }

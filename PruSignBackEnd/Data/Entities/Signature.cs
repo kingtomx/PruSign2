@@ -19,5 +19,8 @@ namespace PruSignBackEnd.Data.Entities
         public string DocumentId { get; set; }
         public string ApplicationId { get; set; }
         public string SignatureObject { get; set; }
+
+        public virtual Device Device { get; set; }
+	    public int DeviceID { get; set; }
     }
 }

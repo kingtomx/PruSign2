@@ -14,6 +14,7 @@ namespace PruSign.Data.Modules
             builder.RegisterType<DeviceLogService>().As<IDeviceLogService>().SingleInstance();
             builder.RegisterType<SignatureService>().As<ISignatureService>().SingleInstance();
             builder.RegisterType<PageResolverService>().As<IPageResolverService>().SingleInstance();
+            builder.RegisterType<QueryService>().As<IQueryService>().SingleInstance();
         }
     }
 }

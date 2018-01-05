@@ -138,21 +138,23 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\DeviceController.cs" />
-    <Compile Include="Controllers\DeviceLogApiController.cs" />
-    <Compile Include="Controllers\DeviceQueriesApiController.cs" />
-    <Compile Include="Controllers\QuestionsApiController.cs" />
-    <Compile Include="Controllers\SystemLogApiController.cs" />
+    <Compile Include="Controllers\Api\DeviceApiController.cs" />
+    <Compile Include="Controllers\Api\DeviceLogApiController.cs" />
+    <Compile Include="Controllers\Api\DeviceQueriesApiController.cs" />
+    <Compile Include="Controllers\Api\QuestionsApiController.cs" />
+    <Compile Include="Controllers\Api\SystemLogApiController.cs" />
+    <Compile Include="Controllers\DeviceQueriesController.cs" />
     <Compile Include="Data\DB\Service.cs" />
     <Compile Include="Data\Entities\Answer.cs" />
     <Compile Include="Data\Entities\Device.cs" />
     <Compile Include="Data\Entities\Question.cs" />
     <Compile Include="Data\Entities\SystemLog.cs" />
+    <Compile Include="DTOs\SignaturesDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\SignatureApiController.cs" />
+    <Compile Include="Controllers\Api\SignatureApiController.cs" />
     <Compile Include="Helpers\SystemLogHelper.cs" />
     <Compile Include="Migrations\201801041243233_Init.cs" />
     <Compile Include="Migrations\201801041243233_Init.Designer.cs">
@@ -165,6 +167,7 @@
     <Compile Include="Data\Entities\PointWhen.cs" />
     <Compile Include="Data\DB\PruSignContext.cs" />
     <Compile Include="Data\Entities\Signature.cs" />
+    <Compile Include="Services\DeviceService.cs" />
     <Compile Include="ViewModels\DeviceLogEntriesViewModel.cs" />
     <Compile Include="ViewModels\DeviceLogViewModel.cs" />
     <Compile Include="ViewModels\DeviceQueryViewModel.cs" />
@@ -198,7 +201,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Device\" />
+    <Folder Include="Views\DeviceApi\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,5 @@
-﻿using PruSign.Data.Entities;
+﻿using System.Threading.Tasks;
+using PruSign.Data.Entities;
 using PruSign.Data.Interfaces;
 
 namespace PruSign.Data.Services
@@ -20,6 +21,12 @@ namespace PruSign.Data.Services
                 Password = password
             };
             await _serviceUserCredentials.Add(dbItem);
+        }
+
+        public async Task<string> GetUsername()
+        {
+            var credentials = await _serviceUserCredentials.GetAll().FirstAsync();
+            return credentials.Username;
         }
     }
 }

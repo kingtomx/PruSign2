@@ -10,7 +10,7 @@ using UIKit;
 
 namespace PruSign.iOS.Data
 {
-    public class UniqueIdIOS : IDevice
+    public class UniqueIdIOS : IUniqueID
     {
         [DllImport("/System/Library/Frameworks/IOKit.framework/IOKit")]
         private static extern uint IOServiceGetMatchingService(uint masterPort, IntPtr matching);

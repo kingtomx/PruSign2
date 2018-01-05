@@ -11,7 +11,7 @@ namespace PruSign.Droid
         {
             base.Load(builder);
             builder.RegisterType<SQLiteAndroid>().As<ISQLite>();
-            builder.RegisterType<UniqueIdAndroid>().As<IDevice>();
+            builder.RegisterType<UniqueIdAndroid>().As<IUniqueID>();
         }
     }
 }

@@ -141,15 +141,15 @@ namespace PruSign
             }
         }
 
-        public void SetAppProperty(string key, string value)
+        public static void SetAppProperty(string key, string value)
         {
             App.Current.Properties[key] = value;
         }
 
         public void SetImei()
         {
-            var deviceDetails = Container.Resolve<IDevice>();
-            this.SetAppProperty("IMEI", deviceDetails.GetIdentifier());
+            var deviceDetails = Container.Resolve<IUniqueID>();
+            App.SetAppProperty("IMEI", deviceDetails.GetIdentifier());
         }
 
         public static string GetImei()

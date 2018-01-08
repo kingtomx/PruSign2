@@ -143,12 +143,12 @@
     <Compile Include="Controllers\Api\DeviceQueriesApiController.cs" />
     <Compile Include="Controllers\Api\QuestionsApiController.cs" />
     <Compile Include="Controllers\Api\SystemLogApiController.cs" />
-    <Compile Include="Controllers\DeviceQueriesController.cs" />
     <Compile Include="Data\DB\Service.cs" />
     <Compile Include="Data\Entities\Answer.cs" />
     <Compile Include="Data\Entities\Device.cs" />
     <Compile Include="Data\Entities\Question.cs" />
     <Compile Include="Data\Entities\SystemLog.cs" />
+    <Compile Include="DTOs\DeviceQueryDTO.cs" />
     <Compile Include="DTOs\SignaturesDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -171,6 +171,7 @@
     <Compile Include="Data\Entities\PointWhen.cs" />
     <Compile Include="Data\DB\PruSignContext.cs" />
     <Compile Include="Data\Entities\Signature.cs" />
+    <Compile Include="Services\DeviceQueryService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="ViewModels\DeviceLogEntriesViewModel.cs" />
     <Compile Include="ViewModels\DeviceLogViewModel.cs" />

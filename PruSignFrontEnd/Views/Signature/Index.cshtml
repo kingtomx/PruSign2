@@ -18,6 +18,9 @@
     <table class="table">
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Device)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.FormattedCreateDate)
             </th>
             <th>
@@ -39,6 +42,11 @@
         {
             <tr>
                 <td>
+                    <a href="@Url.RouteUrl("selectedDevice", new RouteValueDictionary(new {imei = item.Device.Imei, User = item.Device.User}))">
+                        @Html.DisplayFor(modelItem => item.Device.User)
+                    </a>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.FormattedCreateDate)
                 </td>
                 <td>
@@ -54,7 +62,7 @@
                     @Html.DisplayFor(modelItem => item.ApplicationId)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new {customerId = item.CustomerId, documentId = item.DocumentId, applicationId = item.ApplicationId})
+                    @Html.ActionLink("Details", "Details", new { customerId = item.CustomerId, documentId = item.DocumentId, applicationId = item.ApplicationId })
                 </td>
             </tr>
         }

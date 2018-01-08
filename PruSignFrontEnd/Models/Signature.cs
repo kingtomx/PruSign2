@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using PruSignBackEnd.Data.Entities;
 
 namespace PruSignFrontEnd.Models
 {
@@ -39,6 +40,9 @@ namespace PruSignFrontEnd.Models
             get => Updated.ToString("yyyy-MM-dd HH:mm:ss");
             set { }
         }
+
+        [Display(Name = "Device")]
+        public Device Device { get; set; }
 
     }
 }

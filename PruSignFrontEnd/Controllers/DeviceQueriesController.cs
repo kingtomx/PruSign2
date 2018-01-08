@@ -53,9 +53,9 @@ namespace PruSignFrontEnd.Controllers
                 var request = new RestRequest("api/questions/all", Method.GET);
                 request.AddHeader("Content-Type", "application/json");
                 var response = await client.ExecuteTaskAsync(request);
-                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new Exception(response.ErrorMessage);
+                    throw new Exception("There was an error trying to get the questions");
                 }
 
                 ViewBag.QuestionList = JsonConvert.DeserializeObject<List<Question>>(response.Content);
@@ -67,9 +67,9 @@ namespace PruSignFrontEnd.Controllers
                 request.AddParameter("imei", imei);
                 request.AddHeader("Content-Type", "application/json");
                 response = await client.ExecuteTaskAsync(request);
-                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new Exception(response.ErrorMessage);
+                    throw new Exception("There was an error trying to get the device by imei");
                 }
 
                 var selectedDevice = JsonConvert.DeserializeObject<Device>(response.Content);
@@ -85,6 +85,7 @@ namespace PruSignFrontEnd.Controllers
                 return RedirectToAction("Index", "Signature");
             }
         }
+
 
         public async Task<RedirectToRouteResult> CreateAnswer(Answer answer, string user, string imei)
         {

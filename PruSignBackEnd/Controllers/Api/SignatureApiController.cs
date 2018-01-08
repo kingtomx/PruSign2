@@ -3,7 +3,6 @@ using System.Web.Http;
 using System.Net;
 using System.Net.Http;
 using PruSignBackEnd.Data.Entities;
-using System.Collections.Generic;
 using System.Data.Entity;
 using Newtonsoft.Json;
 using System.Text;
@@ -21,6 +20,7 @@ namespace PruSignBackEnd.Controllers.Api
     {
         private PruSignContext db = new PruSignContext();
         private readonly Service<Signature> _serviceSignature;
+        private readonly DeviceQueryService _serviceDeviceQuery;
         private readonly DeviceService _serviceDevice;
 
 
@@ -28,6 +28,7 @@ namespace PruSignBackEnd.Controllers.Api
         {
             _serviceSignature = new Service<Signature>(db);
             _serviceDevice = new DeviceService();
+            _serviceDeviceQuery = new DeviceQueryService();
         }
 
         [Route("signature/all")]
@@ -142,7 +143,7 @@ namespace PruSignBackEnd.Controllers.Api
 
         [HttpPost]
         [Route("signature/")]
-        public HttpResponseMessage Post(SignaturesDTO data)
+        public async Task<HttpResponseMessage> Post(SignaturesDTO data)
         {
             try
             {
@@ -174,7 +175,16 @@ namespace PruSignBackEnd.Controllers.Api
 
                 db.SaveChanges();
 
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                //Check for queries
+                var pendingQueries = await _serviceDeviceQuery.GetPendingQueries(data.Imei);
+                if (!pendingQueries.Any()) return new HttpResponseMessage(HttpStatusCode.OK);
+                var resp = JsonConvert.SerializeObject(pendingQueries);
+
+                return new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(resp, Encoding.UTF8, "application/json")
+                };
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -15,11 +16,13 @@ namespace PruSign.Data.Services
     {
         private readonly IDeviceLogService _deviceLogService;
         private readonly IServiceAsync<Signature> _serviceSignature;
+        private readonly IQueryService _queryService;
 
-        public SignatureService(IDeviceLogService deviceLogService, IServiceAsync<Signature> serviceSignature)
+        public SignatureService(IDeviceLogService deviceLogService, IServiceAsync<Signature> serviceSignature, IQueryService queryService)
         {
             _deviceLogService = deviceLogService;
             _serviceSignature = serviceSignature;
+            _queryService = queryService;
         }
 
         public async Task SendSignatures()
@@ -45,6 +48,11 @@ namespace PruSign.Data.Services
                     var response = await client.ExecuteTaskAsync(request);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
+                        if (response.Content != string.Empty)
+                        {
+                            var newQueries = JsonConvert.DeserializeObject<List<Query>>(response.Content);
+                            await _queryService.SaveIncomingQueries(newQueries);
+                        }
                         foreach (var s in signaturesToSend)
                         {
                             s.Sent = true;

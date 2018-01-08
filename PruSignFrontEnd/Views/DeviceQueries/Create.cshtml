@@ -1,12 +1,10 @@
-﻿@using PruSignBackEnd.Data.Entities
-@model PruSignBackEnd.Data.Entities.Answer
+﻿@model PruSignBackEnd.Data.Entities.Answer
 
 @{
     ViewBag.Title = "Create";
 }
 
 <h2>New Question for Device @ViewBag.SelectedUser</h2>
-
 
 @using (Html.BeginForm("CreateAnswer", "DeviceQueries", new {Imei = ViewBag.Imei, User = ViewBag.SelectedUser}, FormMethod.Post)) 
 {
